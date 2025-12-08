@@ -16,9 +16,6 @@
  */
 package org.breakthebot.breakthelibrary.api
 
-
-import org.breakthebot.breakthelibrary.objects.DiscordPayloadDiscord
-import org.breakthebot.breakthelibrary.objects.DiscordPayloadMinecraft
 import org.breakthebot.breakthelibrary.objects.DiscordResponse
 import org.breakthebot.breakthelibrary.objects.ErrorEnum
 import org.breakthebot.breakthelibrary.objects.ErrorObject
