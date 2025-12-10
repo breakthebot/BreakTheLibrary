@@ -32,7 +32,11 @@ import org.breakthebot.breakthelibrary.objects.Town
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
+import org.breakthebot.breakthelibrary.api.IApi
 
+/**
+ * Java compatible wrapper, not to be confused with [IApi]
+ * */
 interface IApiJava {
     fun getTowns(): CompletableFuture<Result<List<Reference>?, ErrorObject?>>
 
@@ -47,7 +51,6 @@ interface IApiJava {
     fun getNations(): CompletableFuture<Result<List<Reference>?, ErrorObject?>>
 
     fun getNations(names: List<String>): CompletableFuture<Result<List<Nation>?, ErrorObject?>>
-
 
     fun getNations(names: Array<UUID>): CompletableFuture<Result<List<Nation>?, ErrorObject?>>
 
@@ -78,4 +81,6 @@ interface IApiJava {
     fun getLocation(query: List<Pair<Int, Int>>): CompletableFuture<Result<List<Location>?, ErrorObject?>>
 
     fun getDiscord(query: List<DiscordPayload>): CompletableFuture<Result<List<DiscordResponse>?, ErrorObject?>>
+
+    fun getOnline(): CompletableFuture<Result<List<Reference>?, ErrorObject?>>
 }

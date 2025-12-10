@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.breakthebot"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -18,7 +18,6 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.property("kt_serialisation_json")}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.property("kt_coroutines")}")

@@ -17,8 +17,6 @@
 package org.breakthebot.breakthelibrary.api
 
 import org.breakthebot.breakthelibrary.objects.DiscordPayload
-import org.breakthebot.breakthelibrary.objects.DiscordPayloadDiscord
-import org.breakthebot.breakthelibrary.objects.DiscordPayloadMinecraft
 import org.breakthebot.breakthelibrary.objects.DiscordResponse
 import org.breakthebot.breakthelibrary.objects.ErrorObject
 import org.breakthebot.breakthelibrary.objects.Location
@@ -34,7 +32,10 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 import org.breakthebot.breakthelibrary.objects.Result
 import java.util.UUID
 
-interface IApiManager {
+/**
+ * Api interface, note this is only compatible with kotlin.
+ * */
+interface IApi {
 
     suspend fun getTowns(): Result<List<Reference>?, ErrorObject?>
     suspend fun getTowns(names: List<String>): Result<List<Town>?, ErrorObject?>
@@ -67,4 +68,6 @@ interface IApiManager {
     suspend fun getLocation(query: List<Pair<Int, Int>>): Result<List<Location>?, ErrorObject?>
 
     suspend fun getDiscord(query: List<DiscordPayload>): Result<List<DiscordResponse>?, ErrorObject?>
+
+    suspend fun getOnline(): Result<List<Reference>?, ErrorObject?>
 }

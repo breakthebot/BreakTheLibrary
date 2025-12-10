@@ -51,35 +51,35 @@ import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
 import org.breakthebot.breakthelibrary.objects.DiscordPayload
 
-object ApiManager : IApiManager {
+object Api : IApi {
     val json: Json =  Json {
         ignoreUnknownKeys = true
     }
 
     val client: HttpClient = HttpClient.newHttpClient()
 
-    val apiUrl = "https://api.earthmc.net/v3/aurora"
-    val staffRepoURL = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
-
-    val mapURL = "https://map.earthmc.net/tiles/players.json"
+    const val API_URL = "https://api.earthmc.net/v3/aurora"
+    const val STAFF_REPO_URL = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
+    const val MAP_URL = "https://map.earthmc.net/tiles/players.json"
 
     val urls = mapOf(
-        "town" to "$apiUrl/towns",
-        "nation" to "$apiUrl/nations",
-        "player" to "$apiUrl/players",
-        "nearby" to "$apiUrl/nearby",
-        "location" to "$apiUrl/location",
-        "discord" to "$apiUrl/discord",
-        "quarters" to "$apiUrl/quarters",
-        "mm" to "$apiUrl/mm",
-        "server" to "$apiUrl/servers",
-        "map" to mapURL
+        "town" to "$API_URL/towns",
+        "nation" to "$API_URL/nations",
+        "player" to "$API_URL/players",
+        "nearby" to "$API_URL/nearby",
+        "location" to "$API_URL/location",
+        "discord" to "$API_URL/discord",
+        "quarters" to "$API_URL/quarters",
+        "mm" to "$API_URL/mm",
+        "server" to "$API_URL/servers",
+        "map" to MAP_URL,
+        "online" to "$API_URL/online"
     )
 
     /**
      * Sends a get request request.
      * @generic T the type to infer the response into.
-     * @param endpoint The endpoint to send the request to.
+     * @param url The url the request is sent to
      */
     internal suspend inline fun <reified T> getRequest(url: String): Result<T?, ErrorObject?> {
 
@@ -174,7 +174,6 @@ object ApiManager : IApiManager {
             Result.err(ErrorObject(ErrorEnum.Unknown, e.message!!))
         }
 
-
     override suspend fun getTowns(): Result<List<Reference>?, ErrorObject?> = getAll(urls["town"]!!)
 
     override suspend fun getTowns(names: List<String>): Result<List<Town>?, ErrorObject?> = try {
@@ -214,7 +213,7 @@ object ApiManager : IApiManager {
     override suspend fun getServer(): Result<ServerInfo?, ErrorObject?> = getAll<ServerInfo>("").mapSuccess { it?.get(0) }
 
     override suspend fun getStaff(): Result<List<SerializableUUID>?, ErrorObject?> = try {
-        getAll<StaffList>(staffRepoURL).mapSuccess { it?.get(0)?.allStaff() }
+        getAll<StaffList>(STAFF_REPO_URL).mapSuccess { it?.get(0)?.allStaff() }
     } catch (e: kotlin.Exception) { Result.err(ErrorObject(ErrorEnum.Unknown, e.message!!)) }
 
     override suspend fun getNearby(query: NearbyItem): Result<List<Reference>?, ErrorObject?> = try {
@@ -241,6 +240,8 @@ object ApiManager : IApiManager {
         }
         return postRequest<List<DiscordResponse>>(urls["discord"]!!, body)
     }
+
+    override suspend fun getOnline(): Result<List<Reference>?, ErrorObject?> = getAll<Reference>(urls["online"]!!)
 
     fun formatUrl(url: String): String {
         if (url.isEmpty()) return url

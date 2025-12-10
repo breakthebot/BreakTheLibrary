@@ -16,9 +16,17 @@
  */
 package org.breakthebot.breakthelibrary.objects
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.future.future
+import java.util.concurrent.CompletableFuture
+import kotlin.coroutines.CoroutineContext
+
 data class Ok<out L>(val value: L) : Result<L, Nothing>
 data class Err<out R>(val value: R) : Result<Nothing, R>
 
+private val resultFutureScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 sealed interface Result<out L, out R> {
     companion object {
@@ -63,3 +71,8 @@ fun <L, R> Result<L,R>.getErr(): R =
             is Ok -> throw IllegalStateException("Expected to have failed.")
             is Err -> value
         }
+
+fun <L, R> resultFuture(
+    context: CoroutineContext = Dispatchers.Default,
+    block: suspend () -> Result<L, R>
+): CompletableFuture<Result<L, R>> = CoroutineScope(resultFutureScope.coroutineContext + context).future { block() }
