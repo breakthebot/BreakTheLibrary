@@ -14,19 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary
+package org.breakthebot.breakthelibrary.models
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import kotlinx.serialization.Serializable
+import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
-object BreakTheLibrary {
-
-    const val LOGGING_NAME: String = "BreakTheLibrary"
-
-    val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
-
-    init {
-        logger.info("Init")
-    }
-
-}
+@Serializable
+data class MysteryMaster(
+    val name: String?,
+    val uuid: SerializableUUID?,
+    val change: String?
+)

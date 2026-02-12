@@ -14,25 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.utils
+package org.breakthebot.breakthelibrary.api
 
-import kotlinx.coroutines.sync.Semaphore
+import org.breakthebot.breakthelibrary.models.NearbyItem
+import org.breakthebot.breakthelibrary.models.Reference
+import org.breakthebot.breakthelibrary.network.Fetch.postRequest
+import org.breakthebot.breakthelibrary.utils.Endpoints
 
-object Config {
-    data class ConfigData(
-        val threads: Int = 5,
-        val ioThreads: Int = 2,
-        val netThreads: Int = 2,
-        val processingThreads: Int = 1
-    )
+class NearbyAPI {
+    suspend fun get(query: NearbyItem): List<Reference> = postRequest<List<Reference>>(Endpoints.NEARBY, query.toString())
 
-    public val config: ConfigData
-
-    init {
-        config = loadFromFile()
-    }
-
-    public fun loadFromFile(): ConfigData {
-        return ConfigData()
-    }
 }

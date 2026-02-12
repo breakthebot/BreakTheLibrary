@@ -39,9 +39,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
-    implementation("com.guardsquare:proguard-base:7.5.0")
 
     compileOnly("org.slf4j:slf4j-api:2.0.9")
 }
@@ -57,6 +56,29 @@ tasks.register<ProGuardTask>("obfuscate") {
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
 
     configuration("proguard-rules.pro")
+}
+val headerText = file("header.txt").readText()
+
+val prependHeader by tasks.registering {
+    group = "build"
+    description = "Prepends header.txt to files that don't already have it."
+
+    val targetFiles = fileTree("src") {
+        include("**/*.kt")
+    }
+
+    doLast {
+        targetFiles.forEach { file: File ->
+            val content = file.readText()
+            if (!content.startsWith(headerText)) {
+                file.writeText("$headerText\n$content")
+            }
+        }
+    }
+}
+
+tasks.named("compileKotlin") {
+    dependsOn(prependHeader)
 }
 
 

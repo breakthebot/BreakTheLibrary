@@ -14,34 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.objects
+package org.breakthebot.breakthelibrary.api
 
-import kotlinx.serialization.Serializable
+import org.breakthebot.breakthelibrary.models.StaffList
+import org.breakthebot.breakthelibrary.network.Fetch.getRequest
+import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
-@Serializable
-sealed interface DiscordPayload
-
-@Serializable
-data class DiscordPayloadDiscord(
-    val type: Target,
-    val target: Double
-) : DiscordPayload
-
-@Serializable
-data class DiscordPayloadMinecraft(
-    val type: Target,
-    val target: SerializableUUID
-): DiscordPayload
-
-@Serializable
-data class DiscordResponse(
-    val id: Double,
-    val uuid: SerializableUUID
-)
-
-enum class Target {
-    Minecraft,
-    Discord
+class StaffAPI {
+    suspend fun get(): List<SerializableUUID> = getRequest<StaffList>(Endpoints.STAFF).allStaff()
 }
-

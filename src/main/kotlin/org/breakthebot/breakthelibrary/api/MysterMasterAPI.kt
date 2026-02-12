@@ -14,19 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary
+package org.breakthebot.breakthelibrary.api
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.breakthebot.breakthelibrary.models.MysteryMaster
+import org.breakthebot.breakthelibrary.network.Fetch.getRequest
+import org.breakthebot.breakthelibrary.utils.Endpoints
 
-object BreakTheLibrary {
-
-    const val LOGGING_NAME: String = "BreakTheLibrary"
-
-    val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
-
-    init {
-        logger.info("Init")
-    }
-
+class MysteryMasterAPI {
+    suspend fun getMysteryMasters(): List<MysteryMaster> = getRequest(Endpoints.MM)
 }

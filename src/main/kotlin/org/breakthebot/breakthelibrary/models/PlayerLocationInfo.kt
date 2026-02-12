@@ -14,30 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.objects
+package org.breakthebot.breakthelibrary.models
 
-import org.breakthebot.breakthelibrary.BreakTheLibrary
-import java.util.logging.Logger
+import kotlinx.serialization.Serializable
 
-
-enum class ErrorEnum {
-    NotFound,
-    InternalApiError,
-    UnableToConnectAPI,
-    Unknown
-}
-
-data class ErrorObject(
-    val error: ErrorEnum,
-    val message: String
+@Serializable
+data class PlayerLocationInfo(
+    val username: String,
+    var x: Double,
+    var z: Double,
+    var isWilderness: Boolean,
+    var townName: String?,
+    var found: Boolean
 ) {
-    fun log() {
-        val message: String = when(error) {
-            ErrorEnum.NotFound -> "Unable to find $message"
-            ErrorEnum.InternalApiError -> "Internal api error $message"
-            ErrorEnum.UnableToConnectAPI -> "Unable to reach the connect to the emc api, $message"
-            ErrorEnum.Unknown -> message
+
+    init {
+        this.found = found
+    }
+
+    override fun toString(): String {
+        return if (!found) {
+            "$username is either offline or not showing up on the map."
+        } else if (isWilderness) {
+            "$username at x: $x, z: $z is in wilderness."
+        } else {
+            "$username at x: $x, z: $z is in town: $townName."
         }
-        Logger.getLogger(BreakTheLibrary.LOGGING_NAME).severe { message }
     }
 }

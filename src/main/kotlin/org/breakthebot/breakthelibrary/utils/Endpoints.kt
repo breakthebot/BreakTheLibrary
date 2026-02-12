@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.objects
+package org.breakthebot.breakthelibrary.utils
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class NearbyItem(
-    val targetType: NearbyType,
-    val target: String,
-    val searchType: NearbyType,
-    val radius: Int
-)
-
-enum class NearbyType { TOWN, NATION }
-
+object Endpoints {
+    public const val TOWNS = "/towns"
+    public const val NATIONS = "/nations"
+    public const val PLAYERS = "/players"
+    public const val LOCATION = "/location"
+    public const val DISCORD = "/discord"
+    public const val NEARBY = "/nearby"
+    public const val MM = "/mm"
+    public const val STAFF = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
+    public const val MAP = "https://map.earthmc.net/tiles/players.json"
+}

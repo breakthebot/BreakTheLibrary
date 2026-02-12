@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary
+package org.breakthebot.breakthelibrary.models
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import kotlinx.serialization.Serializable
 
-object BreakTheLibrary {
+@Serializable
+data class NearbyItem(
+    val targetType: NearbyType,
+    val target: String,
+    val searchType: NearbyType,
+    val radius: Int
+)
 
-    const val LOGGING_NAME: String = "BreakTheLibrary"
+enum class NearbyType { TOWN, NATION }
 
-    val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
-
-    init {
-        logger.info("Init")
-    }
-
-}

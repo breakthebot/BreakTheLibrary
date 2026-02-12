@@ -1,24 +1,25 @@
 /*
- * This file is part of breakthelibrary.
+ * This file is part of BreakTheLibrary.
  *
- * breakthelibrary is free software: you can redistribute it and/or modify
+ * BreakTheLibrary is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * breakthelibrary is distributed in the hope that it will be useful,
+ * BreakTheLibrary is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with breakthelibrary. If not, see <https://www.gnu.org/licenses/>.
+ * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.api
+package org.breakthebot.breakthelibrary.network
 
 import kotlinx.coroutines.future.await
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import java.net.URI
@@ -27,7 +28,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 object Fetch {
-    val json: Json = Json { ignoreUnknownKeys = true}
+    val json: Json = Json { ignoreUnknownKeys = true }
     val client: HttpClient = HttpClient.newHttpClient()
 
     /** Parse a string into a specified T type.
@@ -67,7 +68,7 @@ object Fetch {
      * @param url The url to send the request to.
      * @param body The json body.
      * */
-    suspend inline fun <reified T> postRequest(url: String, body: JsonArray): T = postRequest<T>(url, body.toString())
+    suspend inline fun <reified T> postRequest(url: String, body: JsonObject): T = postRequest<T>(url, body.toString())
 
     /** Fetch multiple items easily.
      * @param url The url to send the req to
