@@ -1,3 +1,5 @@
+import proguard.gradle.ProGuardTask
+
 plugins {
     kotlin("jvm") version "2.2.20"
     kotlin("plugin.serialization") version "1.9.10"
@@ -10,6 +12,16 @@ version = "1.0.0"
 repositories {
     mavenCentral()
 }
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.4.2")
+    }
+}
+
 
 java {
     withSourcesJar()
@@ -25,12 +37,30 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
+    implementation("com.guardsquare:proguard-base:7.4.2")
+
     compileOnly("org.slf4j:slf4j-api:2.0.9")
 }
+
+tasks.register<ProGuardTask>("obfuscate") {
+
+    dependsOn(tasks.named<Jar>("jar"))
+
+    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
+
+    outjars(layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar"))
+
+    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+
+    configuration("proguard-rules.pro")
+}
+
 
 tasks.test {
     useJUnitPlatform()
 }
+
+
 kotlin {
     jvmToolchain(21)
 }
