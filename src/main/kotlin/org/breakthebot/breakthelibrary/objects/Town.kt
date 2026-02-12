@@ -74,8 +74,6 @@ data class Town(
         val forSalePrice: Float? = null
     )
 
-
-
     @Serializable
     data class Coordinates(
         val spawn: Spawn? = null,

@@ -19,9 +19,11 @@ data class Quarter(
         val registered: Long,
         val claimedAt: Long?
     )
+
     @Serializable data class Status(
         val isEmbassy: Boolean
     )
+
     @Serializable data class Stats(
         val price: Int?,
         val volume: Int,

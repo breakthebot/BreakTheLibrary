@@ -56,8 +56,7 @@ class Resident(val name: String) {
         var numFriends: Int? = null
     )
 
-    @Serializable
-    data class Ranks(
+    @Serializable data class Ranks(
         var townRanks: List<String>? = null,
         var nationRanks: List<String>? = null
     )

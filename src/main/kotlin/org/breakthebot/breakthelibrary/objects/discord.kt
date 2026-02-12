@@ -22,7 +22,6 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 @Serializable
 sealed interface DiscordPayload
 
-
 @Serializable
 data class DiscordPayloadDiscord(
     val type: Target,

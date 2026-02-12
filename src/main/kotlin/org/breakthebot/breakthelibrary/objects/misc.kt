@@ -34,16 +34,6 @@ data class Flags(
 )
 
 @Serializable
-data class Spawn(
-    val world: String? = null,
-    val x: Float? = null,
-    val y: Float? = null,
-    val z: Float? = null,
-    val pitch: Float? = null,
-    val yaw: Float? = null
-)
-
-@Serializable
 data class Perms(
     val build: List<Boolean>? = null,
     val destroy: List<Boolean>? = null,
@@ -51,4 +41,14 @@ data class Perms(
     val itemUse: List<Boolean>? = null,
     val switch: List<Boolean>? = null,
     val flags: Flags? = null
+)
+
+@Serializable
+data class Spawn(
+    val world: String? = null,
+    val x: Float? = null,
+    val y: Float? = null,
+    val z: Float? = null,
+    val pitch: Float? = null,
+    val yaw: Float? = null
 )
