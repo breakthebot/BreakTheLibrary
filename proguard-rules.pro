@@ -8,3 +8,4 @@
 }
 
 -keepattributes *Annotation*, Signature, InnerClasses, EnclosingMethod
+-keep class kotlin.Metadata { *; }

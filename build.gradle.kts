@@ -1,7 +1,8 @@
 import proguard.gradle.ProGuardTask
+// TODO: migrate from proguard to r8
 
 plugins {
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version "2.1.21"
     kotlin("plugin.serialization") version "1.9.10"
     `maven-publish`
 }
@@ -18,9 +19,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.4.2")
+        classpath("com.guardsquare:proguard-gradle:7.5.0")
     }
 }
+
+val isRelease = project.hasProperty("release")
+val shouldPublish = project.hasProperty("publish")
 
 
 java {
@@ -37,7 +41,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
-    implementation("com.guardsquare:proguard-base:7.4.2")
+    implementation("com.guardsquare:proguard-base:7.5.0")
 
     compileOnly("org.slf4j:slf4j-api:2.0.9")
 }
@@ -60,6 +64,15 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.named("build") {
+    if (isRelease) {
+        dependsOn("obfuscate")
+    }
+}
+
+tasks.withType<PublishToMavenRepository>().configureEach {
+    onlyIf { shouldPublish }
+}
 
 kotlin {
     jvmToolchain(21)
@@ -68,10 +81,15 @@ kotlin {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            groupId = groupId
+            val obfJar = layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar")
+
+            artifact(obfJar) {
+                builtBy(tasks.named("obfuscate"))
+            }
+
+            groupId = project.group.toString()
             artifactId = "breakthelibrary"
-            version = version
+            version = project.version.toString()
         }
     }
 
