@@ -1,15 +1,14 @@
 package org.breakthebot.breakthelibrary
 
-import java.util.logging.Logger
-import kotlin.math.log
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 object BreakTheLibrary {
 
     const val LOGGING_NAME: String = "BreakTheLibrary"
 
+    val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
 
-
-    val logger: Logger = Logger.getLogger(LOGGING_NAME)
     init {
         logger.info("Init")
     }

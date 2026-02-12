@@ -14,5 +14,3 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-// TODO: add proper testing
-// note: should probably get done before new year

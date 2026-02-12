@@ -20,12 +20,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NearbyItem(
-    val targetType: TargetType,
+    val targetType: NearbyType,
     val target: String,
-    val searchType: SearchType,
+    val searchType: NearbyType,
     val radius: Int
 )
 
-enum class TargetType { TOWN, NATION }
-enum class SearchType { TOWN, NATION }
+enum class NearbyType { TOWN, NATION }
 

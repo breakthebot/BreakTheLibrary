@@ -56,5 +56,4 @@ data class ServerInfo(
         val target: Int,
         val numRemaining: Int
     )
-
 }

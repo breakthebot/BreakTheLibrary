@@ -27,30 +27,19 @@ data class Town(
     val board: String? = null,
     val founder: String? = null,
     val wiki: String? = null,
-    val mayor: Mayor? = null,
-    val nation: Nation? = null,
+    val mayor: Reference? = null,
+    val nation: Reference? = null,
     val timestamps: Timestamps? = null,
     val status: Status? = null,
     val stats: Stats? = null,
     val perms: Perms? = null,
     val coordinates: Coordinates? = null,
-    val residents: List<Resident>? = null,
-    val trusted: List<Resident>? = null,
-    val outlaws: List<Resident>? = null,
+    val residents: List<Reference>? = null,
+    val trusted: List<Reference>? = null,
+    val outlaws: List<Reference>? = null,
     val quarters: List<Reference>? = null,
     val ranks: Ranks? = null
 ) {
-    @Serializable
-    data class Mayor(
-        val name: String? = null,
-        val uuid: SerializableUUID? = null
-    )
-
-    @Serializable
-    data class Nation(
-        val name: String? = null,
-        val uuid: SerializableUUID? = null
-    )
 
     @Serializable
     data class Timestamps(
@@ -85,23 +74,7 @@ data class Town(
         val forSalePrice: Float? = null
     )
 
-    @Serializable
-    data class Perms(
-        val build: List<Boolean>? = null,
-        val destroy: List<Boolean>? = null,
-        val switchPerm: List<Boolean>? = null,
-        val itemUse: List<Boolean>? = null,
-        val switch: List<Boolean>? = null,
-        val flags: Flags? = null
-    )
 
-    @Serializable
-    data class Flags(
-        val pvp: Boolean? = null,
-        val explosion: Boolean? = null,
-        val fire: Boolean? = null,
-        val mobs: Boolean? = null
-    )
 
     @Serializable
     data class Coordinates(
@@ -111,31 +84,15 @@ data class Town(
     )
 
     @Serializable
-    data class Spawn(
-        val world: String? = null,
-        val x: Float? = null,
-        val y: Float? = null,
-        val z: Float? = null,
-        val pitch: Float? = null,
-        val yaw: Float? = null
-    )
-
-    @Serializable
-    data class Resident(
-        val name: String? = null,
-        val uuid: SerializableUUID? = null
-    )
-
-    @Serializable
     data class Ranks(
-        @SerialName("Councilor") val councillor: List<Resident>? = null,
-        @SerialName("Builder") val builder: List<Resident>? = null,
-        @SerialName("Recruiter") val recruiter: List<Resident>? = null,
-        @SerialName("Police") val police: List<Resident>? = null,
-        @SerialName("Tax-Exempt") val taxExempt: List<Resident>? = null,
-        @SerialName("Treasurer") val treasurer: List<Resident>? = null,
-        @SerialName("Realtor") val realtor: List<Resident>? = null,
-        @SerialName("Settler") val settler: List<Resident>? = null
+        @SerialName("Councilor") val councillor: List<Reference>? = null,
+        @SerialName("Builder") val builder: List<Reference>? =  null,
+        @SerialName("Recruiter") val recruiter: List<Reference>? = null,
+        @SerialName("Police") val police: List<Reference>? = null,
+        @SerialName("Tax-Exempt") val taxExempt: List<Reference>? = null,
+        @SerialName("Treasurer") val treasurer: List<Reference>? = null,
+        @SerialName("Realtor") val realtor: List<Reference>? = null,
+        @SerialName("Settler") val settler: List<Reference>? = null
     )
 
 }

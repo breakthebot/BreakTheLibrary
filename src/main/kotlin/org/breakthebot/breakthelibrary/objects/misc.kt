@@ -20,29 +20,35 @@ import kotlinx.serialization.Serializable
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
-sealed interface DiscordPayload
-
-
-@Serializable
-data class DiscordPayloadDiscord(
-    val type: Target,
-    val target: Double
-) : DiscordPayload
-
-@Serializable
-data class DiscordPayloadMinecraft(
-    val type: Target,
-    val target: SerializableUUID
-): DiscordPayload
-
-@Serializable
-data class DiscordResponse(
-    val id: Double,
-    val uuid: SerializableUUID
+data class Reference(
+    val uuid: SerializableUUID?,
+    val name: String?
 )
 
-enum class Target {
-    Minecraft,
-    Discord
-}
+@Serializable
+data class Flags(
+    var pvp: Boolean? = null,
+    var explosion: Boolean? = null,
+    var fire: Boolean? = null,
+    var mobs: Boolean? = null
+)
 
+@Serializable
+data class Spawn(
+    val world: String? = null,
+    val x: Float? = null,
+    val y: Float? = null,
+    val z: Float? = null,
+    val pitch: Float? = null,
+    val yaw: Float? = null
+)
+
+@Serializable
+data class Perms(
+    val build: List<Boolean>? = null,
+    val destroy: List<Boolean>? = null,
+    val switchPerm: List<Boolean>? = null,
+    val itemUse: List<Boolean>? = null,
+    val switch: List<Boolean>? = null,
+    val flags: Flags? = null
+)

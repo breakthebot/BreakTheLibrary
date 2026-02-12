@@ -27,8 +27,7 @@ data class Location (
     val town: Reference? = null,
     val nation: Reference? = null
 ) {
-    @Serializable
-    data class Coordinates(
+    @Serializable data class Coordinates(
         val x: Double? = null,
         val z: Double? = null
     )

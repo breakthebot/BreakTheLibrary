@@ -25,6 +25,7 @@ object Config {
         val netThreads: Int = 2,
         val processingThreads: Int = 1
     )
+
     public val config: ConfigData
 
     init {
@@ -32,6 +33,6 @@ object Config {
     }
 
     public fun loadFromFile(): ConfigData {
-        return ConfigData() //TODO: add config
+        return ConfigData()
     }
 }

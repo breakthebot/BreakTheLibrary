@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class Quarter(
     val uuid: String,
     val type: String,
-    val owner: Owner?,
-    val town: Town,
+    val owner: Reference?,
+    val town: Reference,
     val timestamps: Timestamps,
     val status: Status,
     val stats: Stats,
@@ -15,14 +15,6 @@ data class Quarter(
     val trusted: List<String>,
     val cuboids: List<Cuboid>
 ) {
-    @Serializable data class Owner(
-        val name: String?,
-        val uuid: String?
-    )
-    @Serializable data class Town(
-        val name: String,
-        val uuid: String
-    )
     @Serializable data class Timestamps(
         val registered: Long,
         val claimedAt: Long?
@@ -35,6 +27,7 @@ data class Quarter(
         val volume: Int,
         val numCuboids: Int
     )
+
     @Serializable data class Cuboid(
         val pos1: List<Int>,
         val pos2: List<Int>
