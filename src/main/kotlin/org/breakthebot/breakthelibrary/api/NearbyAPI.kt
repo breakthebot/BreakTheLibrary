@@ -22,6 +22,5 @@ import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
 class NearbyAPI {
-    suspend fun get(query: NearbyItem): List<Reference> = postRequest<List<Reference>>(Endpoints.NEARBY, query.toString())
-
+    suspend fun get(query: NearbyItem): List<Reference>? = postRequest(Endpoints.NEARBY, query.toString())
 }

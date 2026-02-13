@@ -25,10 +25,10 @@ import java.util.UUID
 
 class TownAPI {
 
-    suspend fun getTown(name: String): Town = postRequest(Endpoints.TOWNS, listOf(name))
-    suspend fun getTown(uuid: UUID): Town = postRequest(Endpoints.TOWNS, listOf(uuid.toString()))
+    suspend fun getTown(name: String): Town? = postRequest(Endpoints.TOWNS, listOf(name))
+    suspend fun getTown(uuid: UUID): Town? = postRequest(Endpoints.TOWNS, listOf(uuid.toString()))
 
     suspend fun getTowns(names: List<String>): List<Town>? = postRequest(Endpoints.TOWNS, names)
 
-    suspend fun getAllTowns(): List<Reference> = getRequest(Endpoints.TOWNS)
+    suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.TOWNS)
 }

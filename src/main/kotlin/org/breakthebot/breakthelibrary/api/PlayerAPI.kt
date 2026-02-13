@@ -26,10 +26,10 @@ import java.util.UUID
 class PlayerAPI {
     companion object { val fetch = Fetch }
 
-    suspend fun getPlayer(name: String): Resident = fetch.postRequest(Endpoints.PLAYERS, listOf(name))
-    suspend fun getPlayer(uuid: UUID): Resident = fetch.postRequest(Endpoints.PLAYERS, listOf(uuid.toString()))
+    suspend fun getPlayer(name: String): Resident? = fetch.postRequest(Endpoints.PLAYERS, listOf(name))
+    suspend fun getPlayer(uuid: UUID): Resident? = fetch.postRequest(Endpoints.PLAYERS, listOf(uuid.toString()))
 
     suspend fun getNations(names: List<String>): List<Nation>? = fetch.postRequest(Endpoints.PLAYERS, names)
 
-    suspend fun getAllTowns(): List<Reference> = fetch.getRequest(Endpoints.PLAYERS)
+    suspend fun getAllTowns(): List<Reference>? = fetch.getRequest(Endpoints.PLAYERS)
 }

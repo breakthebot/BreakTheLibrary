@@ -24,11 +24,10 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.UUID
 
 class NationAPI {
-
-    suspend fun getNation(name: String): Nation = postRequest(Endpoints.NATIONS, listOf(name))
-    suspend fun getNation(uuid: UUID): Nation = postRequest(Endpoints.NATIONS, listOf(uuid.toString()))
+    suspend fun getNation(name: String): Nation? = postRequest(Endpoints.NATIONS, listOf(name))
+    suspend fun getNation(uuid: UUID): Nation? = postRequest(Endpoints.NATIONS, listOf(uuid.toString()))
 
     suspend fun getNations(names: List<String>): List<Nation>? = postRequest(Endpoints.NATIONS, names)
 
-    suspend fun getAllTowns(): List<Reference> = getRequest(Endpoints.NATIONS)
+    suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.NATIONS)
 }

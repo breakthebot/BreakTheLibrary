@@ -21,5 +21,5 @@ import org.breakthebot.breakthelibrary.network.Fetch.getRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
 class MysteryMasterAPI {
-    suspend fun getMysteryMasters(): List<MysteryMaster> = getRequest(Endpoints.MM)
+    suspend fun getMysteryMasters(): List<MysteryMaster>? = getRequest(Endpoints.MM)
 }

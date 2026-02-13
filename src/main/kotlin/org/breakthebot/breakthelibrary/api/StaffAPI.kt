@@ -22,5 +22,5 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 class StaffAPI {
-    suspend fun get(): List<SerializableUUID> = getRequest<StaffList>(Endpoints.STAFF).allStaff()
+    suspend fun get(): List<SerializableUUID>? = getRequest<StaffList?>(Endpoints.STAFF)?.allStaff()
 }

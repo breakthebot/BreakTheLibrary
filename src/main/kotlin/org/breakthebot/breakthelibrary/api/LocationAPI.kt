@@ -38,6 +38,6 @@ class LocationAPI {
         return postRequest<List<Location>?>(Endpoints.LOCATION, body)
     }
 
-    suspend fun getVisiblePlayers(): List<MapReturn> = getRequest(Endpoints.MAP)
+    suspend fun getVisiblePlayers(): List<MapReturn>? = getRequest(Endpoints.MAP)
 
 }
