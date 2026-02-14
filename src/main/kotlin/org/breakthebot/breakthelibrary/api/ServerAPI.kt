@@ -16,18 +16,11 @@
  */
 package org.breakthebot.breakthelibrary.api
 
-import org.breakthebot.breakthelibrary.models.Nation
-import org.breakthebot.breakthelibrary.models.Reference
+import org.breakthebot.breakthelibrary.models.ServerInfo
 import org.breakthebot.breakthelibrary.network.Fetch.getRequest
-import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
-import java.util.UUID
 
-object NationAPI {
-    suspend fun getNation(name: String): Nation? = postRequest(Endpoints.NATIONS, listOf(name))
-    suspend fun getNation(uuid: UUID): Nation? = postRequest(Endpoints.NATIONS, listOf(uuid.toString()))
+object ServerAPI {
+    suspend fun getServer(): ServerInfo = getRequest(Endpoints.APIURL)
 
-    suspend fun getNations(names: List<String>): List<Nation>? = postRequest(Endpoints.NATIONS, names)
-
-    suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.NATIONS)
 }

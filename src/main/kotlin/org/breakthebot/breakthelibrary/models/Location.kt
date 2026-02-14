@@ -16,6 +16,7 @@
  */
 package org.breakthebot.breakthelibrary.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
@@ -35,12 +36,18 @@ data class Location (
 
 @Serializable
 data class MapReturn(
+    val max: Int,
+    val players: List<PlayerMapReturn>
+)
+@Serializable
+data class PlayerMapReturn(
     val world: String,
     val name: String,
     val x: Double,
     val y: Double,
     val z: Double,
+    @SerialName("display_name")
     val displayName: String,
-    val uuid: SerializableUUID,
+    val uuid: String,
     val yaw: Int
 )

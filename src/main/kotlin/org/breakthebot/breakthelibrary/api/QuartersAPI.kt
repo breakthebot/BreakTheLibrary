@@ -16,18 +16,16 @@
  */
 package org.breakthebot.breakthelibrary.api
 
-import org.breakthebot.breakthelibrary.models.Nation
+import org.breakthebot.breakthelibrary.models.Quarter
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.network.Fetch.getRequest
 import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.UUID
 
-object NationAPI {
-    suspend fun getNation(name: String): Nation? = postRequest(Endpoints.NATIONS, listOf(name))
-    suspend fun getNation(uuid: UUID): Nation? = postRequest(Endpoints.NATIONS, listOf(uuid.toString()))
+object QuartersAPI {
 
-    suspend fun getNations(names: List<String>): List<Nation>? = postRequest(Endpoints.NATIONS, names)
+    suspend fun getAllQuarters(): List<Reference>? = getRequest(Endpoints.QUARTERS)
 
-    suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.NATIONS)
+    suspend fun getQuarter(quarters: List<UUID>): List<Quarter>? = postRequest(Endpoints.QUARTERS, quarters.map { it.toString() })
 }

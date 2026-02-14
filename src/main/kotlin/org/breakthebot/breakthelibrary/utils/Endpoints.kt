@@ -17,13 +17,16 @@
 package org.breakthebot.breakthelibrary.utils
 
 object Endpoints {
-    public const val TOWNS = "/towns"
-    public const val NATIONS = "/nations"
-    public const val PLAYERS = "/players"
-    public const val LOCATION = "/location"
-    public const val DISCORD = "/discord"
-    public const val NEARBY = "/nearby"
-    public const val MM = "/mm"
-    public const val STAFF = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
-    public const val MAP = "https://map.earthmc.net/tiles/players.json"
+    const val APIURL = "https://api.earthmc.net/v3/aurora"
+
+    const val TOWNS = "$APIURL/towns"
+    const val NATIONS = "$APIURL/nations"
+    const val PLAYERS = "$APIURL/players"
+    const val LOCATION = "$APIURL/location"
+    const val DISCORD = "$APIURL/discord"
+    const val NEARBY = "$APIURL/nearby"
+    const val MM = "$APIURL/mm"
+    const val QUARTERS = "$APIURL/quarters"
+    const val STAFF = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
+    const val MAP = "https://map.earthmc.net/tiles/players.json"
 }

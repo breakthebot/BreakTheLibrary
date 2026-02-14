@@ -23,7 +23,7 @@ import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.UUID
 
-class TownAPI {
+object TownAPI {
 
     suspend fun getTown(name: String): Town? = postRequest(Endpoints.TOWNS, listOf(name))
     suspend fun getTown(uuid: UUID): Town? = postRequest(Endpoints.TOWNS, listOf(uuid.toString()))

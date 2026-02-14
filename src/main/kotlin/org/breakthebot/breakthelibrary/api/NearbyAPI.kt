@@ -21,6 +21,6 @@ import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
-class NearbyAPI {
+object NearbyAPI {
     suspend fun get(query: NearbyItem): List<Reference>? = postRequest(Endpoints.NEARBY, query.toString())
 }

@@ -16,6 +16,7 @@
  */
 package org.breakthebot.breakthelibrary.api
 
+import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonObject
@@ -26,12 +27,15 @@ import org.breakthebot.breakthelibrary.models.DiscordResponse
 import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
-class DiscordAPI {
+object DiscordAPI{
+    val json = Json { classDiscriminatorMode = ClassDiscriminatorMode.NONE; encodeDefaults = true }
 
     suspend fun getDiscord(query: List<DiscordPayload>): List<DiscordResponse>? {
         val body = buildJsonObject {
-            put("query", JsonArray(query.map { Json.encodeToJsonElement(it).jsonObject }))
+            put("query", JsonArray(query.map { json.encodeToJsonElement(it).jsonObject }))
         }
+        println(body.toString())
+
         return postRequest<List<DiscordResponse>?>(Endpoints.DISCORD, body)
     }
 }

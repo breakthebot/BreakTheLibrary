@@ -20,16 +20,17 @@ import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.network.Fetch
+import org.breakthebot.breakthelibrary.network.Fetch.getRequest
+import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.UUID
 
-class PlayerAPI {
-    companion object { val fetch = Fetch }
+object PlayerAPI{
 
-    suspend fun getPlayer(name: String): Resident? = fetch.postRequest(Endpoints.PLAYERS, listOf(name))
-    suspend fun getPlayer(uuid: UUID): Resident? = fetch.postRequest(Endpoints.PLAYERS, listOf(uuid.toString()))
+    suspend fun getPlayer(name: String): Resident? = postRequest(Endpoints.PLAYERS, listOf(name))
+    suspend fun getPlayer(uuid: UUID): Resident? = postRequest(Endpoints.PLAYERS, listOf(uuid.toString()))
 
-    suspend fun getNations(names: List<String>): List<Nation>? = fetch.postRequest(Endpoints.PLAYERS, names)
+    suspend fun getNations(names: List<String>): List<Nation>? = postRequest(Endpoints.PLAYERS, names)
 
-    suspend fun getAllTowns(): List<Reference>? = fetch.getRequest(Endpoints.PLAYERS)
+    suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.PLAYERS)
 }

@@ -17,30 +17,46 @@
 package org.breakthebot.breakthelibrary.network
 
 import kotlinx.coroutines.future.await
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.serializer
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 object Fetch {
-    val json: Json = Json { ignoreUnknownKeys = true }
+    val json: Json = Json { ignoreUnknownKeys = true; classDiscriminator = "classDiscriminator" }
     val client: HttpClient = HttpClient.newHttpClient()
 
     /** Parse a string into a specified T type.
-     * @param body The string to parse into the T type. */
+     * @param body The string to parse into the T type.
+     * */
+    @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> parseString(body: String): T {
-        return if (T::class == String::class) {
-            body as T
-        } else { json.decodeFromString<T>(body) }
-    }
+        val serializer = json.serializersModule.serializer<T>()
 
+        return when {
+            serializer.descriptor.kind is StructureKind.LIST -> {
+                json.decodeFromString(serializer, body)
+            }
+            T::class == String::class -> {
+                body as T
+            }
+            else -> {
+                val cleaned = body.removePrefix("[").removeSuffix("]")
+                json.decodeFromString(serializer, cleaned)
+            }
+        }
+    }
     /** Sends a get request.
-     * @param url The url to send the request to.*/
+     * @param url The url to send the request to.
+     * */
     suspend inline fun <reified T> getRequest(url: String): T {
         val request = HttpRequest.newBuilder()
             .uri(URI(url))

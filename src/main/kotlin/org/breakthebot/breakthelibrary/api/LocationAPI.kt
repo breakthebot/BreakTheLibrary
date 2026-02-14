@@ -21,11 +21,12 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import org.breakthebot.breakthelibrary.models.Location
 import org.breakthebot.breakthelibrary.models.MapReturn
+import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.network.Fetch.getRequest
 import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
-class LocationAPI {
+object LocationAPI {
 
     suspend fun getLocation(query: List<Pair<Int, Int>>): List<Location>? {
         val body = buildJsonObject {
@@ -38,6 +39,6 @@ class LocationAPI {
         return postRequest<List<Location>?>(Endpoints.LOCATION, body)
     }
 
-    suspend fun getVisiblePlayers(): List<MapReturn>? = getRequest(Endpoints.MAP)
+    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = getRequest<MapReturn?>(Endpoints.MAP)?.players
 
 }

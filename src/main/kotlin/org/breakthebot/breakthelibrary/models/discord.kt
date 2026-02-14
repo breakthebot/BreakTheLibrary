@@ -16,22 +16,25 @@
  */
 package org.breakthebot.breakthelibrary.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
-sealed interface DiscordPayload
+sealed interface DiscordPayload {
+    val type: Target?
+}
 
 @Serializable
 data class DiscordPayloadDiscord(
-    val type: Target,
-    val target: Double
+    val target: String,
+    @SerialName("type") override val type: Target = Target.Discord
 ) : DiscordPayload
 
 @Serializable
 data class DiscordPayloadMinecraft(
-    val type: Target,
-    val target: SerializableUUID
+    val target: SerializableUUID,
+    @SerialName("type") override val type: Target = Target.Minecraft
 ): DiscordPayload
 
 @Serializable
@@ -41,7 +44,7 @@ data class DiscordResponse(
 )
 
 enum class Target {
-    Minecraft,
-    Discord
+    @SerialName("minecraft") Minecraft,
+    @SerialName("discord") Discord
 }
 

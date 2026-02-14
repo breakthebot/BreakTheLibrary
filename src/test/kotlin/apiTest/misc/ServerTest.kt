@@ -14,8 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+package apiTest.misc
 
-public val TestScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.ServerAPI
+import org.breakthebot.breakthelibrary.models.ServerInfo
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
+import kotlin.test.assertIs
+
+class ServerTest {
+    
+    @Test
+    fun testServer() {
+        runBlocking {
+            val info = ServerAPI.getServer()
+            assertNotNull(info)
+            assertIs<ServerInfo>(info)
+        }
+    }
+}

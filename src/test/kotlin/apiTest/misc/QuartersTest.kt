@@ -14,20 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.api
+package apiTest.misc
 
-import org.breakthebot.breakthelibrary.models.Nation
+import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.QuartersAPI
+import org.breakthebot.breakthelibrary.models.Quarter
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.network.Fetch.getRequest
-import org.breakthebot.breakthelibrary.network.Fetch.postRequest
-import org.breakthebot.breakthelibrary.utils.Endpoints
-import java.util.UUID
+import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 
-object NationAPI {
-    suspend fun getNation(name: String): Nation? = postRequest(Endpoints.NATIONS, listOf(name))
-    suspend fun getNation(uuid: UUID): Nation? = postRequest(Endpoints.NATIONS, listOf(uuid.toString()))
+class QuartersTest {
 
-    suspend fun getNations(names: List<String>): List<Nation>? = postRequest(Endpoints.NATIONS, names)
-
-    suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.NATIONS)
+    @Test
+    fun testQuarters() {
+        runBlocking {
+            val allQuarters = QuartersAPI.getAllQuarters()
+            assertNotNull(allQuarters)
+            assertIs<List<Reference>>(allQuarters)
+            val quarter = QuartersAPI.getQuarter(listOf(allQuarters.random().uuid?.toUUID()!!))?.first()
+            assertNotNull(quarter)
+            assertIs<Quarter>(quarter)
+        }
+    }
 }

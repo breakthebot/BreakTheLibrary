@@ -30,8 +30,10 @@
  * You should have received a copy of the GNU General Public License
  * along with breakthemod. If not, see <https://www.gnu.org/licenses/>.
  */
+
 package org.breakthebot.breakthelibrary.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -44,7 +46,7 @@ data class Quarter(
     val status: Status,
     val stats: Stats,
     val colour: List<Int>,
-    val trusted: List<String>,
+    val trusted: List<Reference>,
     val cuboids: List<Cuboid>
 ) {
     @Serializable data class Timestamps(
@@ -57,14 +59,14 @@ data class Quarter(
     )
 
     @Serializable data class Stats(
-        val price: Int?,
+        val price: Float?,
         val volume: Int,
         val numCuboids: Int
     )
 
-    @Serializable data class Cuboid(
-        val pos1: List<Int>,
-        val pos2: List<Int>
+    @Serializable @SerialName("cuboids") data class Cuboid(
+        val cornerOne: List<Int>,
+        val cornerTwo: List<Int>
     )
 }
 

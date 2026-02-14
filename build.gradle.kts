@@ -36,6 +36,9 @@ val ktCoroutines = project.property("kt_coroutines")
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation(platform("org.junit:junit-bom:6.0.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 

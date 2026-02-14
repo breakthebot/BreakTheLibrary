@@ -14,8 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+package apiTest.location
 
-public val TestScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.LocationAPI
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
+
+
+class LocationTest {
+
+    @Test
+    fun testLocation() {
+        val coords = Pair(397, -9145)
+        runBlocking {
+            val loc = LocationAPI.getLocation(listOf(coords))?.first()
+            assertNotNull(loc)
+            assertEquals(loc.town?.name, "Paris")
+            assertEquals(loc.nation?.name, "France")
+        }
+    }
+}

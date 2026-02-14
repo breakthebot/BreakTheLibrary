@@ -14,12 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.api
+package apiTest.location
 
-import org.breakthebot.breakthelibrary.models.MysteryMaster
-import org.breakthebot.breakthelibrary.network.Fetch.getRequest
-import org.breakthebot.breakthelibrary.utils.Endpoints
+import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.LocationAPI
+import org.breakthebot.breakthelibrary.models.PlayerMapReturn
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
+import kotlin.test.assertIs
 
-class MysteryMasterAPI {
-    suspend fun getMysteryMasters(): List<MysteryMaster>? = getRequest(Endpoints.MM)
+class MapTest {
+
+    @Test
+    fun testMapReturn() {
+        runBlocking {
+            val players = LocationAPI.getVisiblePlayers()
+            assertNotNull(players)
+            assertIs<List<PlayerMapReturn>>(players)
+        }
+    }
 }
