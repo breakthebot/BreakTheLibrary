@@ -113,8 +113,6 @@ publishing {
             groupId = project.group.toString()
             artifactId = "breakthelibrary"
             version = project.version.toString()
-
-            artifact(tasks.named("sourcesJar"))
         }
     }
 
