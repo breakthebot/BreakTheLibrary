@@ -27,7 +27,7 @@ class LocationTest {
 
     @Test
     fun testLocation() {
-        val coords = Pair(397, -9145)
+        val coords = Pair(397.0, -9145.0)
         runBlocking {
             val loc = LocationAPI.getLocation(listOf(coords))?.first()
             assertNotNull(loc)

@@ -28,7 +28,7 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 
 object LocationAPI {
 
-    suspend fun getLocation(query: List<Pair<Int, Int>>): List<Location>? {
+    suspend fun getLocation(query: List<Pair<Double, Double>>): List<Location>? {
         val body = buildJsonObject {
             put("query", JsonArray(query.map { (x, y) -> JsonArray(
                 listOf(JsonPrimitive(x), JsonPrimitive(y)
