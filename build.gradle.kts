@@ -108,15 +108,13 @@ kotlin {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            val obfJar = layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar")
-
-            artifact(obfJar) {
-                builtBy(tasks.named("build"))
-            }
+            from(components["java"])
 
             groupId = project.group.toString()
             artifactId = "breakthelibrary"
             version = project.version.toString()
+
+            artifact(tasks.named("sourcesJar"))
         }
     }
 
