@@ -31,7 +31,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 object Fetch {
-    val json: Json = Json { ignoreUnknownKeys = true; classDiscriminator = "classDiscriminator" }
+    val json: Json = Json { ignoreUnknownKeys = true }
     val client: HttpClient = HttpClient.newHttpClient()
 
     /** Parse a string into a specified T type.
@@ -40,7 +40,6 @@ object Fetch {
     @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> parseString(body: String): T {
         val serializer = json.serializersModule.serializer<T>()
-
         return when {
             serializer.descriptor.kind is StructureKind.LIST -> {
                 json.decodeFromString(serializer, body)
@@ -54,6 +53,7 @@ object Fetch {
             }
         }
     }
+
     /** Sends a get request.
      * @param url The url to send the request to.
      * */

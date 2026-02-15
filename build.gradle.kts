@@ -1,4 +1,4 @@
-import proguard.gradle.ProGuardTask
+//import proguard.gradle.ProGuardTask
 // TODO: migrate from proguard to r8
 
 plugins {
@@ -14,16 +14,16 @@ repositories {
     mavenCentral()
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.5.0")
-    }
-}
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath("com.guardsquare:proguard-gradle:7.5.0")
+//    }
+//}
 
-val isRelease = project.hasProperty("release")
+// val isRelease = project.hasProperty("release")
 val shouldPublish = project.hasProperty("publish")
 
 
@@ -33,38 +33,40 @@ java {
 
 val ktSerde = project.property("kt_serialisation_json")
 val ktCoroutines = project.property("kt_coroutines")
+val slf4j = project.property("sl4j_version")
 
 dependencies {
+    // tests
     testImplementation(kotlin("test"))
     testImplementation(platform("org.junit:junit-bom:6.0.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    // kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
 
-    compileOnly("org.slf4j:slf4j-api:2.0.9")
+    // deps
+    compileOnly("org.slf4j:slf4j-api:$slf4j")
 }
 
-tasks.register<ProGuardTask>("obfuscate") {
-
-    dependsOn(tasks.named<Jar>("jar"))
-
-    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
-
-    outjars(layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar"))
-
-    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
-
-    configuration("proguard-rules.pro")
-}
+//tasks.register<ProGuardTask>("obfuscate") {
+//
+//    dependsOn(tasks.named<Jar>("jar"))
+//
+//    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
+//
+//    outjars(layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar"))
+//
+//    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+//
+//    configuration("./proguard-rules.pro")
+//}
 val headerText = file("header.txt").readText()
 
-val prependHeader by tasks.registering {
+val addHeader by tasks.registering {
     group = "build"
-    description = "Prepends header.txt to files that don't already have it."
 
     val targetFiles = fileTree("src") {
         include("**/*.kt")
@@ -81,7 +83,7 @@ val prependHeader by tasks.registering {
 }
 
 tasks.named("compileKotlin") {
-    dependsOn(prependHeader)
+    dependsOn(addHeader)
 }
 
 
@@ -89,11 +91,11 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.named("build") {
-    if (isRelease) {
-        dependsOn("obfuscate")
-    }
-}
+//tasks.named("build") {
+//    if (isRelease) {
+//        dependsOn("obfuscate")
+//    }
+//}
 
 tasks.withType<PublishToMavenRepository>().configureEach {
     onlyIf { shouldPublish }
@@ -109,7 +111,7 @@ publishing {
             val obfJar = layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar")
 
             artifact(obfJar) {
-                builtBy(tasks.named("obfuscate"))
+                builtBy(tasks.named("build"))
             }
 
             groupId = project.group.toString()

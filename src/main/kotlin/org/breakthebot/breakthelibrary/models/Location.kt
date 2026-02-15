@@ -39,6 +39,7 @@ data class MapReturn(
     val max: Int,
     val players: List<PlayerMapReturn>
 )
+
 @Serializable
 data class PlayerMapReturn(
     val world: String,

@@ -16,6 +16,7 @@
  */
 package org.breakthebot.breakthelibrary
 
+import org.breakthebot.breakthelibrary.utils.ConfigManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -27,6 +28,7 @@ object BreakTheLibrary {
 
     init {
         logger.info("Init")
+        ConfigManager.loadConfig()
     }
 
 }
