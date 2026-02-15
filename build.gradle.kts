@@ -33,7 +33,7 @@ java {
 
 val ktSerde = project.property("kt_serialisation_json")
 val ktCoroutines = project.property("kt_coroutines")
-val slf4j = project.property("sl4j_version")
+val slf4j = project.property("slf4j_version")
 
 dependencies {
     // tests
