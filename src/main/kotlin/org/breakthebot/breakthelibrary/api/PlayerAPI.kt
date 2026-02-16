@@ -30,7 +30,7 @@ object PlayerAPI{
     suspend fun getPlayer(name: String): Resident? = postRequest(Endpoints.PLAYERS, listOf(name))
     suspend fun getPlayer(uuid: UUID): Resident? = postRequest(Endpoints.PLAYERS, listOf(uuid.toString()))
 
-    suspend fun getPlayers(names: List<String>): List<Nation>? = postRequest(Endpoints.PLAYERS, names)
+    suspend fun getPlayers(names: List<String>): List<Resident>? = postRequest(Endpoints.PLAYERS, names)
 
     suspend fun getAllPlayers(): List<Reference>? = getRequest(Endpoints.PLAYERS)
 }
