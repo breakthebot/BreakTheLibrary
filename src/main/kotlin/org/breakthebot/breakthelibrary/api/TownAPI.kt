@@ -31,4 +31,5 @@ object TownAPI {
     suspend fun getTowns(names: List<String>): List<Town>? = postRequest(Endpoints.TOWNS, names)
 
     suspend fun getAllTowns(): List<Reference>? = getRequest(Endpoints.TOWNS)
+
 }

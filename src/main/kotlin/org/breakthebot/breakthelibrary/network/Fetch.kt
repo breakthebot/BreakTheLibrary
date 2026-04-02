@@ -58,10 +58,10 @@ object Fetch {
      * @param url The url to send the request to.
      * */
     suspend inline fun <reified T> getRequest(url: String): T {
-        val request = HttpRequest.newBuilder()
-            .uri(URI(url))
-            .header("Content-Type", "application/json")
-            .build()
+        val request = HttpRequest.newBuilder().apply {
+            uri(URI(url))
+            header("Content-Type", "application/json")
+        }.build()
         val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
         return parseString<T>(response.body())
     }
@@ -71,11 +71,12 @@ object Fetch {
      * @param body The request body.
      * */
     suspend inline fun <reified T> postRequest(url: String, body: String): T {
-       val request = HttpRequest.newBuilder()
-           .uri(URI(url))
-           .header("Content-Type", "application/json")
-           .POST(HttpRequest.BodyPublishers.ofString(body))
-           .build()
+       val request = HttpRequest.newBuilder().apply {
+           uri(URI(url))
+           header("Content-Type", "application/json")
+           POST(HttpRequest.BodyPublishers.ofString(body))
+       }.build()
+
        val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
        return parseString<T>(response.body())
    }

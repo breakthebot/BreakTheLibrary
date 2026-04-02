@@ -16,51 +16,16 @@
  */
 package org.breakthebot.breakthelibrary.utils
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.breakthebot.breakthelibrary.BreakTheLibrary.logger
-import java.io.File
-
-@Serializable
 data class Urls(
-    val apiUrl: String = "https://api.earthmc.net/",
+    val apiUrl: String = "https://api.earthmc.net/v4/aurora",
     val mapUrl: String = "https://map.earthmc.net/tiles/players.json",
     val staffUrl: String = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
 )
 
-@Serializable
-data class Config(
-    val urls: Urls = Urls(),
-)
+object ConfigHandler {
+    var urls: Urls = Urls()
 
-object ConfigManager {
-    var config = Config()
-    val configFile = File(System.getProperty("user.dir"), "config")
-
-    fun loadConfig() {
-        if (!configFile.exists()) { saveConfig(null) }
-        val fileContent = configFile.readText()
-
-        if (fileContent.isEmpty() || fileContent.length <= 2) {
-            saveConfig(null)
-        }
-
-        try {
-            config = Json.decodeFromString<Config>(fileContent)
-        } catch (e: Exception) {
-            logger.error("Unable to parse config file regenerating, ${e.message}")
-            saveConfig(null)
-        }
-    }
-
-    fun saveConfig(data: Config?) {
-        val data = data ?: Config()
-        try {
-            val encoded= Json.encodeToString<Config>(data)
-            configFile.writeText(encoded)
-        } catch (e: Exception) {
-            logger.error("Unable to write new config, ${e.message}")
-        }
-    }
+    fun setup(
+        urls: Urls
+    ) { this.urls = urls }
 }
