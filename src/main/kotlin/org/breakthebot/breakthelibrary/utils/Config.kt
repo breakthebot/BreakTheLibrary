@@ -16,6 +16,9 @@
  */
 package org.breakthebot.breakthelibrary.utils
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Urls(
     val apiUrl: String = "https://api.earthmc.net/v4/aurora",
     val mapUrl: String = "https://map.earthmc.net/tiles/players.json",
