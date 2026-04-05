@@ -22,7 +22,7 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 
 @Serializable
-class Nation(val name: String) {
+data class Nation(val name: String) {
     val uuid: SerializableUUID? = null
     var board: String? = null
     var dynmapColour: String? = null

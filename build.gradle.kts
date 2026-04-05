@@ -3,7 +3,7 @@
 
 plugins {
     kotlin("jvm") version "2.1.21"
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("plugin.serialization") version "2.1.21"
     `maven-publish`
 }
 
@@ -14,16 +14,6 @@ repositories {
     mavenCentral()
 }
 
-//buildscript {
-//    repositories {
-//        mavenCentral()
-//    }
-//    dependencies {
-//        classpath("com.guardsquare:proguard-gradle:7.5.0")
-//    }
-//}
-
-// val isRelease = project.hasProperty("release")
 val shouldPublish = project.hasProperty("publish")
 
 
@@ -51,18 +41,6 @@ dependencies {
     compileOnly("org.slf4j:slf4j-api:$slf4j")
 }
 
-//tasks.register<ProGuardTask>("obfuscate") {
-//
-//    dependsOn(tasks.named<Jar>("jar"))
-//
-//    injars(tasks.named<Jar>("jar").flatMap { it.archiveFile })
-//
-//    outjars(layout.buildDirectory.file("libs/${project.name}-${project.version}-obf.jar"))
-//
-//    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
-//
-//    configuration("./proguard-rules.pro")
-//}
 val headerText = file("header.txt").readText()
 
 val addHeader by tasks.registering {
@@ -90,12 +68,6 @@ tasks.named("compileKotlin") {
 tasks.test {
     useJUnitPlatform()
 }
-
-//tasks.named("build") {
-//    if (isRelease) {
-//        dependsOn("obfuscate")
-//    }
-//}
 
 tasks.withType<PublishToMavenRepository>().configureEach {
     onlyIf { shouldPublish }

@@ -16,13 +16,14 @@
  */
 package org.breakthebot.breakthelibrary.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NearbyItem(
-    val targetType: NearbyType,
+    @SerialName("target_type") val targetType: NearbyType,
     val target: String,
-    val searchType: NearbyType,
+    @SerialName("search_type") val searchType: NearbyType,
     val radius: Int
 )
 

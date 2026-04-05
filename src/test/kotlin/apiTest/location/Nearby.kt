@@ -14,23 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.breakthebot.breakthelibrary.api
+package apiTest.location
 
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.NearbyAPI
 import org.breakthebot.breakthelibrary.models.NearbyItem
+import org.breakthebot.breakthelibrary.models.NearbyType
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.network.Fetch
-import org.breakthebot.breakthelibrary.network.Fetch.postRequest
-import org.breakthebot.breakthelibrary.utils.Endpoints
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
+import kotlin.test.assertIs
 
+class Nearby {
 
-object NearbyAPI {
-    suspend fun get(query: NearbyItem): List<Reference>? {
-        val body = buildJsonObject {
-            put("query", JsonArray(listOf(Fetch.json.encodeToJsonElement(query))))
+    @Test
+    fun testNearbyApi() {
+        runBlocking {
+            val nearby = NearbyAPI.get(
+                NearbyItem(
+                    NearbyType.TOWN,
+                    "Lost_Coast",
+                    NearbyType.TOWN,
+                    500
+                )
+            )
+            assertNotNull(nearby)
+            assertIs<List<Reference>>(nearby)
         }
-        return postRequest<List<List<Reference>>?>(Endpoints.NEARBY, body.toString())?.first()
     }
 }
