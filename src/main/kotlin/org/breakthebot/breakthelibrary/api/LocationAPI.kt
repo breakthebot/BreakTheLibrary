@@ -40,5 +40,4 @@ object LocationAPI {
     }
 
     suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = getRequest<MapReturn?>(Endpoints.MAP)?.players
-
 }

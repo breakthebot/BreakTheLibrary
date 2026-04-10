@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Urls(
     val apiUrl: String = "https://api.earthmc.net/v4/aurora",
-    val mapUrl: String = "https://map.earthmc.net/tiles/players.json",
+    val mapUrl: String = "https://map.earthmc.net/",
     val staffUrl: String = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
 )
 

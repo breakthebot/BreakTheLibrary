@@ -28,5 +28,5 @@ object Endpoints {
     val MM = "$APIURL/mm"
     val QUARTERS = "$APIURL/quarters"
     val STAFF = ConfigHandler.urls.staffUrl
-    val MAP = ConfigHandler.urls.mapUrl
+    val MAP = ConfigHandler.urls.mapUrl + "tiles/players.json"
 }
