@@ -34,8 +34,6 @@ object DiscordAPI{
         val body = buildJsonObject {
             put("query", JsonArray(query.map { json.encodeToJsonElement(it).jsonObject }))
         }
-        println(body.toString())
-
         return postRequest<List<DiscordResponse>?>(Endpoints.DISCORD, body)
     }
 }
