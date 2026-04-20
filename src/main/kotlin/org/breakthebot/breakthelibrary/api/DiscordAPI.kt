@@ -22,18 +22,19 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
-import org.breakthebot.breakthelibrary.models.DiscordPayload
-import org.breakthebot.breakthelibrary.models.DiscordResponse
+import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.network.Fetch.postRequest
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
 object DiscordAPI{
     val json = Json { classDiscriminatorMode = ClassDiscriminatorMode.NONE; encodeDefaults = true }
 
-    suspend fun getDiscord(query: List<DiscordPayload>): List<DiscordResponse>? {
-        val body = buildJsonObject {
-            put("query", JsonArray(query.map { json.encodeToJsonElement(it).jsonObject }))
+    suspend fun getDiscord(query: List<String>): List<String>? {
+        val resp = PlayerAPI.getPlayers(
+            query
+        )
+        return resp?.map {
+            it.discord ?: ""
         }
-        return postRequest<List<DiscordResponse>?>(Endpoints.DISCORD, body)
     }
 }

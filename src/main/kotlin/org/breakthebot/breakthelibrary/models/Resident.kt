@@ -36,6 +36,7 @@ class Resident(val name: String) {
     var perms: Perms? = null
     var ranks: Ranks? = null
     var friends: List<Reference>? = null
+    var discord: String? = null
 
     @Serializable data class Timestamps(
         var registered: Long? = null,

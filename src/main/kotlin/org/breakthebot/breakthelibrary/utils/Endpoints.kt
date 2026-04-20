@@ -23,7 +23,6 @@ object Endpoints {
     val NATIONS = "$APIURL/nations"
     val PLAYERS = "$APIURL/players"
     val LOCATION = "$APIURL/location"
-    val DISCORD = "$APIURL/discord"
     val NEARBY = "$APIURL/nearby"
     val MM = "$APIURL/mm"
     val QUARTERS = "$APIURL/quarters"
