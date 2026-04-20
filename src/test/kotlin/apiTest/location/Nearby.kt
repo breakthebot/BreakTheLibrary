@@ -33,7 +33,7 @@ class Nearby {
             val nearby = NearbyAPI.get(
                 NearbyItem(
                     NearbyType.TOWN,
-                    "Lost_Coast",
+                    "Paris",
                     NearbyType.TOWN,
                     500
                 )

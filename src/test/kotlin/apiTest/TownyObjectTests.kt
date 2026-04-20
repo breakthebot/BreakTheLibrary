@@ -33,8 +33,9 @@ import kotlin.test.assertIs
 
 
 class TownyObjectTests {
+
     @ParameterizedTest
-    @ValueSource(strings = ["Paris", "Konoha", "Lost_Coast"])
+    @ValueSource(strings = ["Paris", "Ismailia", "Cairo"])
     fun testTowns(name: String) {
         runBlocking{
             val town = TownAPI.getTown(name)
@@ -56,7 +57,7 @@ class TownyObjectTests {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["France", "Mali", "Netherlands"])
+    @ValueSource(strings = ["France", "Egypt", "Germany"])
     fun testNations(name: String) {
         runBlocking{
             val nation = NationAPI.getNation(name)

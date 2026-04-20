@@ -27,12 +27,12 @@ class LocationTest {
 
     @Test
     fun testLocation() {
-        val coords = Pair(397.0, -9145.0)
+        val coords = Pair(11125.0, -3371.0)
         runBlocking {
             val loc = LocationAPI.getLocation(listOf(coords))?.first()
             assertNotNull(loc)
-            assertEquals(loc.town?.name, "Paris")
-            assertEquals(loc.nation?.name, "France")
+            assertEquals(loc.town?.name, "Ismailia")
+            assertEquals(loc.nation?.name, "Egypt")
         }
     }
 }

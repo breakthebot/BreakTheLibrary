@@ -19,41 +19,21 @@ package apiTest.misc
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.DiscordAPI
 import org.junit.jupiter.api.Test
-import org.breakthebot.breakthelibrary.models.DiscordPayloadDiscord
-import org.breakthebot.breakthelibrary.models.DiscordPayloadMinecraft
-import org.breakthebot.breakthelibrary.models.DiscordResponse
-import org.breakthebot.breakthelibrary.models.Target
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
 import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.util.UUID
 import kotlin.test.assertIs
 
 class DiscordTest {
 
-    @Test
-    /** Tests the discord endpoint with [DiscordPayloadDiscord] */
-    fun testD2D() {
+    @ParameterizedTest
+    @ValueSource(strings = ["charis_k", "Veyronity"])
+    fun testD2D(name: String) {
         runBlocking {
-            val payload = DiscordPayloadDiscord(
-                927581845787402240.toString()
-            )
-            val resp = DiscordAPI.getDiscord(listOf(payload))?.first()
+            val resp = DiscordAPI.getDiscord(listOf(name))?.first()
             assertNotNull(resp)
-            assertIs<DiscordResponse>(resp)
-        }
-    }
-
-    @Test
-    /** Tests the discord endpoint with [DiscordPayloadMinecraft] */
-    fun testD2M() {
-        runBlocking {
-            val payload = DiscordPayloadMinecraft(
-                SerializableUUID(UUID.fromString("bf65f6f1-3f88-4120-aa34-dbdc6e996b12"))
-            )
-            val resp = DiscordAPI.getDiscord(listOf(payload))?.first()
-            assertNotNull(resp)
-            assertIs<DiscordResponse>(resp)
-
+            assertIs<String>(resp)
         }
     }
 }
