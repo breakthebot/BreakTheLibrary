@@ -17,6 +17,8 @@
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Serializable
 data class ServerInfo(
@@ -56,4 +58,8 @@ data class ServerInfo(
         val target: Int,
         val numRemaining: Int
     )
+
+    override fun toString(): String {
+        return Json.encodeToString(this)
+    }
 }

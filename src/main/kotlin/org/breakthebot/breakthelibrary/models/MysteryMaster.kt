@@ -17,6 +17,8 @@
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
@@ -24,4 +26,8 @@ data class MysteryMaster(
     val name: String?,
     val uuid: SerializableUUID?,
     val change: String?
-)
+) {
+    override fun toString(): String {
+        return Json.encodeToString(this)
+    }
+}

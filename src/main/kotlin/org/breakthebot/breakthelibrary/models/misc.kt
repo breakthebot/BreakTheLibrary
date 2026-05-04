@@ -17,6 +17,8 @@
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
@@ -31,7 +33,11 @@ data class Flags(
     var explosion: Boolean? = null,
     var fire: Boolean? = null,
     var mobs: Boolean? = null
-)
+) {
+    override fun toString(): String {
+        return Json.encodeToString(this)
+    }
+}
 
 @Serializable
 data class Perms(
@@ -41,7 +47,11 @@ data class Perms(
     val itemUse: List<Boolean>? = null,
     val switch: List<Boolean>? = null,
     val flags: Flags? = null
-)
+) {
+    override fun toString(): String {
+        return Json.encodeToString(this)
+    }
+}
 
 @Serializable
 data class Spawn(
@@ -51,4 +61,8 @@ data class Spawn(
     val z: Float? = null,
     val pitch: Float? = null,
     val yaw: Float? = null
-)
+) {
+    override fun toString(): String  {
+        return Json.encodeToString(this)
+    }
+}

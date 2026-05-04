@@ -19,6 +19,7 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable

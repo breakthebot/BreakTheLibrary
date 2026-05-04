@@ -19,6 +19,8 @@
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
@@ -62,4 +64,8 @@ class Resident(val name: String) {
         var townRanks: List<String>? = null,
         var nationRanks: List<String>? = null
     )
+
+    override fun toString(): String {
+        return Json.encodeToString(this)
+    }
 }
