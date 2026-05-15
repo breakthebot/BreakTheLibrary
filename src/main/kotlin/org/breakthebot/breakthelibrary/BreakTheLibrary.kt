@@ -16,6 +16,7 @@
  */
 package org.breakthebot.breakthelibrary
 
+import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -25,8 +26,13 @@ object BreakTheLibrary {
 
     val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
 
+    val json: Json = Json {
+        ignoreUnknownKeys = true
+        prettyPrint = true
+    }
+
     init {
-        logger.info("Init.")
+      logger.info("Init.")
     }
 
 }

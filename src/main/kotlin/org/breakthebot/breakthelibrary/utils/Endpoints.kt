@@ -17,15 +17,13 @@
 package org.breakthebot.breakthelibrary.utils
 
 object Endpoints {
-    val APIURL = ConfigHandler.urls.apiUrl
+    val APIURL = ConfigHandler.cfg.apiUrl
 
     val TOWNS = "$APIURL/towns"
     val NATIONS = "$APIURL/nations"
     val PLAYERS = "$APIURL/players"
     val LOCATION = "$APIURL/location"
     val NEARBY = "$APIURL/nearby"
-    val MM = "$APIURL/mm"
-    val QUARTERS = "$APIURL/quarters"
-    val STAFF = ConfigHandler.urls.staffUrl
-    val MAP = ConfigHandler.urls.mapUrl + "tiles/players.json"
+    val STAFF = ConfigHandler.cfg.staffUrl
+    val MAP = ConfigHandler.cfg.mapUrl + "tiles/players.json"
 }

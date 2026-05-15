@@ -20,7 +20,7 @@ package org.breakthebot.breakthelibrary.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
@@ -97,6 +97,6 @@ data class Town(
     )
 
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return BreakTheLibrary.json.encodeToString(this)
     }
 }

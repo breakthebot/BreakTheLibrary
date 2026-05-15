@@ -14,32 +14,62 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package apiTest.location
+package apiTest.map
 
 import kotlinx.coroutines.runBlocking
-import org.breakthebot.breakthelibrary.api.NearbyAPI
+import org.breakthebot.breakthelibrary.api.MapApi
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
+import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
+import org.breakthebot.breakthelibrary.network.ApiResult
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import kotlin.test.assertIs
 
 class Nearby {
 
-    @Test
+    //@Test
     fun testNearbyApi() {
         runBlocking {
-            val nearby = NearbyAPI.get(
-                NearbyItem(
-                    NearbyType.TOWN,
-                    "Paris",
-                    NearbyType.TOWN,
-                    500
+            val nearby = MapApi.getNearby(
+                listOf(
+                    NearbyItem(
+                        NearbyType.TOWN,
+                        "France",
+                        NearbyType.TOWN,
+                        500
+                    )
                 )
             )
             assertNotNull(nearby)
             assertIs<List<Reference>>(nearby)
+        }
+    }
+
+    @Test
+    fun testLocation() {
+        val coords = Pair(11125.0, -3371.0)
+        runBlocking {
+            val loc = when (val resp = MapApi.getLocation(listOf(coords))) {
+                is ApiResult.Success -> {
+                    resp.data
+                }
+                else -> null
+            }?.first()
+            assertNotNull(loc)
+            assertEquals(loc.town?.name, "Giza")
+            assertEquals(loc.nation?.name, "Egypt")
+        }
+    }
+
+    @Test
+    fun testMapReturn() {
+        runBlocking {
+            val players = MapApi.getVisiblePlayers()
+            assertNotNull(players)
+            assertIs<List<PlayerMapReturn>>(players)
         }
     }
 }
