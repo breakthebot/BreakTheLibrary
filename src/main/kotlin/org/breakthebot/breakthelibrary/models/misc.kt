@@ -19,6 +19,7 @@ package org.breakthebot.breakthelibrary.models
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
@@ -35,7 +36,7 @@ data class Flags(
     var mobs: Boolean? = null
 ) {
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return BreakTheLibrary.json.encodeToString(this)
     }
 }
 
@@ -49,7 +50,7 @@ data class Perms(
     val flags: Flags? = null
 ) {
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return BreakTheLibrary.json.encodeToString(this)
     }
 }
 
@@ -63,6 +64,6 @@ data class Spawn(
     val yaw: Float? = null
 ) {
     override fun toString(): String  {
-        return Json.encodeToString(this)
+        return BreakTheLibrary.json.encodeToString(this)
     }
 }

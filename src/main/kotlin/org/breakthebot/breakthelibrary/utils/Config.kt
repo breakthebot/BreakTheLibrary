@@ -19,16 +19,18 @@ package org.breakthebot.breakthelibrary.utils
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Urls(
+data class Config(
     val apiUrl: String = "https://api.earthmc.net/v4",
     val mapUrl: String = "https://map.earthmc.net/",
-    val staffUrl: String = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json"
+    val staffUrl: String = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json",
+
+    val batchSize: Int = 100
 )
 
 object ConfigHandler {
-    var urls: Urls = Urls()
+    var cfg = Config()
 
     fun setup(
-        urls: Urls
-    ) { this.urls = urls }
+        conf: Config
+    ) { this.cfg = conf }
 }

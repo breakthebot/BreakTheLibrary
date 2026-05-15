@@ -20,6 +20,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
@@ -36,7 +37,7 @@ data class Location (
     )
 
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return BreakTheLibrary.json.encodeToString(this)
     }
 }
 
@@ -59,6 +60,6 @@ data class PlayerMapReturn(
     val yaw: Int
 ) {
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return BreakTheLibrary.json.encodeToString(this)
     }
 }

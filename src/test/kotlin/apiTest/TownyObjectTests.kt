@@ -16,18 +16,15 @@
  */
 package apiTest
 
-import kotlinx.coroutines.launch
-import org.breakthebot.breakthelibrary.api.NationAPI
-import org.breakthebot.breakthelibrary.api.PlayerAPI
-import org.breakthebot.breakthelibrary.api.TownAPI
 import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.Town
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import TestScope
 import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.TownyAPI
+import org.breakthebot.breakthelibrary.network.ApiResult
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
@@ -35,10 +32,15 @@ import kotlin.test.assertIs
 class TownyObjectTests {
 
     @ParameterizedTest
-    @ValueSource(strings = ["Paris", "Ismailia", "Cairo"])
+    @ValueSource(strings = ["Paris", "Giza", "Cairo"])
     fun testTowns(name: String) {
         runBlocking{
-            val town = TownAPI.getTown(name)
+            val town = when ( val town = TownyAPI.getTown(name) ) {
+                is ApiResult.Success<Town> -> {
+                    town.data
+                }
+                is ApiResult.Error -> null
+            }
             assertNotNull(town)
             assertIs<Town>(town)
             assertEquals(town.name, name)
@@ -49,7 +51,12 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
         runBlocking{
-            val res = PlayerAPI.getPlayer(name)
+            val res = when (val res = TownyAPI.getPlayer(name)) {
+                is ApiResult.Success<Resident> -> {
+                    res.data
+                }
+                is ApiResult.Error -> null
+            }
             assertNotNull(res)
             assertIs<Resident>(res)
             assertEquals(res.name, name)
@@ -60,11 +67,25 @@ class TownyObjectTests {
     @ValueSource(strings = ["France", "Egypt", "Germany"])
     fun testNations(name: String) {
         runBlocking{
-            val nation = NationAPI.getNation(name)
+            val nation = when( val nation = TownyAPI.getNation(name) ) {
+                is ApiResult.Success<Nation> -> {
+                    nation.data
+                }
+                is ApiResult.Error -> null
+            }
             assertNotNull(nation)
             assertIs<Nation>(nation)
             assertEquals(nation.name, name)
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
+    fun testD2D(name: String) {
+        runBlocking {
+            val resp = TownyAPI.getPlayerDiscord(listOf(name)).first()
+            assertNotNull(resp)
+            assertIs<String>(resp)
+        }
+    }
 }
