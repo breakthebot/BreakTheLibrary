@@ -24,7 +24,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.TownyAPI
+import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.network.ApiResult
+import org.breakthebot.breakthelibrary.network.getOrNull
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
@@ -86,6 +89,22 @@ class TownyObjectTests {
             val resp = TownyAPI.getPlayerDiscord(listOf(name)).first()
             assertNotNull(resp)
             assertIs<String>(resp)
+        }
+    }
+
+    @Test
+    fun testGenericApi() {
+        runBlocking {
+            val players = TownyAPI.getAllPlayers().getOrNull()
+            val towns = TownyAPI.getAllTowns().getOrNull()
+            val nations = TownyAPI.getAllNations().getOrNull()
+            assertNotNull(players)
+            assertNotNull(towns)
+            assertNotNull(nations)
+
+            assertIs<List<Reference>>(players)
+            assertIs<List<Reference>>(towns)
+            assertIs<List<Reference>>(nations)
         }
     }
 }

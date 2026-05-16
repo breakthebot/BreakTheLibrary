@@ -26,12 +26,13 @@ import org.breakthebot.breakthelibrary.network.Fetch
 import org.breakthebot.breakthelibrary.network.getOrNull
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import java.sql.Ref
 
 object TownyAPI {
 
-    suspend fun getAllPlayers(): ApiResult<Resident> = Fetch.getRequest(Endpoints.PLAYERS)
-    suspend fun getAllTowns(): ApiResult<Reference> = Fetch.getRequest(Endpoints.TOWNS)
-    suspend fun getAllNations(): ApiResult<Reference> = Fetch.getRequest(Endpoints.NATIONS)
+    suspend fun getAllPlayers(): ApiResult<List<Reference>> = Fetch.getRequest(Endpoints.PLAYERS)
+    suspend fun getAllTowns(): ApiResult<List<Reference>> = Fetch.getRequest(Endpoints.TOWNS)
+    suspend fun getAllNations(): ApiResult<List<Reference>> = Fetch.getRequest(Endpoints.NATIONS)
 
     suspend fun getPlayer(name: String): ApiResult<Resident> = Fetch.postRequestItem(Endpoints.PLAYERS, name)
 
