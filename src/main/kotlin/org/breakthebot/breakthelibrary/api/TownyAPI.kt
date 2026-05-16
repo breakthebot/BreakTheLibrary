@@ -23,6 +23,7 @@ import org.breakthebot.breakthelibrary.models.StaffList
 import org.breakthebot.breakthelibrary.models.Town
 import org.breakthebot.breakthelibrary.network.ApiResult
 import org.breakthebot.breakthelibrary.network.Fetch
+import org.breakthebot.breakthelibrary.network.getOrNull
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
@@ -60,12 +61,5 @@ object TownyAPI {
 
     suspend fun getNations(names: List<String>): List<ApiResult<List<Nation>>?> = Fetch.getChunked(names, Endpoints.NATIONS)
 
-    suspend fun getStaff(): List<SerializableUUID>? {
-        return when (val staff = Fetch.getRequest<StaffList?>(Endpoints.STAFF)) {
-            is ApiResult.Success -> {
-                staff.data?.allStaff()
-            }
-            else -> null
-        }
-    }
+    suspend fun getStaff(): List<SerializableUUID>? = Fetch.getRequest<StaffList?>(Endpoints.STAFF).getOrNull()?.allStaff()
 }

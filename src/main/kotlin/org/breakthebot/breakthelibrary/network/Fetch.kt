@@ -50,6 +50,13 @@ sealed class ApiResult<out T> {
     ) : ApiResult<Nothing>()
 }
 
+fun <T> ApiResult<T>.getOrNull(): T?{
+    return when (this) {
+        is ApiResult.Success<T> -> this.data
+        else -> null
+    }
+}
+
 object Fetch {
     val json = BreakTheLibrary.json
     val client: HttpClient = HttpClient.newHttpClient()
@@ -82,8 +89,6 @@ object Fetch {
             header("Content-Type", "application/json")
         }.build()
         val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
-
-
         if (response.statusCode() != 200) {
             return ApiResult.Error(
                 response.body(),
@@ -111,15 +116,23 @@ object Fetch {
         }.build()
 
         val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
+        val body = response.body()
         if (response.statusCode() != 200) {
             return ApiResult.Error(
                 // In the context of towny apis this will almost always be the error message.
-                response.body(),
+                body,
                 response.statusCode()
             )
         }
+        // If body is [], then query is 404 but api doesnt return it.
+        if (body.length == 2) {
+            return ApiResult.Error(
+                "Not found",
+                404
+            )
+        }
         return ApiResult.Success(
-           parseString<T>(response.body()),
+           parseString<T>(body),
            200
        )
     }

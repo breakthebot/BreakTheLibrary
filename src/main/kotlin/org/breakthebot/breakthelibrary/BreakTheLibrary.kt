@@ -24,7 +24,7 @@ object BreakTheLibrary {
 
     const val LOGGING_NAME: String = "BreakTheLibrary"
 
-    val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
+    //val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
 
     val json: Json = Json {
         ignoreUnknownKeys = true
@@ -32,7 +32,7 @@ object BreakTheLibrary {
     }
 
     init {
-      logger.info("Init.")
+        //logger.info("Init.")
     }
 
 }

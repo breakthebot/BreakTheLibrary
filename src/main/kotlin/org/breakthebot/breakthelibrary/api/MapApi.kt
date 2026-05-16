@@ -20,6 +20,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonArray
 import org.breakthebot.breakthelibrary.models.Location
 import org.breakthebot.breakthelibrary.models.MapReturn
 import org.breakthebot.breakthelibrary.models.NearbyItem
@@ -27,18 +28,12 @@ import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.network.ApiResult
 import org.breakthebot.breakthelibrary.network.Fetch
+import org.breakthebot.breakthelibrary.network.getOrNull
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
 object MapApi {
 
-    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? {
-        return when (val resp = Fetch.getRequest<MapReturn>(Endpoints.MAP)) {
-            is ApiResult.Success<MapReturn> -> {
-                resp.data.players
-            }
-            else -> null
-        }
-    }
+    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = Fetch.getRequest<MapReturn>(Endpoints.MAP).getOrNull()?.players
 
     suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>> {
         val body = buildJsonObject {
@@ -54,10 +49,10 @@ object MapApi {
         return Fetch.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
-    suspend fun getNearby(query: List<NearbyItem>): ApiResult<List<Reference>?> {
+    suspend fun getNearby(query: List<NearbyItem>): ApiResult<List<List<Reference>?>?> {
         val body = buildJsonObject {
-            put("query", JsonArray(listOf(Fetch.json.encodeToJsonElement(query))))
+            put("query", JsonArray(Fetch.json.encodeToJsonElement(query).jsonArray))
         }
-        return Fetch.postRequest<List<Reference>?>(Endpoints.NEARBY, body.toString())
+        return Fetch.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString())
     }
 }

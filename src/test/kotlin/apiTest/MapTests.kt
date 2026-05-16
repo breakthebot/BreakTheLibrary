@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-package apiTest.map
+package apiTest
 
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.MapApi
@@ -23,26 +23,27 @@ import org.breakthebot.breakthelibrary.models.NearbyType
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.network.ApiResult
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.breakthebot.breakthelibrary.network.getOrNull
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import kotlin.test.assertIs
 
-class Nearby {
+class MapTests {
 
-    //@Test
+    @Test
     fun testNearbyApi() {
         runBlocking {
             val nearby = MapApi.getNearby(
                 listOf(
                     NearbyItem(
                         NearbyType.TOWN,
-                        "France",
+                        "Cairo",
                         NearbyType.TOWN,
                         500
                     )
                 )
-            )
+            ).getOrNull()
             assertNotNull(nearby)
             assertIs<List<Reference>>(nearby)
         }
@@ -56,11 +57,12 @@ class Nearby {
                 is ApiResult.Success -> {
                     resp.data
                 }
+
                 else -> null
             }?.first()
             assertNotNull(loc)
-            assertEquals(loc.town?.name, "Giza")
-            assertEquals(loc.nation?.name, "Egypt")
+            Assertions.assertEquals(loc.town?.name, "Giza")
+            Assertions.assertEquals(loc.nation?.name, "Egypt")
         }
     }
 
