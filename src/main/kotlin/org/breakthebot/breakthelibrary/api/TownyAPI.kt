@@ -22,45 +22,34 @@ import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.StaffList
 import org.breakthebot.breakthelibrary.models.Town
 import org.breakthebot.breakthelibrary.network.ApiResult
-import org.breakthebot.breakthelibrary.network.Fetch
+import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.network.getOrNull
+import org.breakthebot.breakthelibrary.network.mapSuccess
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
-import java.sql.Ref
 
 object TownyAPI {
 
-    suspend fun getAllPlayers(): ApiResult<List<Reference>> = Fetch.getRequest(Endpoints.PLAYERS)
-    suspend fun getAllTowns(): ApiResult<List<Reference>> = Fetch.getRequest(Endpoints.TOWNS)
-    suspend fun getAllNations(): ApiResult<List<Reference>> = Fetch.getRequest(Endpoints.NATIONS)
+    suspend fun getAllPlayers(): ApiResult<List<Reference>> = ApiClient.getRequest(Endpoints.PLAYERS)
+    suspend fun getAllTowns(): ApiResult<List<Reference>> = ApiClient.getRequest(Endpoints.TOWNS)
+    suspend fun getAllNations(): ApiResult<List<Reference>> = ApiClient.getRequest(Endpoints.NATIONS)
 
-    suspend fun getPlayer(name: String): ApiResult<Resident> = Fetch.postRequestItem(Endpoints.PLAYERS, name)
+    suspend fun getPlayer(name: String): ApiResult<Resident> = ApiClient.postRequestItem(Endpoints.PLAYERS, name)
 
-    suspend fun getPlayerDiscord(names: List<String>): List<String?> {
-        return when (
-            val resp = Fetch.postRequest<Resident>(Endpoints.PLAYERS, names)
-        ) {
-            is ApiResult.Success -> {
-                resp.data.map { it.discord }
-            }
-            is ApiResult.Error -> {
-                listOf(resp.message)
-            }
-        }
+    /**
+     * Retrieve the discord user of a player if they are linked.
+     * */
+    suspend fun getPlayerDiscord(names: String): ApiResult<String?> = ApiClient.postRequest<Resident>(Endpoints.PLAYERS, names).mapSuccess { it.discord }
 
-    }
+    suspend fun getPlayers(names: List<String>): List<ApiResult<List<Resident>>> = ApiClient.getChunked(names, Endpoints.PLAYERS)
 
-    suspend fun getPlayers(names: List<String>): List<ApiResult<List<Resident>>?> = Fetch.getChunked(names, Endpoints.PLAYERS)
+    suspend fun getTown(name: String): ApiResult<Town> = ApiClient.postRequestItem(Endpoints.TOWNS, name)
 
+    suspend fun getTowns(names: List<String>): List<ApiResult<List<Town>>> = ApiClient.getChunked(names, Endpoints.TOWNS)
 
-    suspend fun getTown(name: String): ApiResult<Town> = Fetch.postRequestItem(Endpoints.TOWNS, name)
+    suspend fun getNation(name: String): ApiResult<Nation> = ApiClient.postRequestItem(Endpoints.NATIONS, name)
 
-    suspend fun getTowns(names: List<String>): List<ApiResult<List<Town>>?> = Fetch.getChunked(names, Endpoints.TOWNS)
+    suspend fun getNations(names: List<String>): List<ApiResult<List<Nation>>> = ApiClient.getChunked(names, Endpoints.NATIONS)
 
-
-    suspend fun getNation(name: String): ApiResult<Nation> = Fetch.postRequestItem(Endpoints.NATIONS, name)
-
-    suspend fun getNations(names: List<String>): List<ApiResult<List<Nation>>?> = Fetch.getChunked(names, Endpoints.NATIONS)
-
-    suspend fun getStaff(): List<SerializableUUID>? = Fetch.getRequest<StaffList?>(Endpoints.STAFF).getOrNull()?.allStaff()
+    suspend fun getStaff(): List<SerializableUUID>? = ApiClient.getRequest<StaffList?>(Endpoints.STAFF).getOrNull()?.allStaff()
 }

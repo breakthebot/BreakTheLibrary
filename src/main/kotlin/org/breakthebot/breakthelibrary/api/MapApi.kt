@@ -27,13 +27,14 @@ import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.network.ApiResult
-import org.breakthebot.breakthelibrary.network.Fetch
+import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.network.getOrNull
+import org.breakthebot.breakthelibrary.network.mapSuccess
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
 object MapApi {
 
-    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = Fetch.getRequest<MapReturn>(Endpoints.MAP).getOrNull()?.players
+    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP).getOrNull()?.players
 
     suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>> {
         val body = buildJsonObject {
@@ -46,13 +47,13 @@ object MapApi {
             }))
         }
 
-        return Fetch.postRequest<List<Location>>(Endpoints.LOCATION, body)
+        return ApiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
-    suspend fun getNearby(query: List<NearbyItem>): ApiResult<List<List<Reference>?>?> {
+    suspend fun getNearby(query: List<NearbyItem>): ApiResult<List<Reference>?> {
         val body = buildJsonObject {
-            put("query", JsonArray(Fetch.json.encodeToJsonElement(query).jsonArray))
+            put("query", JsonArray(ApiClient.json.encodeToJsonElement(query).jsonArray))
         }
-        return Fetch.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString())
+        return ApiClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }
 }

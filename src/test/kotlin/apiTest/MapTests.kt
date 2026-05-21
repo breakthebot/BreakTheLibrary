@@ -22,7 +22,6 @@ import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.network.ApiResult
 import org.breakthebot.breakthelibrary.network.getOrNull
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -53,13 +52,10 @@ class MapTests {
     fun testLocation() {
         val coords = Pair(11125.0, -3371.0)
         runBlocking {
-            val loc = when (val resp = MapApi.getLocation(listOf(coords))) {
-                is ApiResult.Success -> {
-                    resp.data
-                }
+            val loc = MapApi.getLocation(listOf(coords))
+                .getOrNull()
+                ?.first()
 
-                else -> null
-            }?.first()
             assertNotNull(loc)
             Assertions.assertEquals(loc.town?.name, "Giza")
             Assertions.assertEquals(loc.nation?.name, "Egypt")

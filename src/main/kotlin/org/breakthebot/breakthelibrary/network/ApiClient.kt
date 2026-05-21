@@ -25,7 +25,6 @@ import kotlinx.coroutines.sync.withPermit
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -37,27 +36,57 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-
+/**
+ * Represents a response from the API.
+ * */
 sealed class ApiResult<out T> {
+    /**
+     * A successful response from the API.
+     * @param T The type of the data.
+     * @param data The response data.
+     * @param statusCode The status code.
+     * */
     data class Success<T>(
         val data: T,
         val statusCode: Int
     ) : ApiResult<T>()
 
+    /**
+     * Represents an error sent from the API.
+     * @param message The error message returned by the api.
+     * @param statusCode The status code the request returned.
+     * */
     data class Error(
         val message: String,
         val statusCode: Int?,
     ) : ApiResult<Nothing>()
 }
 
-fun <T> ApiResult<T>.getOrNull(): T?{
+fun <T> ApiResult<T>.getOrNull(): T? {
     return when (this) {
         is ApiResult.Success<T> -> this.data
         else -> null
     }
 }
 
-object Fetch {
+/** Map data if it is a successful request. */
+inline fun <T, R> ApiResult<T>.mapSuccess(
+    transform: (T) -> R
+): ApiResult<R> {
+    return when (this) {
+        is ApiResult.Success -> ApiResult.Success(
+            transform(data),
+            statusCode
+        )
+
+        is ApiResult.Error -> this
+    }
+}
+
+/**
+ * Wrapper for interacting with the EarthMc API in a clean way.
+ * */
+object ApiClient {
     val json = BreakTheLibrary.json
     val client: HttpClient = HttpClient.newHttpClient()
 
@@ -80,6 +109,7 @@ object Fetch {
             }
         }
     }
+
     /** Sends a get request.
      * @param url The url to send the request to.
      * */
@@ -119,13 +149,13 @@ object Fetch {
         val body = response.body()
         if (response.statusCode() != 200) {
             return ApiResult.Error(
-                // In the context of towny apis this will almost always be the error message.
+                // In the context of towny APIs this will almost always be the error message.
                 body,
                 response.statusCode()
             )
         }
-        // If body is [], then query is 404 but api doesnt return it.
-        if (body.length == 2) {
+        // If body is [], then query is 404 but api does not return it.
+        if (body == "[]") {
             return ApiResult.Error(
                 "Not found",
                 404
@@ -179,13 +209,15 @@ object Fetch {
         return postRequest(url, jsonBody.toString())
     }
 
+    /** Fetch items that are over Config.batchSize
+     * @param names The names or uuids of the items to fetch.
+     * @param url The url.
+     * @param T The type of all the items.
+     * */
     suspend inline fun <reified T> getChunked(
         names: List<String>,
         url: String
-    ): List<ApiResult<List<T>>?> {
-        if (names.size < ConfigHandler.cfg.batchSize) {
-            return listOf(postRequest(url, names))
-        }
+    ): List<ApiResult<List<T>>> {
 
         val batches = names.chunked(ConfigHandler.cfg.batchSize)
         val semaphore = Semaphore(3)
