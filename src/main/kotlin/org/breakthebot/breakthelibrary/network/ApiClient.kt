@@ -83,6 +83,24 @@ inline fun <T, R> ApiResult<T>.mapSuccess(
     }
 }
 
+inline fun <T> ApiResult<T>.onSuccess(
+    block: (T) -> Unit
+): ApiResult<T> {
+    if (this is ApiResult.Success) {
+        block(data)
+    }
+    return this
+}
+
+inline fun <T> ApiResult<T>.onError(
+    block: (ApiResult.Error) -> Unit
+): ApiResult<T> {
+    if (this is ApiResult.Error) {
+        block(this)
+    }
+    return this
+}
+
 /**
  * Wrapper for interacting with the EarthMc API in a clean way.
  * */
