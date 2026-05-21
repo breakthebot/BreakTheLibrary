@@ -136,17 +136,24 @@ object ApiClient {
             uri(URI(url))
             header("Content-Type", "application/json")
         }.build()
-        val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
-        if (response.statusCode() != 200) {
+        try {
+            val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
+            if (response.statusCode() != 200) {
+                return ApiResult.Error(
+                    response.body(),
+                    response.statusCode()
+                )
+            }
+            return ApiResult.Success(
+                parseString<T>(response.body()),
+                200
+            )
+        } catch (e: Exception) {
             return ApiResult.Error(
-                response.body(),
-                response.statusCode()
+                e.message ?: "Unknown error",
+                0
             )
         }
-        return ApiResult.Success(
-            parseString<T>(response.body()),
-            200
-        )
     }
 
     /** Send a request with a request.
@@ -162,27 +169,33 @@ object ApiClient {
            header("Content-Type", "application/json")
            POST(HttpRequest.BodyPublishers.ofString(body))
         }.build()
-
-        val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
-        val body = response.body()
-        if (response.statusCode() != 200) {
+        try {
+            val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
+            val body = response.body()
+            if (response.statusCode() != 200) {
+                return ApiResult.Error(
+                    // In the context of towny APIs this will almost always be the error message.
+                    body,
+                    response.statusCode()
+                )
+            }
+            // If body is [], then query is 404 but api does not return it.
+            if (body == "[]") {
+                return ApiResult.Error(
+                    "Not found",
+                    404
+                )
+            }
+            return ApiResult.Success(
+                parseString<T>(body),
+                200
+            )
+        } catch (e: Exception) {
             return ApiResult.Error(
-                // In the context of towny APIs this will almost always be the error message.
-                body,
-                response.statusCode()
+                e.message ?: "Unknown error",
+                0
             )
         }
-        // If body is [], then query is 404 but api does not return it.
-        if (body == "[]") {
-            return ApiResult.Error(
-                "Not found",
-                404
-            )
-        }
-        return ApiResult.Success(
-           parseString<T>(body),
-           200
-       )
     }
 
     /** Send a request with a JSON payload without parsing to str.
