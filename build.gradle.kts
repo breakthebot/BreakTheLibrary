@@ -82,13 +82,6 @@ publishing {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
 
-            groupId = project.group.toString()
-            artifactId = "breakthelibrary"
-            version = project.version.toString()
-        }
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-
             artifact(tasks.named("sourcesJar"))
 
             groupId = project.group.toString()
