@@ -39,7 +39,7 @@ object TownyAPI {
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    suspend fun getPlayerDiscord(names: String): ApiResult<String?> = ApiClient.postRequest<Resident>(Endpoints.PLAYERS, names).mapSuccess { it.discord }
+    suspend fun getPlayerDiscord(names: String): ApiResult<String?> = ApiClient.postRequestItem<Resident>(Endpoints.PLAYERS, names).mapSuccess { it.discord }
 
     suspend fun getPlayers(names: List<String>): List<ApiResult<List<Resident>>> = ApiClient.getChunked(names, Endpoints.PLAYERS)
 

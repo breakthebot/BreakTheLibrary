@@ -86,7 +86,7 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testD2D(name: String) {
         runBlocking {
-            val resp = TownyAPI.getPlayerDiscord(listOf(name)).first()
+            val resp = TownyAPI.getPlayerDiscord(name).getOrNull()
             assertNotNull(resp)
             assertIs<String>(resp)
         }
