@@ -38,17 +38,18 @@ import java.net.http.HttpResponse
 
 /**
  * Represents a response from the API.
+ * @param T The type of the data if the request is successful.
  * */
 sealed class ApiResult<out T> {
     /**
-     * A successful response from the API.
+     * Represents a successful response from the API.
      * @param T The type of the data.
-     * @param data The response data.
+     * @param data The response data of type T.
      * @param statusCode The status code.
      * */
     data class Success<T>(
         val data: T,
-        val statusCode: Int
+        val statusCode: Int?
     ) : ApiResult<T>()
 
     /**
@@ -62,6 +63,9 @@ sealed class ApiResult<out T> {
     ) : ApiResult<Nothing>()
 }
 
+/**
+ * Returns [Success.data] or null.
+ * */
 fun <T> ApiResult<T>.getOrNull(): T? {
     return when (this) {
         is ApiResult.Success<T> -> this.data
@@ -83,6 +87,19 @@ inline fun <T, R> ApiResult<T>.mapSuccess(
     }
 }
 
+inline fun <T> ApiResult<T>.mapError(
+    transform: (ApiResult.Error) -> ApiResult.Error
+): ApiResult<T> {
+    return when (this) {
+        is ApiResult.Success -> this
+        is ApiResult.Error -> transform(this)
+    }
+}
+
+/**
+ * Map a function on success.
+ * @param block The action to execute
+ * */
 inline fun <T> ApiResult<T>.onSuccess(
     block: (T) -> Unit
 ): ApiResult<T> {
@@ -92,6 +109,10 @@ inline fun <T> ApiResult<T>.onSuccess(
     return this
 }
 
+/**
+ * Map a function on error.
+ * @param block The action to execute.
+ * */
 inline fun <T> ApiResult<T>.onError(
     block: (ApiResult.Error) -> Unit
 ): ApiResult<T> {
@@ -101,14 +122,25 @@ inline fun <T> ApiResult<T>.onError(
     return this
 }
 
+inline fun <T> ApiResult<T>.getOrElse(
+    fallback: (ApiResult.Error) -> T
+): T {
+    return when (this) {
+        is ApiResult.Success -> data
+        is ApiResult.Error -> fallback(this)
+    }
+}
+
 /**
  * Wrapper for interacting with the EarthMc API in a clean way.
+ * @property client The http client the ApiClient uses.
  * */
 object ApiClient {
     val json = BreakTheLibrary.json
     val client: HttpClient = HttpClient.newHttpClient()
 
     /** Parse a string into a specified T type.
+     * @param T The type to attempt to parse the string into.
      * @param body The string to parse into the T type.
      * */
     @OptIn(ExperimentalSerializationApi::class)
@@ -130,6 +162,8 @@ object ApiClient {
 
     /** Sends a get request.
      * @param url The url to send the request to.
+     * @param T The type of the data that should be returned on success.
+     * @return Return [ApiResult] with T as a type param.
      * */
     suspend inline fun <reified T> getRequest(url: String): ApiResult<T> {
         val request = HttpRequest.newBuilder().apply {
@@ -156,9 +190,11 @@ object ApiClient {
         }
     }
 
-    /** Send a request with a request.
+    /** Send a post request to the specified url, cannot handle more than Config.batchSize.
      * @param url The url to send the request to.
      * @param body The request body.
+     * @param T The type of the data that should be returned on success.
+     * @return Return [ApiResult] with T as a type param.
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
@@ -201,21 +237,32 @@ object ApiClient {
     /** Send a request with a JSON payload without parsing to str.
      * @param url The url to send the request to.
      * @param body The JSON body.
+     * @param T The type of the data that should be returned on success.
+     * @return Return [ApiResult] with T as a type param.
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
         body: JsonObject
     ): ApiResult<T> = postRequest<T>(url, body.toString())
 
-    /** Fetch multiple items easily.
+
+    /** Post request items without having to construct an object
+     * by adding everything from body to a JSON object with a key named `query` that is a JSON array.
      * @param T The type of the objects you want to fetch.
-     * @param url The url to send the req to
+     * @param url The url to send the req to.
      * @param body A list of UUID's or names to fetch from the specified endpoint.
+     * @return Return [ApiResult] with List<T> as a type param.
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
         body: List<String>
     ): ApiResult<List<T>> {
+        if (body.size > ConfigHandler.cfg.batchSize) {
+            return ApiResult.Error(
+                "Unable to send request, query size is bigger than ${ConfigHandler.cfg.batchSize}",
+                400
+            )
+        }
        val uuids = body.toString().removePrefix("[").removeSuffix("]").split(",").map { it.trim().removeSurrounding("\"") }
        val jsonBody = buildJsonObject {
            put("query", JsonArray(uuids.map { JsonPrimitive(it) }))
@@ -224,26 +271,28 @@ object ApiClient {
     }
 
 
-    /** Fetch multiple items easily.
+    /** Post request a singular item without having to construct an object
+     * by adding everything from body to a JSON object with a key named `query` that is a JSON array.
      * @param T The type of the objects you want to fetch.
      * @param url The url to send the req to
-     * @param body A list of UUID's or names to fetch from the specified endpoint.
+     * @param name The name or stringified UUID to query.
+     * @return Return [ApiResult] with List<T> as a type param.
      * */
     suspend inline fun <reified T> postRequestItem(
         url: String,
-        body: String
+        name: String
     ): ApiResult<T> {
         val jsonBody = buildJsonObject {
-            put("query", JsonArray(listOf(JsonPrimitive(body))))
+            put("query", JsonArray(listOf(JsonPrimitive(name))))
         }
-
         return postRequest(url, jsonBody.toString())
     }
 
-    /** Fetch items that are over Config.batchSize
-     * @param names The names or uuids of the items to fetch.
+    /** Fetch items that are over [Config#batchSize].
+     * @param names The names or UUIDs of the items to fetch.
      * @param url The url.
-     * @param T The type of all the items.
+     * @param T The type that the items should be parsed into.
+     * @return 
      * */
     suspend inline fun <reified T> getChunked(
         names: List<String>,
