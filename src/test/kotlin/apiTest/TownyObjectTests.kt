@@ -24,9 +24,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.TownyAPI
+import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.network.ApiResult
-import org.breakthebot.breakthelibrary.network.getOrNull
+import org.breakthebot.breakthelibrary.models.getOrNull
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

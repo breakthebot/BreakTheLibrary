@@ -16,15 +16,15 @@
  */
 package org.breakthebot.breakthelibrary.api
 
+import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.StaffList
 import org.breakthebot.breakthelibrary.models.Town
-import org.breakthebot.breakthelibrary.network.ApiResult
+import org.breakthebot.breakthelibrary.models.getOrNull
+import org.breakthebot.breakthelibrary.models.mapSuccess
 import org.breakthebot.breakthelibrary.network.ApiClient
-import org.breakthebot.breakthelibrary.network.getOrNull
-import org.breakthebot.breakthelibrary.network.mapSuccess
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 

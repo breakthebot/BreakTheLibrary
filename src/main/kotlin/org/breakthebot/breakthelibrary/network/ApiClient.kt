@@ -30,106 +30,12 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.BreakTheLibrary
+import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.utils.ConfigHandler
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-
-/**
- * Represents a response from the API.
- * @param T The type of the data if the request is successful.
- * */
-sealed class ApiResult<out T> {
-    /**
-     * Represents a successful response from the API.
-     * @param T The type of the data.
-     * @param data The response data of type T.
-     * @param statusCode The status code.
-     * */
-    data class Success<T>(
-        val data: T,
-        val statusCode: Int?
-    ) : ApiResult<T>()
-
-    /**
-     * Represents an error sent from the API.
-     * @param message The error message returned by the api.
-     * @param statusCode The status code the request returned.
-     * */
-    data class Error(
-        val message: String,
-        val statusCode: Int?,
-    ) : ApiResult<Nothing>()
-}
-
-/**
- * Returns [Success.data] or null.
- * */
-fun <T> ApiResult<T>.getOrNull(): T? {
-    return when (this) {
-        is ApiResult.Success<T> -> this.data
-        else -> null
-    }
-}
-
-/** Map data if it is a successful request. */
-inline fun <T, R> ApiResult<T>.mapSuccess(
-    transform: (T) -> R
-): ApiResult<R> {
-    return when (this) {
-        is ApiResult.Success -> ApiResult.Success(
-            transform(data),
-            statusCode
-        )
-
-        is ApiResult.Error -> this
-    }
-}
-
-inline fun <T> ApiResult<T>.mapError(
-    transform: (ApiResult.Error) -> ApiResult.Error
-): ApiResult<T> {
-    return when (this) {
-        is ApiResult.Success -> this
-        is ApiResult.Error -> transform(this)
-    }
-}
-
-/**
- * Map a function on success.
- * @param block The action to execute
- * */
-inline fun <T> ApiResult<T>.onSuccess(
-    block: (T) -> Unit
-): ApiResult<T> {
-    if (this is ApiResult.Success) {
-        block(data)
-    }
-    return this
-}
-
-/**
- * Map a function on error.
- * @param block The action to execute.
- * */
-inline fun <T> ApiResult<T>.onError(
-    block: (ApiResult.Error) -> Unit
-): ApiResult<T> {
-    if (this is ApiResult.Error) {
-        block(this)
-    }
-    return this
-}
-
-inline fun <T> ApiResult<T>.getOrElse(
-    fallback: (ApiResult.Error) -> T
-): T {
-    return when (this) {
-        is ApiResult.Success -> data
-        is ApiResult.Error -> fallback(this)
-    }
-}
 
 /**
  * Wrapper for interacting with the EarthMc API in a clean way.

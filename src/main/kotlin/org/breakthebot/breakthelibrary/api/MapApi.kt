@@ -21,15 +21,15 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
+import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.Location
 import org.breakthebot.breakthelibrary.models.MapReturn
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.network.ApiResult
+import org.breakthebot.breakthelibrary.models.getOrNull
+import org.breakthebot.breakthelibrary.models.mapSuccess
 import org.breakthebot.breakthelibrary.network.ApiClient
-import org.breakthebot.breakthelibrary.network.getOrNull
-import org.breakthebot.breakthelibrary.network.mapSuccess
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
 object MapApi {
