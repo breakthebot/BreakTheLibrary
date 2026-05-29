@@ -39,7 +39,7 @@ sealed class ApiResult<out T> {
      * */
     data class Error(
         val message: String,
-        val statusCode: Int?,
+        val statusCode: Int,
     ) : ApiResult<Nothing>()
 }
 

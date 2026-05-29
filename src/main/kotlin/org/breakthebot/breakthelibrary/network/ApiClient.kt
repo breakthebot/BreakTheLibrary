@@ -48,6 +48,7 @@ object ApiClient {
     /** Parse a string into a specified T type.
      * @param T The type to attempt to parse the string into.
      * @param body The string to parse into the T type.
+     * @return The body as T or string.
      * */
     @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> parseString(body: String): T {
@@ -198,7 +199,6 @@ object ApiClient {
      * @param names The names or UUIDs of the items to fetch.
      * @param url The url.
      * @param T The type that the items should be parsed into.
-     * @return 
      * */
     suspend inline fun <reified T> getChunked(
         names: List<String>,

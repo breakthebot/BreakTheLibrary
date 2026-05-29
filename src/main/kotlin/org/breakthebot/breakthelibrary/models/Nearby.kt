@@ -34,5 +34,5 @@ data class NearbyItem(
     }
 }
 
-enum class NearbyType { TOWN, NATION }
+enum class NearbyType { TOWN, COORDINATES }
 

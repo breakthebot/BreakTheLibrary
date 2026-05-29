@@ -17,6 +17,7 @@
 
 package org.breakthebot.breakthelibrary.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -73,9 +74,12 @@ data class Nation(val name: String) {
 
     @Serializable
     data class Ranks(
-        var Chancellor: List<Reference>? = null,
-        var Colonist: List<Reference>? = null,
-        var Diplomat: List<Reference>? = null
+        @SerialName("Chancellor")
+        var chancellor: List<Reference>? = null,
+        @SerialName("Colonist")
+        var colonist: List<Reference>? = null,
+        @SerialName("diplomat")
+        var diplomat: List<Reference>? = null
     )
 
     override fun toString(): String {
