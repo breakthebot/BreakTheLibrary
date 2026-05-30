@@ -50,9 +50,9 @@ object MapApi {
         return ApiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
-    suspend fun getNearby(query: List<NearbyItem>): ApiResult<List<Reference>?> {
+    suspend fun getNearby(query: NearbyItem): ApiResult<List<Reference>?> {
         val body = buildJsonObject {
-            put("query", JsonArray(ApiClient.json.encodeToJsonElement(query).jsonArray))
+            put("query", JsonArray(ApiClient.json.encodeToJsonElement(listOf(query)).jsonArray))
         }
         return ApiClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }

@@ -19,14 +19,14 @@ package org.breakthebot.breakthelibrary.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 
 @Serializable
 data class NearbyItem(
-    @SerialName("target_type") val targetType: NearbyType,
-    val target: String,
+    val target: JsonElement,
     @SerialName("search_type") val searchType: NearbyType,
+    @SerialName("target_type") val targetType: NearbyType,
     val radius: Int
 ) {
     override fun toString(): String {
@@ -34,5 +34,6 @@ data class NearbyItem(
     }
 }
 
-enum class NearbyType { TOWN, COORDINATES }
+
+enum class NearbyType { TOWN, COORDINATE }
 

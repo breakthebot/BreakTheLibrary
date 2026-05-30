@@ -17,6 +17,9 @@
 package apiTest
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import org.breakthebot.breakthelibrary.api.MapApi
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
@@ -31,17 +34,35 @@ import kotlin.test.assertIs
 class MapTests {
 
     @Test
-    fun testNearbyApi() {
+    fun testNearbyApiTown() {
         runBlocking {
+            val query =   NearbyItem(
+                JsonPrimitive("Cairo"),
+                NearbyType.TOWN,
+                NearbyType.TOWN,
+                500
+            )
             val nearby = MapApi.getNearby(
-                listOf(
-                    NearbyItem(
-                        NearbyType.TOWN,
-                        "Cairo",
-                        NearbyType.TOWN,
-                        500
-                    )
-                )
+                query
+            ).getOrNull()
+            assertNotNull(nearby)
+            assertIs<List<Reference>>(nearby)
+        }
+    }
+
+    @Test
+    fun testNearbyApiCoords() {
+        runBlocking {
+            val query = NearbyItem(
+                JsonArray(
+                    listOf(JsonPrimitive(11346), JsonPrimitive(11346))
+                ),
+                searchType = NearbyType.TOWN,
+                targetType = NearbyType.COORDINATE,
+                500
+            )
+            val nearby = MapApi.getNearby(
+              query
             ).getOrNull()
             assertNotNull(nearby)
             assertIs<List<Reference>>(nearby)
