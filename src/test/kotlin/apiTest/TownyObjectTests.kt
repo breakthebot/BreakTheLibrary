@@ -31,19 +31,13 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-
 class TownyObjectTests {
 
     @ParameterizedTest
     @ValueSource(strings = ["Paris", "Giza", "Cairo"])
     fun testTowns(name: String) {
         runBlocking{
-            val town = when ( val town = TownyAPI.getTown(name) ) {
-                is ApiResult.Success<Town> -> {
-                    town.data
-                }
-                is ApiResult.Error -> null
-            }
+            val town = TownyAPI.getTown(name).getOrNull()
             assertNotNull(town)
             assertIs<Town>(town)
             assertEquals(town.name, name)
@@ -54,12 +48,7 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
         runBlocking{
-            val res = when (val res = TownyAPI.getPlayer(name)) {
-                is ApiResult.Success<Resident> -> {
-                    res.data
-                }
-                is ApiResult.Error -> null
-            }
+            val res= TownyAPI.getPlayer(name).getOrNull()
             assertNotNull(res)
             assertIs<Resident>(res)
             assertEquals(res.name, name)
@@ -70,12 +59,7 @@ class TownyObjectTests {
     @ValueSource(strings = ["France", "Egypt", "Germany"])
     fun testNations(name: String) {
         runBlocking{
-            val nation = when( val nation = TownyAPI.getNation(name) ) {
-                is ApiResult.Success<Nation> -> {
-                    nation.data
-                }
-                is ApiResult.Error -> null
-            }
+            val nation = TownyAPI.getNation(name).getOrNull()
             assertNotNull(nation)
             assertIs<Nation>(nation)
             assertEquals(nation.name, name)

@@ -36,6 +36,10 @@ object MapApi {
 
     suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP).getOrNull()?.players
 
+    /**
+     * Query the location api.
+     * @param query The list of coordinates to query.
+     * */
     suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>> {
         val body = buildJsonObject {
             put("query", JsonArray(query.map { (x, y) ->
@@ -46,7 +50,6 @@ object MapApi {
                 )
             }))
         }
-
         return ApiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 

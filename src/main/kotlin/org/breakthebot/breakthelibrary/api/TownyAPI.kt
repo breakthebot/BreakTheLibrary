@@ -22,7 +22,6 @@ import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.StaffList
 import org.breakthebot.breakthelibrary.models.Town
-import org.breakthebot.breakthelibrary.models.getOrNull
 import org.breakthebot.breakthelibrary.models.mapSuccess
 import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.utils.Endpoints
@@ -51,5 +50,5 @@ object TownyAPI {
 
     suspend fun getNations(names: List<String>): List<ApiResult<List<Nation>>> = ApiClient.getChunked(names, Endpoints.NATIONS)
 
-    suspend fun getStaff(): List<SerializableUUID>? = ApiClient.getRequest<StaffList?>(Endpoints.STAFF).getOrNull()?.allStaff()
+    suspend fun getStaff(): ApiResult<List<SerializableUUID>> = ApiClient.getRequest<StaffList>(Endpoints.STAFF).mapSuccess { it.allStaff() }
 }
