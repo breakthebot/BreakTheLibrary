@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.breakthebot"
-version = "1.4.0"
+version = "1.5.2"
 
 repositories {
     mavenCentral()
@@ -19,6 +19,7 @@ val shouldPublish = project.hasProperty("publish")
 
 java {
     withSourcesJar()
+    withJavadocJar()
 }
 
 val ktSerde = project.property("kt_serialisation_json")

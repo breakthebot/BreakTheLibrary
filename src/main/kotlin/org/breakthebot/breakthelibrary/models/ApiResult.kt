@@ -21,6 +21,12 @@ package org.breakthebot.breakthelibrary.models
  * @param T The type of the data if the request is successful.
  * */
 sealed class ApiResult<out T> {
+    val isSuccess: Boolean
+        get() = this is Success
+
+    val isError: Boolean
+        get() = this is Error
+
     /**
      * Represents a successful response from the API.
      * @param T The type of the data.
@@ -41,6 +47,7 @@ sealed class ApiResult<out T> {
         val message: String,
         val statusCode: Int,
     ) : ApiResult<Nothing>()
+
 }
 
 /**
