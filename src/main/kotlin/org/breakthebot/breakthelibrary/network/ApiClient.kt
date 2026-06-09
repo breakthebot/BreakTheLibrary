@@ -14,28 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-/*
- * This file is part of BreakTheLibrary.
- *
- * BreakTheLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * BreakTheLibrary is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
- */
 package org.breakthebot.breakthelibrary.network
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.future.future
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -52,6 +39,8 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.util.concurrent.CompletableFuture
+import java.util.function.Supplier
 
 /**
  * Wrapper for interacting with the EarthMc API in a clean way.
@@ -235,4 +224,10 @@ object ApiClient {
 
         return items
     }
+
+    fun <T> future(block: suspend () -> T): CompletableFuture<T> =
+        CoroutineScope(Dispatchers.IO).future { block() }
+
+    fun <T> supplyAsync(supplier: Supplier<T>): CompletableFuture<T> =
+        CompletableFuture.supplyAsync(supplier)
 }

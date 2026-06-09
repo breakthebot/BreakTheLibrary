@@ -30,9 +30,11 @@ import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.getOrNull
 import org.breakthebot.breakthelibrary.models.mapSuccess
 import org.breakthebot.breakthelibrary.network.ApiClient
+import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
+import java.util.concurrent.CompletableFuture
 
-object MapApi {
+object MapAPI {
 
     suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP).getOrNull()?.players
 
@@ -59,4 +61,10 @@ object MapApi {
         }
         return ApiClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }
+
+    fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> =  future { getVisiblePlayers() }
+
+    fun getLocationJava(query: List<Pair<Double, Double>>): CompletableFuture<ApiResult<List<Location>>> = future { getLocation(query) }
+
+    fun getNearbyJava(query: NearbyItem): CompletableFuture<ApiResult<List<Reference>?>> = future { getNearby(query) }
 }

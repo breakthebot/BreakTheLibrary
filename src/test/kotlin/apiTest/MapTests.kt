@@ -18,9 +18,8 @@ package apiTest
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
-import org.breakthebot.breakthelibrary.api.MapApi
+import org.breakthebot.breakthelibrary.api.MapAPI
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
@@ -42,7 +41,7 @@ class MapTests {
                 NearbyType.TOWN,
                 500
             )
-            val nearby = MapApi.getNearby(
+            val nearby = MapAPI.getNearby(
                 query
             ).getOrNull()
             assertNotNull(nearby)
@@ -61,7 +60,7 @@ class MapTests {
                 targetType = NearbyType.COORDINATE,
                 500
             )
-            val nearby = MapApi.getNearby(
+            val nearby = MapAPI.getNearby(
               query
             ).getOrNull()
             assertNotNull(nearby)
@@ -73,7 +72,7 @@ class MapTests {
     fun testLocation() {
         val coords = Pair(11125.0, -3371.0)
         runBlocking {
-            val loc = MapApi.getLocation(listOf(coords))
+            val loc = MapAPI.getLocation(listOf(coords))
                 .getOrNull()
                 ?.first()
 
@@ -86,7 +85,7 @@ class MapTests {
     @Test
     fun testMapReturn() {
         runBlocking {
-            val players = MapApi.getVisiblePlayers()
+            val players = MapAPI.getVisiblePlayers()
             assertNotNull(players)
             assertIs<List<PlayerMapReturn>>(players)
         }
