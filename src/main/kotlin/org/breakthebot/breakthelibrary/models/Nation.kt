@@ -26,60 +26,69 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 
 @Serializable
-data class Nation(val name: String) {
+data class Nation(
+    val name: String
+) {
     val uuid: SerializableUUID? = null
+
     var board: String? = null
     var dynmapColour: String? = null
     var dynmapOutline: String? = null
     var wiki: String? = null
+
     var king: Reference? = null
     var capital: Reference? = null
-    var timestamps: Timestamps? = null
-    var status: Status? = null
-    var stats: Stats? = null
-    var coordinates: Coordinates? = null
-    var residents: List<Reference>? = null
-    var towns: List<Reference>? = null
-    var allies: List<Reference>? = null
-    var enemies: List<Reference>? = null
-    var sanctioned: List<Reference>? = null
-    var ranks: Ranks? = null
+
+    var timestamps: Timestamps = Timestamps()
+    var status: Status = Status()
+    var stats: Stats = Stats()
+    var coordinates: Coordinates = Coordinates()
+
+    var residents: List<Reference> = emptyList()
+    var towns: List<Reference> = emptyList()
+    var allies: List<Reference> = emptyList()
+    var enemies: List<Reference> = emptyList()
+    var sanctioned: List<Reference> = emptyList()
+
+    var ranks: Ranks = Ranks()
 
     @Serializable
     data class Timestamps(
-        var registered: Long? = null
+        var registered: Long = 0L
     )
 
     @Serializable
     data class Status(
-        var isPublic: Boolean? = null,
-        var isOpen: Boolean? = null,
-        var isNeutral: Boolean? = null
+        var isPublic: Boolean = false,
+        var isOpen: Boolean = false,
+        var isNeutral: Boolean = false
     )
 
     @Serializable
     data class Stats(
-        var numTownBlocks: Int? = null,
-        var numResidents: Int? = null,
-        var numTowns: Int? = null,
-        var numAllies: Int? = null,
-        var numEnemies: Int? = null,
-        var balance: Float? = null
+        var numTownBlocks: Int = 0,
+        var numResidents: Int = 0,
+        var numTowns: Int = 0,
+        var numAllies: Int = 0,
+        var numEnemies: Int = 0,
+        var balance: Float = 0f
     )
 
     @Serializable
     data class Coordinates(
-        var spawn: Spawn? = null
+        var spawn: Spawn = Spawn()
     )
 
     @Serializable
     data class Ranks(
         @SerialName("Chancellor")
-        var chancellor: List<Reference>? = null,
+        var chancellor: List<Reference> = emptyList(),
+
         @SerialName("Colonist")
-        var colonist: List<Reference>? = null,
+        var colonist: List<Reference> = emptyList(),
+
         @SerialName("diplomat")
-        var diplomat: List<Reference>? = null
+        var diplomat: List<Reference> = emptyList()
     )
 
     override fun toString(): String {

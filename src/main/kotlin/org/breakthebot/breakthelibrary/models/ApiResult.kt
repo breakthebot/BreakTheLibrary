@@ -48,81 +48,75 @@ sealed class ApiResult<out T> {
         val statusCode: Int,
     ) : ApiResult<Nothing>()
 
-}
-
-/**
- * Returns [Success.data] or null.
- * */
-fun <T> ApiResult<T>.getOrNull(): T? {
-    return when (this) {
-        is ApiResult.Success<T> -> this.data
-        else -> null
+    /**
+     * Returns [Success.data] or null.
+     * */
+    fun getOrNull(): T? {
+        return when (this) {
+            is Success<T> -> this.data
+            else -> null
+        }
     }
-}
 
-/**
- * Map data if it is a successful request.
- * @param transform The function that should be executed with the data as input.
- * */
-inline fun <T, R> ApiResult<T>.mapSuccess(
-    transform: (T) -> R
-): ApiResult<R> {
-    return when (this) {
-        is ApiResult.Success -> ApiResult.Success(
-            transform(data),
-            statusCode
-        )
+    /**
+     * Map data if it is a successful request.
+     * @param transform The function that should be executed with the data as input.
+     * */
+    inline fun <R> mapSuccess(
+        transform: (T) -> R
+    ): ApiResult<R> {
+        return when (this) {
+            is Success -> Success(
+                transform(data),
+                statusCode
+            )
 
-        is ApiResult.Error -> this
+            is Error -> this
+        }
     }
-}
 
-/** Map an action in-case of an error.
- * @param transform The function that should be executed with the error as input.
- * */
-inline fun <T> ApiResult<T>.mapError(
-    transform: (ApiResult.Error) -> ApiResult.Error
-): ApiResult<T> {
-    return when (this) {
-        is ApiResult.Success -> this
-        is ApiResult.Error -> transform(this)
+    /** Map an action in-case of an error.
+     * @param transform The function that should be executed with the error as input.
+     * */
+    inline fun mapError(
+        transform: (Error) -> Error
+    ): ApiResult<T> {
+        return when (this) {
+            is Success -> this
+            is Error -> transform(this)
+        }
     }
-}
 
-/**
- * Map a function on success.
- * @param block The action to execute
- * */
-inline fun <T> ApiResult<T>.onSuccess(
-    block: (T) -> Unit
-): ApiResult<T> {
-    if (this is ApiResult.Success) {
-        block(data)
+    /**
+     * Map a function on success.
+     * @param block The action to execute
+     * */
+    inline fun onSuccess(
+        block: (T) -> Unit
+    ): ApiResult<T> {
+        if (this is Success) {
+            block(data)
+        }
+        return this
     }
-    return this
-}
 
-/**
- * Map a function on error.
- * @param block The action to execute.
- * */
-inline fun <T> ApiResult<T>.onError(
-    block: (ApiResult.Error) -> Unit
-): ApiResult<T> {
-    if (this is ApiResult.Error) {
-        block(this)
+    /**
+     * Map a function on error.
+     * @param block The action to execute.
+     * */
+    inline fun onError(
+        block: (Error) -> Unit
+    ): ApiResult<T> {
+        if (this is Error) {
+            block(this)
+        }
+        return this
     }
-    return this
-}
 
-/** Set a function to be executed on error.
- * @param fallback The function executed in-case of an error.
- * */
-inline fun <T> ApiResult<T>.getOrElse(
-    fallback: (ApiResult.Error) -> T
-): T {
-    return when (this) {
-        is ApiResult.Success -> data
-        is ApiResult.Error -> fallback(this)
+    inline fun getOrElse(
+        fallback: (Error) -> @UnsafeVariance T
+    ): T = when (this) {
+        is Success -> data
+        is Error -> fallback(this)
     }
 }

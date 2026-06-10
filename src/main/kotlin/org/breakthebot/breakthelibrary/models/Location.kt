@@ -25,15 +25,15 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
 data class Location (
-    val name: String? = null,
+    val name: String = "",
     val location: Coordinates? = null,
-    val isWilderness: Boolean? = null,
+    val isWilderness: Boolean = false,
     val town: Reference? = null,
     val nation: Reference? = null
 ) {
     @Serializable data class Coordinates(
-        val x: Double? = null,
-        val z: Double? = null
+        val x: Double = 0.0,
+        val z: Double = 0.0
     )
 
     override fun toString(): String {

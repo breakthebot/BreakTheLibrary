@@ -32,68 +32,83 @@ data class Town(
     val wiki: String? = null,
     val mayor: Reference? = null,
     val nation: Reference? = null,
-    val timestamps: Timestamps? = null,
-    val status: Status? = null,
-    val stats: Stats? = null,
-    val perms: Perms? = null,
-    val coordinates: Coordinates? = null,
-    val residents: List<Reference>? = null,
-    val trusted: List<Reference>? = null,
-    val outlaws: List<Reference>? = null,
-    val quarters: List<Reference>? = null,
-    val ranks: Ranks? = null
+    val timestamps: Timestamps = Timestamps(),
+    val status: Status = Status(),
+    val stats: Stats = Stats(),
+    val perms: Perms = Perms(),
+    val coordinates: Coordinates = Coordinates(),
+    val residents: List<Reference> = emptyList(),
+    val trusted: List<Reference> = emptyList(),
+    val outlaws: List<Reference> = emptyList(),
+    val quarters: List<Reference> = emptyList(),
+    val ranks: Ranks = Ranks()
 ) {
 
     @Serializable
     data class Timestamps(
-        val registered: Long? = null,
-        val joinedNationAt: Long? = null,
-        val ruinedAt: Long? = null
+        val registered: Long = 0L,
+        val joinedNationAt: Long = 0L,
+        val ruinedAt: Long = 0L
     )
 
     @Serializable
     data class Status(
-        val isPublic: Boolean? = null,
-        val isOpen: Boolean? = null,
-        val isNeutral: Boolean? = null,
-        val isCapital: Boolean? = null,
-        val isOverClaimed: Boolean? = null,
-        val isRuined: Boolean? = null,
-        val isForSale: Boolean? = null,
-        val hasNation: Boolean? = null,
-        val hasOverclaimShield: Boolean? = null,
-        val canOutsidersSpawn: Boolean? = null
+        val isPublic: Boolean = false,
+        val isOpen: Boolean = false,
+        val isNeutral: Boolean = false,
+        val isCapital: Boolean = false,
+        val isOverClaimed: Boolean = false,
+        val isRuined: Boolean = false,
+        val isForSale: Boolean = false,
+        val hasNation: Boolean = false,
+        val hasOverclaimShield: Boolean = false,
+        val canOutsidersSpawn: Boolean = false
     )
 
     @Serializable
     data class Stats(
-        val numTownBlocks: Int? = null,
-        val maxTownBlocks: Int? = null,
-        val numResidents: Int? = null,
-        val numTrusted: Int? = null,
-        val numOutlaws: Int? = null,
-        val bonusBlocks: Int?  = null,
-        val balance: Float? = null,
-        val forSalePrice: Float? = null
+        val numTownBlocks: Int = 0,
+        val maxTownBlocks: Int = 0,
+        val numResidents: Int = 0,
+        val numTrusted: Int = 0,
+        val numOutlaws: Int = 0,
+        val bonusBlocks: Int = 0,
+        val balance: Float = 0f,
+        val forSalePrice: Float = 0f
     )
 
     @Serializable
     data class Coordinates(
         val spawn: Spawn? = null,
-        val homeBlock: List<Int>? = null,
-        val townBlocks: List<List<Int>>? = null
+        val homeBlock: List<Int> = emptyList(),
+        val townBlocks: List<List<Int>> = emptyList()
     )
 
     @Serializable
     data class Ranks(
-        @SerialName("Councilor") val councillor: List<Reference>? = null,
-        @SerialName("Builder") val builder: List<Reference>? =  null,
-        @SerialName("Recruiter") val recruiter: List<Reference>? = null,
-        @SerialName("Police") val police: List<Reference>? = null,
-        @SerialName("Tax-Exempt") val taxExempt: List<Reference>? = null,
-        @SerialName("Treasurer") val treasurer: List<Reference>? = null,
-        @SerialName("Realtor") val realtor: List<Reference>? = null,
-        @SerialName("Settler") val settler: List<Reference>? = null
+        @SerialName("Councilor")
+        val councillor: List<Reference> = emptyList(),
+
+        @SerialName("Builder")
+        val builder: List<Reference> = emptyList(),
+
+        @SerialName("Recruiter")
+        val recruiter: List<Reference> = emptyList(),
+
+        @SerialName("Police")
+        val police: List<Reference> = emptyList(),
+
+        @SerialName("Tax-Exempt")
+        val taxExempt: List<Reference> = emptyList(),
+
+        @SerialName("Treasurer")
+        val treasurer: List<Reference> = emptyList(),
+
+        @SerialName("Realtor")
+        val realtor: List<Reference> = emptyList(),
+
+        @SerialName("Settler")
+        val settler: List<Reference> = emptyList()
     )
 
     override fun toString(): String {

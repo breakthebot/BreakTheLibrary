@@ -30,10 +30,10 @@ data class Reference(
 
 @Serializable
 data class Flags(
-    var pvp: Boolean? = null,
-    var explosion: Boolean? = null,
-    var fire: Boolean? = null,
-    var mobs: Boolean? = null
+    var pvp: Boolean = false,
+    var explosion: Boolean = false,
+    var fire: Boolean = false,
+    var mobs: Boolean = false
 ) {
     override fun toString(): String {
         return BreakTheLibrary.json.encodeToString(this)
@@ -42,12 +42,12 @@ data class Flags(
 
 @Serializable
 data class Perms(
-    val build: List<Boolean>? = null,
-    val destroy: List<Boolean>? = null,
-    val switchPerm: List<Boolean>? = null,
-    val itemUse: List<Boolean>? = null,
-    val switch: List<Boolean>? = null,
-    val flags: Flags? = null
+    val build: List<Boolean> = listOf(),
+    val destroy: List<Boolean> = listOf(),
+    val switchPerm: List<Boolean> = listOf(),
+    val itemUse: List<Boolean> = listOf(),
+    val switch: List<Boolean> = listOf(),
+    val flags: Flags = Flags()
 ) {
     override fun toString(): String {
         return BreakTheLibrary.json.encodeToString(this)
@@ -57,11 +57,11 @@ data class Perms(
 @Serializable
 data class Spawn(
     val world: String? = null,
-    val x: Float? = null,
-    val y: Float? = null,
-    val z: Float? = null,
-    val pitch: Float? = null,
-    val yaw: Float? = null
+    val x: Float = 0F,
+    val y: Float = 0F,
+    val z: Float = 0F,
+    val pitch: Float = 0F,
+    val yaw: Float = 0F
 ) {
     override fun toString(): String  {
         return BreakTheLibrary.json.encodeToString(this)

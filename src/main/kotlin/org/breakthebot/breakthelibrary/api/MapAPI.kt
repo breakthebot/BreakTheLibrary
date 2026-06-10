@@ -27,8 +27,6 @@ import org.breakthebot.breakthelibrary.models.MapReturn
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.models.getOrNull
-import org.breakthebot.breakthelibrary.models.mapSuccess
 import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints

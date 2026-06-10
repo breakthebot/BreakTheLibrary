@@ -20,50 +20,59 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
-class Resident(val name: String) {
-    val uuid: SerializableUUID? = null
-    var title: String? = null
-    var surname: String? = null
-    var formattedName: String? = null
-    var about: String? = null
-    var town: Reference? = null
-    var nation: Reference? = null
-    var timestamps: Timestamps? = null
-    var status: Status? = null
-    var stats: Stats? = null
-    var perms: Perms? = null
-    var ranks: Ranks? = null
-    var friends: List<Reference>? = null
-    var discord: String? = null
+data class Resident(
+    val name: String,
+    val uuid: SerializableUUID? = null,
 
+    var title: String? = null,
+    var surname: String? = null,
+    var formattedName: String? = null,
+    var about: String? = null,
+    var discord: String? = null,
+
+    var town: Reference? = null,
+    var nation: Reference? = null,
+
+    var timestamps: Timestamps = Timestamps(),
+    var status: Status = Status(),
+    var stats: Stats = Stats(),
+    var perms: Perms = Perms(),
+    var ranks: Ranks = Ranks(),
+
+    var friends: List<Reference> = emptyList(),
+
+
+) {
     @Serializable data class Timestamps(
-        var registered: Long? = null,
-        var joinedTownAt: Long? = null,
-        var lastOnline: Long? = null
+        var registered: Long = 0L,
+        var joinedTownAt: Long = 0L,
+        var lastOnline: Long = 0L
     )
 
-    @Serializable data class Status(
-        var isOnline: Boolean? = null,
-        var isNPC: Boolean? = null,
-        var isMayor: Boolean? = null,
-        var isKing: Boolean? = null,
-        var hasTown: Boolean? = null,
-        var hasNation: Boolean? = null
+    @Serializable
+    data class Status(
+        var isOnline: Boolean = false,
+        var isNPC: Boolean = false,
+        var isMayor: Boolean = false,
+        var isKing: Boolean = false,
+        var hasTown: Boolean = false,
+        var hasNation: Boolean = false
     )
 
-    @Serializable data class Stats(
-        var balance: Float? = null,
-        var numFriends: Int? = null
+    @Serializable
+    data class Stats(
+        var balance: Float = 0f,
+        var numFriends: Int = 0
     )
 
-    @Serializable data class Ranks(
-        var townRanks: List<String>? = null,
-        var nationRanks: List<String>? = null
+    @Serializable
+    data class Ranks(
+        var townRanks: List<String> = emptyList(),
+        var nationRanks: List<String> = emptyList()
     )
 
     override fun toString(): String {
