@@ -26,7 +26,6 @@ import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.TownyAPI
 import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.models.getOrNull
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -37,7 +36,8 @@ class TownyObjectTests {
     @ValueSource(strings = ["Paris", "Giza", "Cairo"])
     fun testTowns(name: String) {
         runBlocking{
-            val town = TownyAPI.getTown(name).getOrNull()
+            val town = TownyAPI.getTown(name)
+                .getOrNull()
             assertNotNull(town)
             assertIs<Town>(town)
             assertEquals(town.name, name)
@@ -48,7 +48,8 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
         runBlocking{
-            val res= TownyAPI.getPlayer(name).getOrNull()
+            val res= TownyAPI.getPlayer(name)
+                .getOrNull()
             assertNotNull(res)
             assertIs<Resident>(res)
             assertEquals(res.name, name)
@@ -59,7 +60,8 @@ class TownyObjectTests {
     @ValueSource(strings = ["France", "Egypt", "Germany"])
     fun testNations(name: String) {
         runBlocking{
-            val nation = TownyAPI.getNation(name).getOrNull()
+            val nation = TownyAPI.getNation(name)
+                .getOrNull()
             assertNotNull(nation)
             assertIs<Nation>(nation)
             assertEquals(nation.name, name)
@@ -70,7 +72,8 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testD2D(name: String) {
         runBlocking {
-            val resp = TownyAPI.getPlayerDiscord(name).getOrNull()
+            val resp = TownyAPI.getPlayerDiscord(name)
+                .getOrNull()
             assertNotNull(resp)
             assertIs<String>(resp)
         }

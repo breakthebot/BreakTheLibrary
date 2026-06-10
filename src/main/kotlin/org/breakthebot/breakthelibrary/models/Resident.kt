@@ -44,8 +44,6 @@ data class Resident(
     var ranks: Ranks = Ranks(),
 
     var friends: List<Reference> = emptyList(),
-
-
 ) {
     @Serializable data class Timestamps(
         var registered: Long = 0L,
