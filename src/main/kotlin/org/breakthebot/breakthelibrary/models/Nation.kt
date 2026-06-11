@@ -48,6 +48,7 @@ data class Nation(
     val allies: List<Reference> = emptyList(),
     val enemies: List<Reference> = emptyList(),
     val sanctioned: List<Reference> = emptyList(),
+    val outlaws: List<Reference> = emptyList(),
 
     val ranks: Ranks = Ranks(),
 
@@ -75,6 +76,7 @@ data class Nation(
         val numAllies: Int = 0,
         val numEnemies: Int = 0,
         val nationBonus: Int = 0,
+        val numOutlaws: Int = 0,
         val balance: Float = 0f
     )
 

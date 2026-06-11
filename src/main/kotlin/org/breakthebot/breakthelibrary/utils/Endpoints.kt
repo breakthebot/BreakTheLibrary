@@ -24,6 +24,7 @@ object Endpoints {
     val PLAYERS = "$APIURL/players"
     val LOCATION = "$APIURL/location"
     val NEARBY = "$APIURL/nearby"
+    val PURSUITS = "$APIURL/pursuits"
     val STAFF = ConfigHandler.cfg.staffUrl
     val MAP = ConfigHandler.cfg.mapUrl + "tiles/players.json"
 }

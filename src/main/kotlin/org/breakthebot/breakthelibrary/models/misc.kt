@@ -88,3 +88,10 @@ data class WarpLocation(
     val z: Float,
     val y: Float
 )
+
+enum class PursuitType {
+    PLAYER,
+    TOWN,
+    NATION,
+    ALL
+}

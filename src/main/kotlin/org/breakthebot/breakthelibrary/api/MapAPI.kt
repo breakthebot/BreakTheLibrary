@@ -64,5 +64,7 @@ object MapAPI {
 
     fun getLocationJava(query: List<Pair<Double, Double>>): CompletableFuture<ApiResult<List<Location>>> = future { getLocation(query) }
 
+    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<ApiResult<Location>> = future { getLocation(listOf(query)).mapSuccess { it[0] } }
+
     fun getNearbyJava(query: NearbyItem): CompletableFuture<ApiResult<List<Reference>?>> = future { getNearby(query) }
 }

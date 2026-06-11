@@ -16,7 +16,11 @@
  */
 package org.breakthebot.breakthelibrary.api
 
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.breakthebot.breakthelibrary.models.ApiResult
+import org.breakthebot.breakthelibrary.models.PursuitResponse
+import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.ServerInfo
 import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.network.ApiClient.future
@@ -27,4 +31,14 @@ object ServerAPI {
     suspend fun getServerInfo(): ApiResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
 
     fun getServerInfoJava(): CompletableFuture<ApiResult<ServerInfo>> = future { getServerInfo() }
+
+    suspend fun getPursuits(key: String, type: PursuitType): ApiResult<PursuitResponse> {
+        val query = buildJsonObject {
+            put("query", type.toString())
+            put("key", key)
+        }
+        return ApiClient.postRequest(Endpoints.PURSUITS, query)
+    }
+
+    fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
 }
