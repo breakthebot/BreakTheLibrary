@@ -42,7 +42,8 @@ data class Town(
     val trusted: List<Reference> = emptyList(),
     val outlaws: List<Reference> = emptyList(),
     val quarters: List<Reference> = emptyList(),
-    val ranks: Ranks = Ranks()
+    val ranks: Ranks = Ranks(),
+    val warp: List<Warp> = listOf()
 ) {
 
     @Serializable
