@@ -111,6 +111,17 @@ data class Town(
         val settler: List<Reference> = emptyList()
     )
 
+    @Serializable
+    data class Warp(
+        val name: String,
+        val uuid: SerializableUUID,
+        val createdAt: Long,
+        val createdBy: String,
+        val access: WarpAccess,
+        val location: WarpLocation
+    )
+
+
     override fun toString(): String {
         return BreakTheLibrary.json.encodeToString(this)
     }

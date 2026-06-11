@@ -16,6 +16,7 @@
  */
 package org.breakthebot.breakthelibrary.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -67,3 +68,23 @@ data class Spawn(
         return BreakTheLibrary.json.encodeToString(this)
     }
 }
+
+@Serializable
+@SerialName("stats")
+data class PactStats(
+    val createdAt: Long,
+    val expiresAt: Long,
+    val duration: Int
+)
+
+enum class WarpAccess{
+    Resident,
+    Nation
+}
+
+@Serializable
+data class WarpLocation(
+    val x: Float,
+    val z: Float,
+    val y: Float
+)
