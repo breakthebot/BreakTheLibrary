@@ -78,8 +78,8 @@ data class PactStats(
 )
 
 enum class WarpAccess{
-    Resident,
-    Nation
+    RESIDENT,
+    NATION
 }
 
 @Serializable

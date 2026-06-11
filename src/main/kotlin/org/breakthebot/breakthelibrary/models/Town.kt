@@ -43,7 +43,7 @@ data class Town(
     val outlaws: List<Reference> = emptyList(),
     val quarters: List<Reference> = emptyList(),
     val ranks: Ranks = Ranks(),
-    val warp: List<Warp> = listOf()
+    val warps: List<Warp> = listOf()
 ) {
 
     @Serializable
