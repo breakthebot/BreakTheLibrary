@@ -30,7 +30,8 @@ data class Town(
     val board: String? = null,
     val founder: String? = null,
     val wiki: String? = null,
-    val mayor: Reference? = null,
+    val discord: String? = null,
+    val mayor: Reference,
     val nation: Reference? = null,
     val timestamps: Timestamps = Timestamps(),
     val status: Status = Status(),
@@ -62,7 +63,10 @@ data class Town(
         val isForSale: Boolean = false,
         val hasNation: Boolean = false,
         val hasOverclaimShield: Boolean = false,
-        val canOutsidersSpawn: Boolean = false
+        val canOutsidersSpawn: Boolean = false,
+        val canPassiveMobSpawn: Boolean = false,
+        val hasSnowAccumulation: Boolean = false,
+        val hasFriendlyFire: Boolean = false,
     )
 
     @Serializable
@@ -79,7 +83,7 @@ data class Town(
 
     @Serializable
     data class Coordinates(
-        val spawn: Spawn? = null,
+        val spawn: Spawn = Spawn(),
         val homeBlock: List<Int> = emptyList(),
         val townBlocks: List<List<Int>> = emptyList()
     )

@@ -29,26 +29,27 @@ data class Nation(
     val name: String,
     val uuid: SerializableUUID,
 
-    var board: String? = null,
-    var dynmapColour: String? = null,
-    var dynmapOutline: String? = null,
-    var wiki: String? = null,
+    val board: String? = null,
+    val dynmapColour: String? = null,
+    val dynmapOutline: String? = null,
+    val wiki: String? = null,
+    val discord: String? = null,
 
-    var king: Reference? = null,
-    var capital: Reference? = null,
+    val king: Reference,
+    val capital: Reference,
 
-    var timestamps: Timestamps = Timestamps(),
-    var status: Status = Status(),
-    var stats: Stats = Stats(),
-    var coordinates: Coordinates = Coordinates(),
+    val timestamps: Timestamps = Timestamps(),
+    val status: Status = Status(),
+    val stats: Stats = Stats(),
+    val coordinates: Coordinates = Coordinates(),
 
-    var residents: List<Reference> = emptyList(),
-    var towns: List<Reference> = emptyList(),
-    var allies: List<Reference> = emptyList(),
-    var enemies: List<Reference> = emptyList(),
-    var sanctioned: List<Reference> = emptyList(),
+    val residents: List<Reference> = emptyList(),
+    val towns: List<Reference> = emptyList(),
+    val allies: List<Reference> = emptyList(),
+    val enemies: List<Reference> = emptyList(),
+    val sanctioned: List<Reference> = emptyList(),
 
-    var ranks: Ranks = Ranks(),
+    val ranks: Ranks = Ranks(),
 
     val embargoes: Embargoes = Embargoes(),
 
@@ -56,7 +57,7 @@ data class Nation(
 ) {
     @Serializable
     data class Timestamps(
-        var registered: Long = 0L
+        val registered: Long = 0L
     )
 
     @Serializable
@@ -68,12 +69,13 @@ data class Nation(
 
     @Serializable
     data class Stats(
-        var numTownBlocks: Int = 0,
-        var numResidents: Int = 0,
-        var numTowns: Int = 0,
-        var numAllies: Int = 0,
-        var numEnemies: Int = 0,
-        var balance: Float = 0f
+        val numTownBlocks: Int = 0,
+        val numResidents: Int = 0,
+        val numTowns: Int = 0,
+        val numAllies: Int = 0,
+        val numEnemies: Int = 0,
+        val nationBonus: Int = 0,
+        val balance: Float = 0f
     )
 
     @Serializable
@@ -84,13 +86,16 @@ data class Nation(
     @Serializable
     data class Ranks(
         @SerialName("Chancellor")
-        var chancellor: List<Reference> = emptyList(),
+        val chancellor: List<Reference> = emptyList(),
 
         @SerialName("Colonist")
-        var colonist: List<Reference> = emptyList(),
+        val colonist: List<Reference> = emptyList(),
 
         @SerialName("diplomat")
-        var diplomat: List<Reference> = emptyList()
+        val diplomat: List<Reference> = emptyList(),
+
+        @SerialName("Treasurer")
+        val treasurer: List<Reference> = emptyList()
     )
 
     @Serializable
@@ -104,7 +109,7 @@ data class Nation(
     @Serializable
     data class Pacts(
         val active: List<PactData> = listOf(),
-        val against: List<PactData> = listOf()
+        val pending: List<PactData> = listOf()
     )
 
     @Serializable

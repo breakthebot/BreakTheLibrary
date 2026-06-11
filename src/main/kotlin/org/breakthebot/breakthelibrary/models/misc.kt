@@ -25,8 +25,8 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
 data class Reference(
-    val uuid: SerializableUUID?,
-    val name: String?
+    val uuid: SerializableUUID,
+    val name: String
 )
 
 @Serializable
