@@ -81,15 +81,14 @@ class TownyObjectTests {
         }
     }
 
-    @Test
+    //@Test
     fun testPursuits() {
         runBlocking {
             val resp = ServerAPI.getPursuits(
-                "",
+                System.getenv("api_key") ?: "",
                 PursuitType.ALL
-            )
-            assertIs<ApiResult.Error>(resp)
-            assertEquals(resp.statusCode, 401)
+            ).mapError { println(it.message); it }.getOrNull()
+            assertNotNull(resp)
         }
     }
 

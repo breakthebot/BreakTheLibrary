@@ -34,7 +34,9 @@ import java.util.concurrent.CompletableFuture
 
 object MapAPI {
 
-    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP).getOrNull()?.players
+    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP)
+        .getOrNull()
+        ?.players
 
     /**
      * Query the location api.

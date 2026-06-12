@@ -54,8 +54,6 @@ data class PlayerMapReturn(
     val x: Double,
     val y: Double,
     val z: Double,
-    @SerialName("display_name")
-    val displayName: String,
     val uuid: String,
     val yaw: Int
 ) {

@@ -38,7 +38,7 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
 data class PursuitTop(
-    val uuid: SerializableUUID,
+    val uuid: SerializableUUID? = null,
     val score: Float = 0F
 )
 
@@ -46,21 +46,21 @@ data class PursuitTop(
 data class PlayerPursuits(
     val name: String,
     val isActive: Boolean,
-    val top: Map<String, PursuitTop>
+    val top: Map<String, PursuitTop>?
 )
 
 @Serializable
 data class TownPursuits(
     val name: String,
     val isActive: Boolean,
-    val top: Map<String, PursuitTop>
+    val top: Map<String, PursuitTop>?
 )
 
 @Serializable
 data class NationPursuits(
     val name: String,
     val isActive: Boolean,
-    val top: Map<String, PursuitTop>
+    val top: Map<String, PursuitTop>?
 )
 
 @Serializable
