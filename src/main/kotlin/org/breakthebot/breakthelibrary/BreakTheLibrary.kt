@@ -29,7 +29,7 @@ object BreakTheLibrary {
     val json: Json = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
-
+        coerceInputValues = true
     }
 
     init {
