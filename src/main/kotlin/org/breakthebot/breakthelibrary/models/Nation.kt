@@ -26,7 +26,7 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
 data class Nation(
-    val name: String,
+    val name: String = "",
     val uuid: SerializableUUID,
 
     val board: String? = null,

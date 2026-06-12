@@ -25,8 +25,8 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
 data class Reference(
-    val uuid: SerializableUUID,
-    val name: String
+    val uuid: SerializableUUID? = null,
+    val name: String = ""
 )
 
 @Serializable
@@ -95,3 +95,9 @@ enum class PursuitType {
     NATION,
     ALL
 }
+
+@Serializable
+data class OnlineReturn (
+    val count: Int = 0,
+    val players: List<Reference> = listOf()
+)

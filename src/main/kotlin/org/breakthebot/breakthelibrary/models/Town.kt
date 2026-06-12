@@ -25,8 +25,8 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
 @Serializable
 data class Town(
-    val name: String,
-    val uuid: SerializableUUID? = null,
+    val name: String = "",
+    val uuid: SerializableUUID,
     val board: String? = null,
     val founder: String? = null,
     val wiki: String? = null,

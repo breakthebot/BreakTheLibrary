@@ -20,9 +20,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
-
-sealed class PursuitTop
-
 @Serializable
 data class PlayerPursuitTop(
     val player: SerializableUUID? = null,

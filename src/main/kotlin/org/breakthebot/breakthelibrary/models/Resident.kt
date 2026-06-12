@@ -26,7 +26,7 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 @Serializable
 data class Resident(
     val name: String,
-    val uuid: SerializableUUID? = null,
+    val uuid: SerializableUUID,
 
     var title: String? = null,
     var surname: String? = null,

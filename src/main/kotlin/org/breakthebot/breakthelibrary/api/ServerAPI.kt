@@ -22,6 +22,8 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.breakthebot.breakthelibrary.models.ApiResult
+import org.breakthebot.breakthelibrary.models.MysteryMaster
+import org.breakthebot.breakthelibrary.models.OnlineReturn
 import org.breakthebot.breakthelibrary.models.PursuitResponse
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.ServerInfo
@@ -44,4 +46,12 @@ object ServerAPI {
     }
 
     fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
+
+    suspend fun getMysteryMaster(): ApiResult<MysteryMaster> = ApiClient.getRequest(Endpoints.MM)
+
+    suspend fun getOnlinePlayers(): ApiResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
+
+    fun getMysteryMasterJava(): CompletableFuture<ApiResult<MysteryMaster>> = future { getMysteryMaster() }
+
+    fun getOnlinePlayersJava(): CompletableFuture<ApiResult<OnlineReturn>> = future { getOnlinePlayers() }
 }
