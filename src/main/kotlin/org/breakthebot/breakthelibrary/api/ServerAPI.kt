@@ -16,6 +16,9 @@
  */
 package org.breakthebot.breakthelibrary.api
 
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.breakthebot.breakthelibrary.models.ApiResult
@@ -34,7 +37,7 @@ object ServerAPI {
 
     suspend fun getPursuits(key: String, type: PursuitType): ApiResult<PursuitResponse> {
         val query = buildJsonObject {
-            put("query", type.toString())
+            put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
             put("key", key)
         }
         return ApiClient.postRequest(Endpoints.PURSUITS, query)

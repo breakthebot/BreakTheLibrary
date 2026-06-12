@@ -23,8 +23,10 @@ import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.api.ServerAPI
 import org.breakthebot.breakthelibrary.api.TownyAPI
 import org.breakthebot.breakthelibrary.models.ApiResult
+import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.Reference
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -76,6 +78,18 @@ class TownyObjectTests {
                 .getOrNull()
             assertNotNull(resp)
             assertIs<String>(resp)
+        }
+    }
+
+    @Test
+    fun testPursuits() {
+        runBlocking {
+            val resp = ServerAPI.getPursuits(
+                "",
+                PursuitType.ALL
+            )
+            assertIs<ApiResult.Error>(resp)
+            assertEquals(resp.statusCode, 401)
         }
     }
 
