@@ -34,7 +34,7 @@ data class TownPursuitTop(
 
 @Serializable
 data class NationPursuitTop(
-    val town: SerializableUUID? = null,
+    val nation: SerializableUUID? = null,
     val score: Float = 0F
 )
 
