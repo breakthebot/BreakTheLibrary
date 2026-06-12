@@ -203,14 +203,16 @@ object ApiClient {
     /** Fetch items that are over [Config#batchSize].
      * @param names The names or UUIDs of the items to fetch.
      * @param url The url.
+     * @param concurrencyLimit The limit of concurrent requests.
      * @param T The type that the items should be parsed into.
      * */
     suspend inline fun <reified T> getChunked(
         names: List<String>,
-        url: String
+        url: String,
+        concurrencyLimit: Int = 3,
     ): List<ApiResult<List<T>>> {
         val batches = names.chunked(ConfigHandler.cfg.batchSize)
-        val semaphore = Semaphore(3)
+        val semaphore = Semaphore(concurrencyLimit)
 
         val items = coroutineScope {
             batches.map { batch ->
@@ -221,7 +223,6 @@ object ApiClient {
                 }
             }.awaitAll()
         }
-
         return items
     }
 

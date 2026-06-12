@@ -67,7 +67,7 @@ data class Town(
         val canOutsidersSpawn: Boolean = false,
         val canPassiveMobSpawn: Boolean = false,
         val hasSnowAccumulation: Boolean = false,
-        val hasFriendlyFire: Boolean = false,
+        val hasFriendlyFire: Boolean = false
     )
 
     @Serializable
