@@ -46,21 +46,21 @@ data class PursuitTop(
 data class PlayerPursuits(
     val name: String,
     val isActive: Boolean,
-    val top: List<Map<String, PursuitTop>>
+    val top: Map<String, PursuitTop>
 )
 
 @Serializable
 data class TownPursuits(
     val name: String,
     val isActive: Boolean,
-    val top: List<Map<String, PursuitTop>>
+    val top: Map<String, PursuitTop>
 )
 
 @Serializable
 data class NationPursuits(
     val name: String,
     val isActive: Boolean,
-    val top: List<Map<String, PursuitTop>>
+    val top: Map<String, PursuitTop>
 )
 
 @Serializable
