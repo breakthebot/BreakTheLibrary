@@ -47,11 +47,11 @@ object ServerAPI {
 
     fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
 
-    suspend fun getMysteryMaster(): ApiResult<MysteryMaster> = ApiClient.getRequest(Endpoints.MM)
+    suspend fun getMysteryMaster(): ApiResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
 
     suspend fun getOnlinePlayers(): ApiResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
 
-    fun getMysteryMasterJava(): CompletableFuture<ApiResult<MysteryMaster>> = future { getMysteryMaster() }
+    fun getMysteryMasterJava() = future { getMysteryMaster() }
 
-    fun getOnlinePlayersJava(): CompletableFuture<ApiResult<OnlineReturn>> = future { getOnlinePlayers() }
+    fun getOnlinePlayersJava() = future { getOnlinePlayers() }
 }
