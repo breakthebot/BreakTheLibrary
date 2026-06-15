@@ -32,7 +32,7 @@ data class Town(
     val wiki: String? = null,
     val discord: String? = null,
     val mayor: Reference = Reference(),
-    val nation: Reference = Reference(),
+    val nation: Reference? = null,
     val timestamps: Timestamps = Timestamps(),
     val status: Status = Status(),
     val stats: Stats = Stats(),
