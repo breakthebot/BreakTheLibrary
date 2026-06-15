@@ -35,8 +35,8 @@ data class Nation(
     val wiki: String? = null,
     val discord: String? = null,
 
-    val king: Reference,
-    val capital: Reference,
+    val king: Reference = Reference(),
+    val capital: Reference = Reference(),
 
     val timestamps: Timestamps = Timestamps(),
     val status: Status = Status(),

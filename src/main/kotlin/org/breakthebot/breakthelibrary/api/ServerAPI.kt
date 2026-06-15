@@ -21,6 +21,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import org.breakthebot.breakthelibrary.api.interfaces.IServerAPI
 import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.MysteryMaster
 import org.breakthebot.breakthelibrary.models.OnlineReturn
@@ -32,12 +33,12 @@ import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
-object ServerAPI {
-    suspend fun getServerInfo(): ApiResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
+object ServerAPI : IServerAPI{
+    override suspend fun getServerInfo(): ApiResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
 
-    fun getServerInfoJava(): CompletableFuture<ApiResult<ServerInfo>> = future { getServerInfo() }
+    override fun getServerInfoJava(): CompletableFuture<ApiResult<ServerInfo>> = future { getServerInfo() }
 
-    suspend fun getPursuits(key: String, type: PursuitType): ApiResult<PursuitResponse> {
+    override suspend fun getPursuits(key: String, type: PursuitType): ApiResult<PursuitResponse> {
         val query = buildJsonObject {
             put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
             put("key", key)
@@ -45,13 +46,13 @@ object ServerAPI {
         return ApiClient.postRequest(Endpoints.PURSUITS, query)
     }
 
-    fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
+    override fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
 
-    suspend fun getMysteryMaster(): ApiResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
+    override suspend fun getMysteryMaster(): ApiResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
 
-    suspend fun getOnlinePlayers(): ApiResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
+    override suspend fun getOnlinePlayers(): ApiResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
 
-    fun getMysteryMasterJava() = future { getMysteryMaster() }
+    override fun getMysteryMasterJava() = future { getMysteryMaster() }
 
-    fun getOnlinePlayersJava() = future { getOnlinePlayers() }
+    override fun getOnlinePlayersJava() = future { getOnlinePlayers() }
 }

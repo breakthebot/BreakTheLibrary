@@ -31,8 +31,8 @@ data class Town(
     val founder: String? = null,
     val wiki: String? = null,
     val discord: String? = null,
-    val mayor: Reference,
-    val nation: Reference? = null,
+    val mayor: Reference = Reference(),
+    val nation: Reference = Reference(),
     val timestamps: Timestamps = Timestamps(),
     val status: Status = Status(),
     val stats: Stats = Stats(),
@@ -49,8 +49,8 @@ data class Town(
     @Serializable
     data class Timestamps(
         val registered: Long = 0L,
-        val joinedNationAt: Long? = 0L,
-        val ruinedAt: Long? = 0L
+        val joinedNationAt: Long = 0L,
+        val ruinedAt: Long = 0L
     )
 
     @Serializable
@@ -79,7 +79,7 @@ data class Town(
         val numOutlaws: Int = 0,
         val bonusBlocks: Int = 0,
         val balance: Float = 0f,
-        val forSalePrice: Float? = 0f
+        val forSalePrice: Float = 0f
     )
 
     @Serializable

@@ -34,8 +34,8 @@ data class Resident(
     var about: String? = null,
     var discord: String? = null,
 
-    var town: Reference? = null,
-    var nation: Reference? = null,
+    var town: Reference = Reference(),
+    var nation: Reference = Reference(),
 
     var timestamps: Timestamps = Timestamps(),
     var status: Status = Status(),

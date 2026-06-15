@@ -21,6 +21,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
+import org.breakthebot.breakthelibrary.api.interfaces.IMapAPI
 import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.Location
 import org.breakthebot.breakthelibrary.models.MapReturn
@@ -32,9 +33,9 @@ import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
-object MapAPI {
+object MapAPI : IMapAPI {
 
-    suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP)
+    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP)
         .getOrNull()
         ?.players
 
@@ -42,7 +43,7 @@ object MapAPI {
      * Query the location api.
      * @param query The list of coordinates to query.
      * */
-    suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>> {
+    override suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>> {
         val body = buildJsonObject {
             put("query", JsonArray(query.map { (x, y) ->
                 JsonArray(
@@ -55,18 +56,12 @@ object MapAPI {
         return ApiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
-    suspend fun getNearby(query: NearbyItem): ApiResult<List<Reference>?> {
+    override suspend fun getNearby(query: NearbyItem): ApiResult<List<Reference>?> {
         val body = buildJsonObject {
             put("query", JsonArray(ApiClient.json.encodeToJsonElement(listOf(query)).jsonArray))
         }
         return ApiClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }
 
-    fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> =  future { getVisiblePlayers() }
-
-    fun getLocationJava(query: List<Pair<Double, Double>>): CompletableFuture<ApiResult<List<Location>>> = future { getLocation(query) }
-
-    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<ApiResult<Location>> = future { getLocation(listOf(query)).mapSuccess { it[0] } }
-
-    fun getNearbyJava(query: NearbyItem): CompletableFuture<ApiResult<List<Reference>?>> = future { getNearby(query) }
+    override fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> =  future { getVisiblePlayers() }
 }
