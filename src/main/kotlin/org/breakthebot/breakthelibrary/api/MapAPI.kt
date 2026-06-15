@@ -21,6 +21,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
+import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.api.interfaces.IMapAPI
 import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.Location
@@ -58,7 +59,7 @@ object MapAPI : IMapAPI {
 
     override suspend fun getNearby(query: NearbyItem): ApiResult<List<Reference>?> {
         val body = buildJsonObject {
-            put("query", JsonArray(ApiClient.json.encodeToJsonElement(listOf(query)).jsonArray))
+            put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
         }
         return ApiClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }

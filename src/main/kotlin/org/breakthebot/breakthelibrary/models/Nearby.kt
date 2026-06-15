@@ -19,21 +19,41 @@ package org.breakthebot.breakthelibrary.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.JsonElement
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 
+/**
+ * Represents a single query of the nearby endpoint.
+ * */
 @Serializable
-data class NearbyItem(
-    val target: JsonElement,
-    @SerialName("search_type") val searchType: NearbyType,
-    @SerialName("target_type") val targetType: NearbyType,
-    val radius: Int
-) {
+sealed class NearbyItem {
+    @SerialName("search_type") abstract val searchType: NearbyType
+    @SerialName("target_type") abstract val targetType: NearbyType
+    abstract val radius: Int
+    abstract val strict: Boolean
+
+    @Serializable
+    data class NearbyItemCoordinates(
+        @SerialName("search_type") override val searchType: NearbyType,
+        @SerialName("target_type") override val targetType: NearbyType,
+        override val radius: Int,
+        override val strict: Boolean = false,
+        val target: List<Int>
+    ) : NearbyItem()
+
+    @Serializable
+    data class NearbyItemString(
+        @SerialName("search_type") override val searchType: NearbyType,
+        @SerialName("target_type") override val targetType: NearbyType,
+        override val radius: Int,
+        override val strict: Boolean = false,
+        val target: String
+    ) : NearbyItem()
+
     override fun toString(): String {
         return BreakTheLibrary.json.encodeToString(this)
     }
 }
 
 
-enum class NearbyType { TOWN, COORDINATE }
+enum class NearbyType { TOWN, COORDINATE, NATION }
 

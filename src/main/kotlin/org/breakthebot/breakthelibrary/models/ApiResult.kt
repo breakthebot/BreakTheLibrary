@@ -35,7 +35,9 @@ package org.breakthebot.breakthelibrary.models
 /**
  * Represents a response from the API.
  * @param T The type of the data if the request is successful.
- * */
+ * @property isSuccess If the response is success.
+ * @property isError If the response is error.
+ *  */
 sealed class ApiResult<out T> {
     val isSuccess: Boolean
         get() = this is Success

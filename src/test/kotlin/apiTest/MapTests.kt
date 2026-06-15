@@ -17,8 +17,6 @@
 package apiTest
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonPrimitive
 import org.breakthebot.breakthelibrary.api.MapAPI
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
@@ -34,11 +32,11 @@ class MapTests {
     @Test
     fun testNearbyApiTown() {
         runBlocking {
-            val query =   NearbyItem(
-                JsonPrimitive("Cairo"),
-                NearbyType.TOWN,
-                NearbyType.TOWN,
-                500
+            val query = NearbyItem.NearbyItemString(
+                target = "Cairo",
+                searchType = NearbyType.TOWN,
+                targetType = NearbyType.TOWN,
+                radius = 500
             )
             val nearby = MapAPI.getNearby(
                 query
@@ -51,13 +49,11 @@ class MapTests {
     @Test
     fun testNearbyApiCoords() {
         runBlocking {
-            val query = NearbyItem(
-                JsonArray(
-                    listOf(JsonPrimitive(11346), JsonPrimitive(11346))
-                ),
+            val query = NearbyItem.NearbyItemCoordinates(
+                target = listOf(11346, 11346),
                 searchType = NearbyType.TOWN,
                 targetType = NearbyType.COORDINATE,
-                500
+                radius = 500
             )
             val nearby = MapAPI.getNearby(
               query
@@ -74,7 +70,6 @@ class MapTests {
             val loc = MapAPI.getLocation(listOf(coords))
                 .getOrNull()
                 ?.first()
-
             assertNotNull(loc)
             Assertions.assertEquals(loc.town?.name, "Giza")
             Assertions.assertEquals(loc.nation?.name, "Egypt")
