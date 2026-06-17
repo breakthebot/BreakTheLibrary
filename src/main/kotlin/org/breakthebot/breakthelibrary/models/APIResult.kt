@@ -74,7 +74,7 @@ sealed class APIResult<out T> {
     /**
      * Get the status code from both success & error.
      * */
-    fun getErrorStatusCode(): Int {
+    fun getStatus(): Int {
         return when(this) {
             is Success -> statusCode
             is Error -> statusCode
