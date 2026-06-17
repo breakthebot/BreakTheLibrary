@@ -37,7 +37,8 @@ sealed class APIResult<out T> {
      * */
     open class Success<T>(
         val data: T,
-        val statusCode: Int = 0
+        val statusCode: Int = 0,
+        var db: Boolean = false
     ) : APIResult<T>()
 
     /**
@@ -67,6 +68,26 @@ sealed class APIResult<out T> {
         return when (this) {
             is Error -> this
             is Success -> null
+        }
+    }
+
+    /**
+     * Get the status code from both success & error.
+     * */
+    fun getStatusCode(): Int {
+        return when(this) {
+            is Success -> statusCode
+            is Error -> statusCode
+        }
+    }
+
+    /**
+     * Get the error message or empty.
+     * */
+    fun getErrorMessage(): String {
+        return when (this) {
+            is Success -> ""
+            is Error -> message
         }
     }
 

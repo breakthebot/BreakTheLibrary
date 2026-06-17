@@ -31,6 +31,7 @@ import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
+import kotlin.time.TimeSource
 
 object ServerAPI : IServerAPI{
     override suspend fun getServerInfo(): APIResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
@@ -50,6 +51,12 @@ object ServerAPI : IServerAPI{
     override suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
 
     override suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
+
+    override suspend fun getAPILatency(): Long {
+        val start = TimeSource.Monotonic.markNow()
+        getServerInfo()
+        return start.elapsedNow().inWholeMilliseconds
+    }
 
     override fun getMysteryMasterJava() = future { getMysteryMaster() }
 
