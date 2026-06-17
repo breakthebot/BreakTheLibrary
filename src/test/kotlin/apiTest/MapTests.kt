@@ -64,6 +64,24 @@ class MapTests {
     }
 
     @Test
+    fun testNearbyApiNation() {
+        runBlocking {
+            val query = NearbyItem.NearbyItemString(
+                target = "Giza",
+                searchType = NearbyType.NATION,
+                targetType = NearbyType.TOWN,
+                radius = 500
+            )
+            println(query)
+            val nearby = MapAPI.getNearby(
+                query
+            ).getOrNull()
+            assertNotNull(nearby)
+            assertIs<List<Reference>>(nearby)
+        }
+    }
+
+    @Test
     fun testLocation() {
         val coords = Pair(11125.0, -3371.0)
         runBlocking {

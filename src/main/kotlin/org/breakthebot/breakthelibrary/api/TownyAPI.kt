@@ -19,34 +19,32 @@ package org.breakthebot.breakthelibrary.api
 import org.breakthebot.breakthelibrary.api.interfaces.ITownyAPI
 import org.breakthebot.breakthelibrary.models.*
 import org.breakthebot.breakthelibrary.network.ApiClient
-import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
-import java.util.concurrent.CompletableFuture
 
 object TownyAPI : ITownyAPI{
 
-    override suspend fun getAllPlayers(): ApiResult<List<Reference>> = ApiClient.getRequest(Endpoints.PLAYERS)
-    override suspend fun getAllTowns(): ApiResult<List<Reference>> = ApiClient.getRequest(Endpoints.TOWNS)
-    override suspend fun getAllNations(): ApiResult<List<Reference>> = ApiClient.getRequest(Endpoints.NATIONS)
+    override suspend fun getAllPlayers(): APIResult<List<Reference>> = ApiClient.getRequest(Endpoints.PLAYERS)
+    override suspend fun getAllTowns(): APIResult<List<Reference>> = ApiClient.getRequest(Endpoints.TOWNS)
+    override suspend fun getAllNations(): APIResult<List<Reference>> = ApiClient.getRequest(Endpoints.NATIONS)
 
-    override suspend fun getPlayer(name: String): ApiResult<Resident> = ApiClient.postRequestItem(Endpoints.PLAYERS, name)
+    override suspend fun getPlayer(name: String): APIResult<Resident> = ApiClient.postRequestItem(Endpoints.PLAYERS, name)
 
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    override suspend fun getPlayerDiscord(name: String): ApiResult<String> = ApiClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
+    override suspend fun getPlayerDiscord(name: String): APIResult<String> = ApiClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
 
-    override suspend fun getPlayers(names: List<String>): List<ApiResult<List<Resident>>> = ApiClient.getChunked(names, Endpoints.PLAYERS)
+    override suspend fun getPlayers(names: List<String>): List<APIResult<List<Resident>>> = ApiClient.getChunked(names, Endpoints.PLAYERS)
 
-    override suspend fun getTown(name: String): ApiResult<Town> = ApiClient.postRequestItem(Endpoints.TOWNS, name)
+    override suspend fun getTown(name: String): APIResult<Town> = ApiClient.postRequestItem(Endpoints.TOWNS, name)
 
-    override suspend fun getTowns(names: List<String>): List<ApiResult<List<Town>>> = ApiClient.getChunked(names, Endpoints.TOWNS)
+    override suspend fun getTowns(names: List<String>): List<APIResult<List<Town>>> = ApiClient.getChunked(names, Endpoints.TOWNS)
 
-    override suspend fun getNation(name: String): ApiResult<Nation> = ApiClient.postRequestItem(Endpoints.NATIONS, name)
+    override suspend fun getNation(name: String): APIResult<Nation> = ApiClient.postRequestItem(Endpoints.NATIONS, name)
 
-    override suspend fun getNations(names: List<String>): List<ApiResult<List<Nation>>> = ApiClient.getChunked(names, Endpoints.NATIONS)
+    override suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>> = ApiClient.getChunked(names, Endpoints.NATIONS)
 
-    override suspend fun getStaff(): ApiResult<List<SerializableUUID>> = ApiClient.getRequest<StaffList>(Endpoints.STAFF).mapSuccess { it.allStaff() }
+    override suspend fun getStaff(): APIResult<List<SerializableUUID>> = ApiClient.getRequest<StaffList>(Endpoints.STAFF).mapSuccess { it.allStaff() }
 
 }

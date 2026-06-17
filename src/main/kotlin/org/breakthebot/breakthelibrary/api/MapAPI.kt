@@ -23,7 +23,7 @@ import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.api.interfaces.IMapAPI
-import org.breakthebot.breakthelibrary.models.ApiResult
+import org.breakthebot.breakthelibrary.models.APIResult
 import org.breakthebot.breakthelibrary.models.Location
 import org.breakthebot.breakthelibrary.models.MapReturn
 import org.breakthebot.breakthelibrary.models.NearbyItem
@@ -44,7 +44,7 @@ object MapAPI : IMapAPI {
      * Query the location api.
      * @param query The list of coordinates to query.
      * */
-    override suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>> {
+    override suspend fun getLocation(query: List<Pair<Double, Double>>): APIResult<List<Location>> {
         val body = buildJsonObject {
             put("query", JsonArray(query.map { (x, y) ->
                 JsonArray(
@@ -57,7 +57,7 @@ object MapAPI : IMapAPI {
         return ApiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
-    override suspend fun getNearby(query: NearbyItem): ApiResult<List<Reference>?> {
+    override suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?> {
         val body = buildJsonObject {
             put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
         }

@@ -21,16 +21,16 @@ import org.breakthebot.breakthelibrary.network.ApiClient.future
 import java.util.concurrent.CompletableFuture
 
 interface IServerAPI {
-    suspend fun getServerInfo(): ApiResult<ServerInfo>
-    suspend fun getPursuits(key: String, type: PursuitType): ApiResult<PursuitResponse>
-    suspend fun getMysteryMaster(): ApiResult<List<MysteryMaster>>
-    suspend fun getOnlinePlayers(): ApiResult<OnlineReturn>
+    suspend fun getServerInfo(): APIResult<ServerInfo>
+    suspend fun getPursuits(key: String, type: PursuitType): APIResult<PursuitResponse>
+    suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>>
+    suspend fun getOnlinePlayers(): APIResult<OnlineReturn>
 
     fun getMysteryMasterJava() = future { getMysteryMaster() }
 
     fun getOnlinePlayersJava() = future { getOnlinePlayers() }
 
-    fun getServerInfoJava(): CompletableFuture<ApiResult<ServerInfo>> = future { getServerInfo() }
+    fun getServerInfoJava(): CompletableFuture<APIResult<ServerInfo>> = future { getServerInfo() }
 
-    fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
+    fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<APIResult<PursuitResponse>> = future { getPursuits(key, type) }
 }

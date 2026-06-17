@@ -23,61 +23,61 @@ import java.util.concurrent.CompletableFuture
 
 interface ITownyAPI {
 
-    suspend fun getAllPlayers(): ApiResult<List<Reference>>
-    suspend fun getAllTowns(): ApiResult<List<Reference>>
-    suspend fun getAllNations(): ApiResult<List<Reference>>
+    suspend fun getAllPlayers(): APIResult<List<Reference>>
+    suspend fun getAllTowns(): APIResult<List<Reference>>
+    suspend fun getAllNations(): APIResult<List<Reference>>
 
-    suspend fun getPlayer(name: String): ApiResult<Resident>
+    suspend fun getPlayer(name: String): APIResult<Resident>
 
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    suspend fun getPlayerDiscord(name: String): ApiResult<String>
+    suspend fun getPlayerDiscord(name: String): APIResult<String>
 
-    suspend fun getPlayers(names: List<String>): List<ApiResult<List<Resident>>>
+    suspend fun getPlayers(names: List<String>): List<APIResult<List<Resident>>>
 
-    suspend fun getTown(name: String): ApiResult<Town>
+    suspend fun getTown(name: String): APIResult<Town>
 
-    suspend fun getTowns(names: List<String>): List<ApiResult<List<Town>>>
+    suspend fun getTowns(names: List<String>): List<APIResult<List<Town>>>
 
-    suspend fun getNation(name: String): ApiResult<Nation>
+    suspend fun getNation(name: String): APIResult<Nation>
 
-    suspend fun getNations(names: List<String>): List<ApiResult<List<Nation>>>
+    suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>>
 
-    suspend fun getStaff(): ApiResult<List<SerializableUUID>>
+    suspend fun getStaff(): APIResult<List<SerializableUUID>>
 
     // Java API
 
-    fun getAllPlayersJava(): CompletableFuture<ApiResult<List<Reference>>> =
+    fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> =
         future { getAllPlayers() }
 
-    fun getAllTownsJava(): CompletableFuture<ApiResult<List<Reference>>> =
+    fun getAllTownsJava(): CompletableFuture<APIResult<List<Reference>>> =
         future { getAllTowns() }
 
-    fun getAllNationsJava(): CompletableFuture<ApiResult<List<Reference>>> =
+    fun getAllNationsJava(): CompletableFuture<APIResult<List<Reference>>> =
         future { getAllNations() }
 
-    fun getPlayerJava(name: String): CompletableFuture<ApiResult<Resident>> =
+    fun getPlayerJava(name: String): CompletableFuture<APIResult<Resident>> =
         future { getPlayer(name) }
 
-    fun getPlayerDiscordJava(name: String): CompletableFuture<ApiResult<String>> =
+    fun getPlayerDiscordJava(name: String): CompletableFuture<APIResult<String>> =
         future { getPlayerDiscord(name) }
 
-    fun getPlayersJava(names: List<String>): CompletableFuture<List<ApiResult<List<Resident>>>> =
+    fun getPlayersJava(names: List<String>): CompletableFuture<List<APIResult<List<Resident>>>> =
         future { getPlayers(names) }
 
-    fun getTownJava(name: String): CompletableFuture<ApiResult<Town>> =
+    fun getTownJava(name: String): CompletableFuture<APIResult<Town>> =
         future { getTown(name) }
 
-    fun getTownsJava(names: List<String>): CompletableFuture<List<ApiResult<List<Town>>>> =
+    fun getTownsJava(names: List<String>): CompletableFuture<List<APIResult<List<Town>>>> =
         future { getTowns(names) }
 
-    fun getNationJava(name: String): CompletableFuture<ApiResult<Nation>> =
+    fun getNationJava(name: String): CompletableFuture<APIResult<Nation>> =
         future { getNation(name) }
 
-    fun getNationsJava(names: List<String>): CompletableFuture<List<ApiResult<List<Nation>>>> =
+    fun getNationsJava(names: List<String>): CompletableFuture<List<APIResult<List<Nation>>>> =
         future { getNations(names) }
 
-    fun getStaffJava(): CompletableFuture<ApiResult<List<SerializableUUID>>> =
+    fun getStaffJava(): CompletableFuture<APIResult<List<SerializableUUID>>> =
         future { getStaff() }
 }

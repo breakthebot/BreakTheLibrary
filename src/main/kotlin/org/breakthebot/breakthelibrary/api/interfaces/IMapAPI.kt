@@ -23,18 +23,18 @@ import java.util.concurrent.CompletableFuture
 interface IMapAPI {
 
     suspend fun getVisiblePlayers(): List<PlayerMapReturn>?
-    suspend fun getLocation(query: List<Pair<Double, Double>>): ApiResult<List<Location>>
-    suspend fun getNearby(query: NearbyItem): ApiResult<List<Reference>?>
+    suspend fun getLocation(query: List<Pair<Double, Double>>): APIResult<List<Location>>
+    suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?>
 
     fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?>
 
-    fun getLocationJava(query: List<Pair<Double, Double>>): CompletableFuture<ApiResult<List<Location>>> = future { getLocation(query) }
+    fun getLocationJava(query: List<Pair<Double, Double>>): CompletableFuture<APIResult<List<Location>>> = future { getLocation(query) }
 
-    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<ApiResult<Location>> = future { getLocation(
+    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<APIResult<Location>> = future { getLocation(
         listOf(query)
     ).mapSuccess { it[0] } }
 
-    fun getNearbyJava(query: NearbyItem): CompletableFuture<ApiResult<List<Reference>?>> = future {
+    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> = future {
         getNearby(query)
     }
 }

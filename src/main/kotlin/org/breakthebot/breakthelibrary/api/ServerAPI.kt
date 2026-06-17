@@ -14,31 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-/*
- * This file is part of BreakTheLibrary.
- *
- * BreakTheLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * BreakTheLibrary is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
- */
 package org.breakthebot.breakthelibrary.api
 
 import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.breakthebot.breakthelibrary.api.interfaces.IServerAPI
-import org.breakthebot.breakthelibrary.models.ApiResult
+import org.breakthebot.breakthelibrary.models.APIResult
 import org.breakthebot.breakthelibrary.models.MysteryMaster
 import org.breakthebot.breakthelibrary.models.OnlineReturn
 import org.breakthebot.breakthelibrary.models.PursuitResponse
@@ -50,11 +33,11 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
 object ServerAPI : IServerAPI{
-    override suspend fun getServerInfo(): ApiResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
+    override suspend fun getServerInfo(): APIResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
 
-    override fun getServerInfoJava(): CompletableFuture<ApiResult<ServerInfo>> = future { getServerInfo() }
+    override fun getServerInfoJava(): CompletableFuture<APIResult<ServerInfo>> = future { getServerInfo() }
 
-    override suspend fun getPursuits(key: String, type: PursuitType): ApiResult<PursuitResponse> {
+    override suspend fun getPursuits(key: String, type: PursuitType): APIResult<PursuitResponse> {
         val query = buildJsonObject {
             put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
             put("key", key)
@@ -62,11 +45,11 @@ object ServerAPI : IServerAPI{
         return ApiClient.postRequest(Endpoints.PURSUITS, query)
     }
 
-    override fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<ApiResult<PursuitResponse>> = future { getPursuits(key, type) }
+    override fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<APIResult<PursuitResponse>> = future { getPursuits(key, type) }
 
-    override suspend fun getMysteryMaster(): ApiResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
+    override suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
 
-    override suspend fun getOnlinePlayers(): ApiResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
+    override suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
 
     override fun getMysteryMasterJava() = future { getMysteryMaster() }
 

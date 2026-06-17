@@ -25,7 +25,6 @@ import org.junit.jupiter.params.provider.ValueSource
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.ServerAPI
 import org.breakthebot.breakthelibrary.api.TownyAPI
-import org.breakthebot.breakthelibrary.models.ApiResult
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.Reference
 import org.junit.jupiter.api.Test

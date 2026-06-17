@@ -14,22 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-/*
- * This file is part of BreakTheLibrary.
- *
- * BreakTheLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * BreakTheLibrary is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
- */
 package org.breakthebot.breakthelibrary.models
 
 /**
@@ -38,7 +22,7 @@ package org.breakthebot.breakthelibrary.models
  * @property isSuccess If the response is success.
  * @property isError If the response is error.
  *  */
-sealed class ApiResult<out T> {
+sealed class APIResult<out T> {
     val isSuccess: Boolean
         get() = this is Success
 
@@ -51,20 +35,20 @@ sealed class ApiResult<out T> {
      * @param data The response data of type T.
      * @param statusCode The status code.
      * */
-    data class Success<T>(
+    open class Success<T>(
         val data: T,
-        val statusCode: Int?
-    ) : ApiResult<T>()
+        val statusCode: Int = 0
+    ) : APIResult<T>()
 
     /**
      * Represents an error sent from the API.
      * @param message The error message returned by the api.
      * @param statusCode The status code the request returned.
      * */
-    data class Error(
+    open class Error(
         val message: String,
         val statusCode: Int,
-    ) : ApiResult<Nothing>()
+    ) : APIResult<Nothing>()
 
     /**
      * Returns [Success.data] or null.
@@ -77,12 +61,22 @@ sealed class ApiResult<out T> {
     }
 
     /**
+     * Returns [Error] or null.
+     */
+    fun getErrorOrNull(): Error? {
+        return when (this) {
+            is Error -> this
+            is Success -> null
+        }
+    }
+
+    /**
      * Map data if it is a successful request.
      * @param transform The function that should be executed with the data as input.
      * */
     inline fun <R> mapSuccess(
         transform: (T) -> R
-    ): ApiResult<R> {
+    ): APIResult<R> {
         return when (this) {
             is Success -> Success(
                 transform(data),
@@ -98,7 +92,7 @@ sealed class ApiResult<out T> {
      * */
     inline fun mapError(
         transform: (Error) -> Error
-    ): ApiResult<T> {
+    ): APIResult<T> {
         return when (this) {
             is Success -> this
             is Error -> transform(this)
@@ -111,7 +105,7 @@ sealed class ApiResult<out T> {
      * */
     inline fun onSuccess(
         block: (T) -> Unit
-    ): ApiResult<T> {
+    ): APIResult<T> {
         if (this is Success) {
             block(data)
         }
@@ -124,7 +118,7 @@ sealed class ApiResult<out T> {
      * */
     inline fun onError(
         block: (Error) -> Unit
-    ): ApiResult<T> {
+    ): APIResult<T> {
         if (this is Error) {
             block(this)
         }

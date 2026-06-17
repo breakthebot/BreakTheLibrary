@@ -49,7 +49,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.BreakTheLibrary
-import org.breakthebot.breakthelibrary.models.ApiResult
+import org.breakthebot.breakthelibrary.models.APIResult
 import org.breakthebot.breakthelibrary.utils.ConfigHandler
 import java.net.URI
 import java.net.http.HttpClient
@@ -91,9 +91,9 @@ object ApiClient {
     /** Sends a get request.
      * @param url The url to send the request to.
      * @param T The type of the data that should be returned on success.
-     * @return Return [ApiResult] with T as a type param.
+     * @return Return [APIResult] with T as a type param.
      * */
-    suspend inline fun <reified T> getRequest(url: String): ApiResult<T> {
+    suspend inline fun <reified T> getRequest(url: String): APIResult<T> {
         val request = HttpRequest.newBuilder().apply {
             uri(URI(url))
             header("Content-Type", "application/json")
@@ -101,17 +101,17 @@ object ApiClient {
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             if (response.statusCode() != 200) {
-                return ApiResult.Error(
+                return APIResult.Error(
                     response.body(),
                     response.statusCode()
                 )
             }
-            return ApiResult.Success(
+            return APIResult.Success(
                 parseString<T>(response.body()),
                 200
             )
         } catch (e: Exception) {
-            return ApiResult.Error(
+            return APIResult.Error(
                 e.message ?: "Unknown error",
                 0
             )
@@ -122,12 +122,12 @@ object ApiClient {
      * @param url The url to send the request to.
      * @param body The request body.
      * @param T The type of the data that should be returned on success.
-     * @return Return [ApiResult] with T as a type param.
+     * @return Return [APIResult] with T as a type param.
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
         body: String
-    ): ApiResult<T> {
+    ): APIResult<T> {
         val request = HttpRequest.newBuilder().apply {
            uri(URI(url))
            header("Content-Type", "application/json")
@@ -137,7 +137,7 @@ object ApiClient {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             val body = response.body()
             if (response.statusCode() != 200) {
-                return ApiResult.Error(
+                return APIResult.Error(
                     // In the context of towny APIs this will almost always be the error message.
                     body,
                     response.statusCode()
@@ -145,17 +145,17 @@ object ApiClient {
             }
             // If body is [], then query is 404 but api does not return it.
             if (body == "[]") {
-                return ApiResult.Error(
+                return APIResult.Error(
                     "Not found",
                     404
                 )
             }
-            return ApiResult.Success(
+            return APIResult.Success(
                 parseString<T>(body),
                 200
             )
         } catch (e: Exception) {
-            return ApiResult.Error(
+            return APIResult.Error(
                 e.message ?: "Unknown error",
                 0
             )
@@ -166,12 +166,12 @@ object ApiClient {
      * @param url The url to send the request to.
      * @param body The JSON body.
      * @param T The type of the data that should be returned on success.
-     * @return Return [ApiResult] with T as a type param.
+     * @return Return [APIResult] with T as a type param.
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
         body: JsonObject
-    ): ApiResult<T> = postRequest<T>(url, body.toString())
+    ): APIResult<T> = postRequest<T>(url, body.toString())
 
 
     /** Post request items without having to construct an object
@@ -179,14 +179,14 @@ object ApiClient {
      * @param T The type of the objects you want to fetch.
      * @param url The url to send the req to.
      * @param body A list of UUID's or names to fetch from the specified endpoint.
-     * @return Return [ApiResult] with List<T> as a type param.
+     * @return Return [APIResult] with List<T> as a type param.
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
         body: List<String>
-    ): ApiResult<List<T>> {
+    ): APIResult<List<T>> {
         if (body.size > ConfigHandler.cfg.batchSize) {
-            return ApiResult.Error(
+            return APIResult.Error(
                 "Unable to send request, query size is bigger than ${ConfigHandler.cfg.batchSize}",
                 400
             )
@@ -204,12 +204,12 @@ object ApiClient {
      * @param T The type of the objects you want to fetch.
      * @param url The url to send the req to
      * @param name The name or stringified UUID to query.
-     * @return Return [ApiResult] with List<T> as a type param.
+     * @return Return [APIResult] with List<T> as a type param.
      * */
     suspend inline fun <reified T> postRequestItem(
         url: String,
         name: String
-    ): ApiResult<T> {
+    ): APIResult<T> {
         val jsonBody = buildJsonObject {
             put("query", JsonArray(listOf(JsonPrimitive(name))))
         }
@@ -226,7 +226,7 @@ object ApiClient {
         names: List<String>,
         url: String,
         concurrencyLimit: Int = 3,
-    ): List<ApiResult<List<T>>> {
+    ): List<APIResult<List<T>>> {
         val batches = names.chunked(ConfigHandler.cfg.batchSize)
         val semaphore = Semaphore(concurrencyLimit)
 
