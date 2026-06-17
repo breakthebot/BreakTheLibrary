@@ -25,6 +25,7 @@ interface IServerAPI {
     suspend fun getPursuits(key: String, type: PursuitType): APIResult<PursuitResponse>
     suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>>
     suspend fun getOnlinePlayers(): APIResult<OnlineReturn>
+    suspend fun getAPILatency(): Long
 
     fun getMysteryMasterJava() = future { getMysteryMaster() }
 
@@ -33,4 +34,6 @@ interface IServerAPI {
     fun getServerInfoJava(): CompletableFuture<APIResult<ServerInfo>> = future { getServerInfo() }
 
     fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<APIResult<PursuitResponse>> = future { getPursuits(key, type) }
+
+    fun getAPILatencyJava() = future { getAPILatency() }
 }
