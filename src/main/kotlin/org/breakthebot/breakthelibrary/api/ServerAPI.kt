@@ -27,13 +27,15 @@ import org.breakthebot.breakthelibrary.models.OnlineReturn
 import org.breakthebot.breakthelibrary.models.PursuitResponse
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.ServerInfo
+import org.breakthebot.breakthelibrary.models.StaffList
 import org.breakthebot.breakthelibrary.network.ApiClient
 import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import kotlin.time.TimeSource
 
-object ServerAPI : IServerAPI{
+object ServerAPI : IServerAPI {
     override suspend fun getServerInfo(): APIResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
 
     override fun getServerInfoJava(): CompletableFuture<APIResult<ServerInfo>> = future { getServerInfo() }
@@ -58,7 +60,11 @@ object ServerAPI : IServerAPI{
         return start.elapsedNow().inWholeMilliseconds
     }
 
-    override fun getMysteryMasterJava() = future { getMysteryMaster() }
+    override suspend fun getStaff(): Map<String, List<UUID>> {
+        return ApiClient.getRequest<StaffList>(Endpoints.STAFF)
+            .mapSuccess { it.toMap() }
+            .getOrElse { emptyMap() }
+    }
 
-    override fun getOnlinePlayersJava() = future { getOnlinePlayers() }
+    override suspend fun getStaffList(): APIResult<StaffList> = ApiClient.getRequest(Endpoints.STAFF)
 }

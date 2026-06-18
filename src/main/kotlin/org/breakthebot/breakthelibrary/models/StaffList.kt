@@ -21,16 +21,32 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import java.util.UUID
 
 @Serializable
 data class StaffList(
-    @Contextual val owner: List<SerializableUUID>,
-    @Contextual val admin: List<SerializableUUID>,
-    @Contextual val developer: List<SerializableUUID>,
-    @Contextual val moderator: List<SerializableUUID>,
-    @Contextual val helper: List<SerializableUUID>
+    @Contextual
+    val owner: List<SerializableUUID>,
+    @Contextual
+    val admin: List<SerializableUUID>,
+    @Contextual
+    val developer: List<SerializableUUID>,
+    @Contextual
+    val moderator: List<SerializableUUID>,
+    @Contextual
+    val helper: List<SerializableUUID>
 ) {
     fun allStaff(): List<SerializableUUID> {
         return (owner + admin + moderator + helper + developer).distinct()
+    }
+
+    fun toMap(): Map<String, List<UUID>> {
+        val map = mutableMapOf<String, List<UUID>>()
+        map["owner"] = owner.map { it.toUUID() }
+        map["admin"] = admin.map { it.toUUID() }
+        map["developer"] = developer.map { it.toUUID() }
+        map["moderator"] = moderator.map { it.toUUID() }
+        map["helper"] = helper.map { it.toUUID() }
+        return map
     }
 }

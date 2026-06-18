@@ -44,8 +44,6 @@ interface ITownyAPI {
 
     suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>>
 
-    suspend fun getStaff(): APIResult<List<SerializableUUID>>
-
     // Java API
 
     fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> =
@@ -77,7 +75,4 @@ interface ITownyAPI {
 
     fun getNationsJava(names: List<String>): CompletableFuture<List<APIResult<List<Nation>>>> =
         future { getNations(names) }
-
-    fun getStaffJava(): CompletableFuture<APIResult<List<SerializableUUID>>> =
-        future { getStaff() }
 }

@@ -45,6 +45,4 @@ object TownyAPI : ITownyAPI{
 
     override suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>> = ApiClient.getChunked(names, Endpoints.NATIONS)
 
-    override suspend fun getStaff(): APIResult<List<SerializableUUID>> = ApiClient.getRequest<StaffList>(Endpoints.STAFF).mapSuccess { it.allStaff() }
-
 }

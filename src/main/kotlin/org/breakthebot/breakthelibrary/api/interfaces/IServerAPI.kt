@@ -18,6 +18,7 @@ package org.breakthebot.breakthelibrary.api.interfaces
 
 import org.breakthebot.breakthelibrary.models.*
 import org.breakthebot.breakthelibrary.network.ApiClient.future
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 interface IServerAPI {
@@ -26,14 +27,14 @@ interface IServerAPI {
     suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>>
     suspend fun getOnlinePlayers(): APIResult<OnlineReturn>
     suspend fun getAPILatency(): Long
+    suspend fun getStaffList(): APIResult<StaffList>
+    suspend fun getStaff(): Map<String, List<UUID>>
 
     fun getMysteryMasterJava() = future { getMysteryMaster() }
-
     fun getOnlinePlayersJava() = future { getOnlinePlayers() }
-
     fun getServerInfoJava(): CompletableFuture<APIResult<ServerInfo>> = future { getServerInfo() }
-
     fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<APIResult<PursuitResponse>> = future { getPursuits(key, type) }
-
     fun getAPILatencyJava() = future { getAPILatency() }
+    fun getStaffListJava() = future { getStaffList() }
+    fun getStaffJava() = future { getStaff() }
 }
