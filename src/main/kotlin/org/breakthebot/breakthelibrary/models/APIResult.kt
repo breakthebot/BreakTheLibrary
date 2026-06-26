@@ -146,6 +146,9 @@ sealed class APIResult<out T> {
         return this
     }
 
+    /** Get the result or else.
+     * @param fallback The fallback to be executed.
+     * */
     inline fun getOrElse(
         fallback: (Error) -> @UnsafeVariance T
     ): T = when (this) {

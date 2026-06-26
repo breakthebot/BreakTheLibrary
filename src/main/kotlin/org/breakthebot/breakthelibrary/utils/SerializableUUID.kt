@@ -25,6 +25,10 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+import kotlin.uuid.toJavaUuid
+import kotlin.uuid.toKotlinUuid
 
 object SerializableUUIDSerializer : KSerializer<SerializableUUID> {
     override val descriptor: SerialDescriptor =
@@ -41,8 +45,17 @@ object SerializableUUIDSerializer : KSerializer<SerializableUUID> {
 
 @Serializable(with = SerializableUUIDSerializer::class)
 data class SerializableUUID(val value: UUID) {
+
+    @OptIn(ExperimentalUuidApi::class)
+    constructor(value: Uuid) : this(value.toJavaUuid())
+
     fun toUUID(): UUID {
         return value
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    fun toKotlinUUID(): Uuid {
+        return value.toKotlinUuid()
     }
 
     override fun toString(): String {

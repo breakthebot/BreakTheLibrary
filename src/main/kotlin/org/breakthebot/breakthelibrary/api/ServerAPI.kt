@@ -38,8 +38,6 @@ import kotlin.time.TimeSource
 object ServerAPI : IServerAPI {
     override suspend fun getServerInfo(): APIResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
 
-    override fun getServerInfoJava(): CompletableFuture<APIResult<ServerInfo>> = future { getServerInfo() }
-
     override suspend fun getPursuits(key: String, type: PursuitType): APIResult<PursuitResponse> {
         val query = buildJsonObject {
             put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
@@ -47,8 +45,6 @@ object ServerAPI : IServerAPI {
         }
         return ApiClient.postRequest(Endpoints.PURSUITS, query)
     }
-
-    override fun getPursuitsJava(key: String, type: PursuitType): CompletableFuture<APIResult<PursuitResponse>> = future { getPursuits(key, type) }
 
     override suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
 

@@ -27,21 +27,15 @@ interface ITownyAPI {
     suspend fun getAllTowns(): APIResult<List<Reference>>
     suspend fun getAllNations(): APIResult<List<Reference>>
 
-    suspend fun getPlayer(name: String): APIResult<Resident>
-
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
+    suspend fun getPlayer(name: String): APIResult<Resident>
     suspend fun getPlayerDiscord(name: String): APIResult<String>
-
     suspend fun getPlayers(names: List<String>): List<APIResult<List<Resident>>>
-
     suspend fun getTown(name: String): APIResult<Town>
-
     suspend fun getTowns(names: List<String>): List<APIResult<List<Town>>>
-
     suspend fun getNation(name: String): APIResult<Nation>
-
     suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>>
 
     // Java API
