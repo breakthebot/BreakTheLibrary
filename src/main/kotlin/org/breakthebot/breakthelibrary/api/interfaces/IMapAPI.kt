@@ -17,7 +17,7 @@
 package org.breakthebot.breakthelibrary.api.interfaces
 
 import org.breakthebot.breakthelibrary.models.*
-import org.breakthebot.breakthelibrary.network.ApiClient.future
+import org.breakthebot.breakthelibrary.api.APIClient.future
 import java.util.concurrent.CompletableFuture
 
 interface IMapAPI {

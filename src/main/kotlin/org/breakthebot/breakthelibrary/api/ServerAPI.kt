@@ -28,27 +28,24 @@ import org.breakthebot.breakthelibrary.models.PursuitResponse
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.ServerInfo
 import org.breakthebot.breakthelibrary.models.StaffList
-import org.breakthebot.breakthelibrary.network.ApiClient
-import org.breakthebot.breakthelibrary.network.ApiClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.UUID
-import java.util.concurrent.CompletableFuture
 import kotlin.time.TimeSource
 
 object ServerAPI : IServerAPI {
-    override suspend fun getServerInfo(): APIResult<ServerInfo> = ApiClient.getRequest(Endpoints.APIURL)
+    override suspend fun getServerInfo(): APIResult<ServerInfo> = APIClient.getRequest(Endpoints.APIURL)
 
     override suspend fun getPursuits(key: String, type: PursuitType): APIResult<PursuitResponse> {
         val query = buildJsonObject {
             put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
             put("key", key)
         }
-        return ApiClient.postRequest(Endpoints.PURSUITS, query)
+        return APIClient.postRequest(Endpoints.PURSUITS, query)
     }
 
-    override suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = ApiClient.getRequest(Endpoints.MM)
+    override suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = APIClient.getRequest(Endpoints.MM)
 
-    override suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = ApiClient.getRequest(Endpoints.APIURL + "/online")
+    override suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = APIClient.getRequest(Endpoints.APIURL + "/online")
 
     override suspend fun getAPILatency(): Long {
         val start = TimeSource.Monotonic.markNow()
@@ -57,10 +54,10 @@ object ServerAPI : IServerAPI {
     }
 
     override suspend fun getStaff(): Map<String, List<UUID>> {
-        return ApiClient.getRequest<StaffList>(Endpoints.STAFF)
+        return APIClient.getRequest<StaffList>(Endpoints.STAFF)
             .mapSuccess { it.toMap() }
             .getOrElse { emptyMap() }
     }
 
-    override suspend fun getStaffList(): APIResult<StaffList> = ApiClient.getRequest(Endpoints.STAFF)
+    override suspend fun getStaffList(): APIResult<StaffList> = APIClient.getRequest(Endpoints.STAFF)
 }

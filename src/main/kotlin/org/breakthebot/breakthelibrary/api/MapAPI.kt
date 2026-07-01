@@ -29,14 +29,13 @@ import org.breakthebot.breakthelibrary.models.MapReturn
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.network.ApiClient
-import org.breakthebot.breakthelibrary.network.ApiClient.future
+import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
 object MapAPI : IMapAPI {
 
-    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = ApiClient.getRequest<MapReturn>(Endpoints.MAP)
+    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = APIClient.getRequest<MapReturn>(Endpoints.MAP)
         .getOrNull()
         ?.players
 
@@ -54,14 +53,14 @@ object MapAPI : IMapAPI {
                 )
             }))
         }
-        return ApiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
+        return APIClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
     override suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?> {
         val body = buildJsonObject {
             put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
         }
-        return ApiClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
+        return APIClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }
 
     override fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> =  future { getVisiblePlayers() }

@@ -23,7 +23,7 @@ import org.breakthebot.breakthelibrary.models.PursuitResponse
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.ServerInfo
 import org.breakthebot.breakthelibrary.models.StaffList
-import org.breakthebot.breakthelibrary.network.ApiClient.future
+import org.breakthebot.breakthelibrary.api.APIClient.future
 import java.util.UUID
 
 interface IServerAPI {

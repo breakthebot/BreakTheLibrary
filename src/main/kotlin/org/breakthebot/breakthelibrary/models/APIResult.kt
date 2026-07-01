@@ -38,7 +38,6 @@ sealed class APIResult<out T> {
     open class Success<T>(
         val data: T,
         val statusCode: Int = 0,
-        var db: Boolean = false
     ) : APIResult<T>()
 
     /**

@@ -40,6 +40,10 @@ data class StaffList(
         return (owner + admin + moderator + helper + developer).distinct()
     }
 
+    fun toList(): List<UUID> {
+        return allStaff().map { it.toUUID() }
+    }
+
     fun toMap(): Map<String, List<UUID>> {
         val map = mutableMapOf<String, List<UUID>>()
         map["owner"] = owner.map { it.toUUID() }

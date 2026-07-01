@@ -126,7 +126,6 @@ data class Town(
         val location: WarpLocation
     )
 
-
     override fun toString(): String {
         return BreakTheLibrary.json.encodeToString(this)
     }
