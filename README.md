@@ -4,3 +4,4 @@ freely licensed to anyone who wants to use, modify and distribute it under gplv3
 
 ## Used in:    
     BreakTheMod
+    BreakTheBot
