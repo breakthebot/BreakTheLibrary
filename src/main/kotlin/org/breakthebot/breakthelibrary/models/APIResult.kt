@@ -16,6 +16,8 @@
  */
 package org.breakthebot.breakthelibrary.models
 
+import org.jetbrains.annotations.ApiStatus
+
 /**
  * Represents a response from the API.
  * @param T The type of the data if the request is successful.
@@ -153,5 +155,18 @@ sealed class APIResult<out T> {
     ): T = when (this) {
         is Success -> data
         is Error -> fallback(this)
+    }
+
+    /**
+     * Provide a human friendly error string.
+     * */
+    @ApiStatus.AvailableSince("1.6.2")
+    override fun toString(): String {
+        return when (this) {
+            is Error -> {
+                "Received error $message with status code $statusCode from the api."
+            }
+            is Success -> this.toString()
+        }
     }
 }

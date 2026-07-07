@@ -89,8 +89,8 @@ class MapTests {
                 .getOrNull()
                 ?.first()
             assertNotNull(loc)
-            Assertions.assertEquals(loc.town?.name, "Giza")
-            Assertions.assertEquals(loc.nation?.name, "Egypt")
+            Assertions.assertEquals("Giza", loc.town?.name)
+            Assertions.assertEquals("Egypt", loc.nation?.name)
         }
     }
 
