@@ -25,20 +25,18 @@ data class PlayerLocationInfo(
     var z: Double,
     var isWilderness: Boolean,
     var townName: String?,
-    var found: Boolean
+    var found: Boolean,
 ) {
-
     init {
         this.found = found
     }
 
-    override fun toString(): String {
-        return if (!found) {
+    override fun toString(): String =
+        if (!found) {
             "$username is either offline or not showing up on the map."
         } else if (isWilderness) {
             "$username at x: $x, z: $z is in wilderness."
         } else {
             "$username at x: $x, z: $z is in town: $townName."
         }
-    }
 }

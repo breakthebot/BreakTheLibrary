@@ -16,29 +16,30 @@
  */
 package apiTest
 
-import org.breakthebot.breakthelibrary.models.Nation
-import org.breakthebot.breakthelibrary.models.Resident
-import org.breakthebot.breakthelibrary.models.Town
-import org.junit.jupiter.api.assertNotNull
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.ServerAPI
 import org.breakthebot.breakthelibrary.api.TownyAPI
+import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.Reference
+import org.breakthebot.breakthelibrary.models.Resident
+import org.breakthebot.breakthelibrary.models.Town
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 class TownyObjectTests {
-
     @ParameterizedTest
     @ValueSource(strings = ["Paris", "Giza", "Cairo"])
     fun testTowns(name: String) {
-        runBlocking{
-            val town = TownyAPI.getTown(name)
-                .getOrNull()
+        runBlocking {
+            val town =
+                TownyAPI
+                    .getTown(name)
+                    .getOrNull()
             assertNotNull(town)
             assertIs<Town>(town)
             assertEquals(town.name, name)
@@ -48,9 +49,11 @@ class TownyObjectTests {
     @ParameterizedTest
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
-        runBlocking{
-            val res= TownyAPI.getPlayer(name)
-                .getOrNull()
+        runBlocking {
+            val res =
+                TownyAPI
+                    .getPlayer(name)
+                    .getOrNull()
             assertNotNull(res)
             assertIs<Resident>(res)
             assertEquals(res.name, name)
@@ -60,9 +63,11 @@ class TownyObjectTests {
     @ParameterizedTest
     @ValueSource(strings = ["France", "Egypt", "Germany"])
     fun testNations(name: String) {
-        runBlocking{
-            val nation = TownyAPI.getNation(name)
-                .getOrNull()
+        runBlocking {
+            val nation =
+                TownyAPI
+                    .getNation(name)
+                    .getOrNull()
             assertNotNull(nation)
             assertIs<Nation>(nation)
             assertEquals(nation.name, name)
@@ -73,8 +78,10 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testD2D(name: String) {
         runBlocking {
-            val resp = TownyAPI.getPlayerDiscord(name)
-                .getOrNull()
+            val resp =
+                TownyAPI
+                    .getPlayerDiscord(name)
+                    .getOrNull()
             assertNotNull(resp)
             assertIs<String>(resp)
         }
@@ -83,10 +90,15 @@ class TownyObjectTests {
     @Test
     fun testPursuits() {
         runBlocking {
-            val resp = ServerAPI.getPursuits(
-                System.getenv("api_key") ?: "",
-                PursuitType.ALL
-            ).mapError { println(it.message); it }.getOrNull()
+            val resp =
+                ServerAPI
+                    .getPursuits(
+                        System.getenv("api_key") ?: "",
+                        PursuitType.ALL,
+                    ).mapError {
+                        println(it.message)
+                        it
+                    }.getOrNull()
             assertNotNull(resp)
         }
     }

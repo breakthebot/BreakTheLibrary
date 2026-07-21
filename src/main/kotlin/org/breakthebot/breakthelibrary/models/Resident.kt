@@ -15,7 +15,6 @@
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
@@ -27,28 +26,24 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 data class Resident(
     val name: String,
     val uuid: SerializableUUID,
-
     var title: String? = null,
     var surname: String? = null,
     var formattedName: String? = null,
     var about: String? = null,
     var discord: String? = null,
-
     var town: Reference? = null,
     var nation: Reference? = null,
-
     var timestamps: Timestamps = Timestamps(),
     var status: Status = Status(),
     var stats: Stats = Stats(),
     var perms: Perms = Perms(),
     var ranks: Ranks = Ranks(),
-
     var friends: List<Reference> = emptyList(),
 ) {
     @Serializable data class Timestamps(
         var registered: Long = 0L,
         var joinedTownAt: Long = 0L,
-        var lastOnline: Long = 0L
+        var lastOnline: Long = 0L,
     )
 
     @Serializable
@@ -58,22 +53,20 @@ data class Resident(
         var isMayor: Boolean = false,
         var isKing: Boolean = false,
         var hasTown: Boolean = false,
-        var hasNation: Boolean = false
+        var hasNation: Boolean = false,
     )
 
     @Serializable
     data class Stats(
         var balance: Float = 0f,
-        var numFriends: Int = 0
+        var numFriends: Int = 0,
     )
 
     @Serializable
     data class Ranks(
         var townRanks: List<String> = emptyList(),
-        var nationRanks: List<String> = emptyList()
+        var nationRanks: List<String> = emptyList(),
     )
 
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }

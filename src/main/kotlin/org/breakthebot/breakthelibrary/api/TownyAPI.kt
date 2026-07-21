@@ -14,26 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+
 package org.breakthebot.breakthelibrary.api
 
 import org.breakthebot.breakthelibrary.api.interfaces.ITownyAPI
-import org.breakthebot.breakthelibrary.models.*
+import org.breakthebot.breakthelibrary.models.APIResult
+import org.breakthebot.breakthelibrary.models.Nation
+import org.breakthebot.breakthelibrary.models.Reference
+import org.breakthebot.breakthelibrary.models.Resident
+import org.breakthebot.breakthelibrary.models.Town
 import org.breakthebot.breakthelibrary.utils.Endpoints
 
-object TownyAPI : ITownyAPI{
-
+object TownyAPI : ITownyAPI {
     override suspend fun getAllPlayers(): APIResult<List<Reference>> = APIClient.getRequest(Endpoints.PLAYERS)
+
     override suspend fun getAllTowns(): APIResult<List<Reference>> = APIClient.getRequest(Endpoints.TOWNS)
+
     override suspend fun getAllNations(): APIResult<List<Reference>> = APIClient.getRequest(Endpoints.NATIONS)
 
     override suspend fun getPlayer(name: String): APIResult<Resident> = APIClient.postRequestItem(Endpoints.PLAYERS, name)
+
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    override suspend fun getPlayerDiscord(name: String): APIResult<String> = APIClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
-    override suspend fun getPlayers(names: List<String>): List<APIResult<List<Resident>>> = APIClient.getChunked(names, Endpoints.PLAYERS)
+    override suspend fun getPlayerDiscord(name: String): APIResult<String> =
+        APIClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
+
+    override suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> =
+        APIClient.getChunked(names, Endpoints.PLAYERS)
+
     override suspend fun getTown(name: String): APIResult<Town> = APIClient.postRequestItem(Endpoints.TOWNS, name)
-    override suspend fun getTowns(names: List<String>): List<APIResult<List<Town>>> = APIClient.getChunked(names, Endpoints.TOWNS)
+
+    override suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>> = APIClient.getChunked(names, Endpoints.TOWNS)
+
     override suspend fun getNation(name: String): APIResult<Nation> = APIClient.postRequestItem(Endpoints.NATIONS, name)
-    override suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>> = APIClient.getChunked(names, Endpoints.NATIONS)
+
+    override suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> =
+        APIClient.getChunked(names, Endpoints.NATIONS)
 }

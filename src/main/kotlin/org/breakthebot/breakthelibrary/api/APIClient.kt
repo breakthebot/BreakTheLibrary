@@ -65,9 +65,11 @@ object APIClient {
             serializer.descriptor.kind is StructureKind.LIST -> {
                 json.decodeFromString(serializer, body)
             }
+
             T::class == String::class -> {
                 body as T
             }
+
             else -> {
                 val cleaned = body.removePrefix("[").removeSuffix("]")
                 json.decodeFromString(serializer, cleaned)
@@ -81,26 +83,29 @@ object APIClient {
      * @return Return [APIResult] with T as a type param.
      * */
     suspend inline fun <reified T> getRequest(url: String): APIResult<T> {
-        val request = HttpRequest.newBuilder().apply {
-            uri(URI(url))
-            header("Content-Type", "application/json")
-        }.build()
+        val request =
+            HttpRequest
+                .newBuilder()
+                .apply {
+                    uri(URI(url))
+                    header("Content-Type", "application/json")
+                }.build()
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             if (response.statusCode() != 200) {
                 return APIResult.Error(
                     response.body(),
-                    response.statusCode()
+                    response.statusCode(),
                 )
             }
             return APIResult.Success(
                 parseString<T>(response.body()),
-                200
+                200,
             )
         } catch (e: Exception) {
             return APIResult.Error(
                 e.message ?: "Unknown error",
-                0
+                0,
             )
         }
     }
@@ -113,13 +118,16 @@ object APIClient {
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
-        body: String
+        body: String,
     ): APIResult<T> {
-        val request = HttpRequest.newBuilder().apply {
-           uri(URI(url))
-           header("Content-Type", "application/json")
-           POST(HttpRequest.BodyPublishers.ofString(body))
-        }.build()
+        val request =
+            HttpRequest
+                .newBuilder()
+                .apply {
+                    uri(URI(url))
+                    header("Content-Type", "application/json")
+                    POST(HttpRequest.BodyPublishers.ofString(body))
+                }.build()
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             val body = response.body()
@@ -127,24 +135,24 @@ object APIClient {
                 return APIResult.Error(
                     // In the context of towny APIs this will almost always be the error message.
                     body,
-                    response.statusCode()
+                    response.statusCode(),
                 )
             }
             // If body is [], then query is 404 but api does not return it.
             if (body == "[]") {
                 return APIResult.Error(
                     "Not found",
-                    404
+                    404,
                 )
             }
             return APIResult.Success(
                 parseString<T>(body),
-                200
+                200,
             )
         } catch (e: Exception) {
             return APIResult.Error(
                 e.message ?: "Unknown error",
-                0
+                0,
             )
         }
     }
@@ -157,9 +165,8 @@ object APIClient {
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
-        body: JsonObject
+        body: JsonObject,
     ): APIResult<T> = postRequest<T>(url, body.toString())
-
 
     /** Post request items without having to construct an object
      * by adding everything from body to a JSON object with a key named `query` that is a JSON array.
@@ -170,21 +177,27 @@ object APIClient {
      * */
     suspend inline fun <reified T> postRequest(
         url: String,
-        body: List<String>
+        body: Collection<String>,
     ): APIResult<List<T>> {
         if (body.size > ConfigHandler.cfg.batchSize) {
             return APIResult.Error(
                 "Unable to send request, query size is bigger than ${ConfigHandler.cfg.batchSize}",
-                400
+                400,
             )
         }
-       val uuids = body.toString().removePrefix("[").removeSuffix("]").split(",").map { it.trim().removeSurrounding("\"") }
-       val jsonBody = buildJsonObject {
-           put("query", JsonArray(uuids.map { JsonPrimitive(it) }))
-       }
-       return postRequest(url, jsonBody.toString())
+        val uuids =
+            body
+                .toString()
+                .removePrefix("[")
+                .removeSuffix("]")
+                .split(",")
+                .map { it.trim().removeSurrounding("\"") }
+        val jsonBody =
+            buildJsonObject {
+                put("query", JsonArray(uuids.map { JsonPrimitive(it) }))
+            }
+        return postRequest(url, jsonBody.toString())
     }
-
 
     /** Post request a singular item without having to construct an object
      * by adding everything from body to a JSON object with a key named `query` that is a JSON array.
@@ -195,11 +208,12 @@ object APIClient {
      * */
     suspend inline fun <reified T> postRequestItem(
         url: String,
-        name: String
+        name: String,
     ): APIResult<T> {
-        val jsonBody = buildJsonObject {
-            put("query", JsonArray(listOf(JsonPrimitive(name))))
-        }
+        val jsonBody =
+            buildJsonObject {
+                put("query", JsonArray(listOf(JsonPrimitive(name))))
+            }
         return postRequest(url, jsonBody.toString())
     }
 
@@ -210,22 +224,24 @@ object APIClient {
      * @param T The type that the items should be parsed into.
      * */
     suspend inline fun <reified T> getChunked(
-        names: List<String>,
+        names: Collection<String>,
         url: String,
         concurrencyLimit: Int = 3,
     ): List<APIResult<List<T>>> {
         val batches = names.chunked(ConfigHandler.cfg.batchSize)
         val semaphore = Semaphore(concurrencyLimit)
 
-        val items = coroutineScope {
-            batches.map { batch ->
-                async {
-                    semaphore.withPermit {
-                        postRequest<T>(url, batch)
-                    }
-                }
-            }.awaitAll()
-        }
+        val items =
+            coroutineScope {
+                batches
+                    .map { batch ->
+                        async {
+                            semaphore.withPermit {
+                                postRequest<T>(url, batch)
+                            }
+                        }
+                    }.awaitAll()
+            }
         return items
     }
 

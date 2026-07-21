@@ -28,19 +28,21 @@ import org.junit.jupiter.api.assertNotNull
 import kotlin.test.assertIs
 
 class MapTests {
-
     @Test
     fun testNearbyApiTown() {
         runBlocking {
-            val query = NearbyItem.NearbyItemString(
-                target = "Cairo",
-                searchType = NearbyType.TOWN,
-                targetType = NearbyType.TOWN,
-                radius = 500
-            )
-            val nearby = MapAPI.getNearby(
-                query
-            ).getOrNull()
+            val query =
+                NearbyItem.NearbyItemString(
+                    target = "Cairo",
+                    searchType = NearbyType.TOWN,
+                    targetType = NearbyType.TOWN,
+                    radius = 500,
+                )
+            val nearby =
+                MapAPI
+                    .getNearby(
+                        query,
+                    ).getOrNull()
             assertNotNull(nearby)
             assertIs<List<Reference>>(nearby)
         }
@@ -49,15 +51,18 @@ class MapTests {
     @Test
     fun testNearbyApiCoords() {
         runBlocking {
-            val query = NearbyItem.NearbyItemCoordinates(
-                target = listOf(11346, 11346),
-                searchType = NearbyType.TOWN,
-                targetType = NearbyType.COORDINATE,
-                radius = 500
-            )
-            val nearby = MapAPI.getNearby(
-              query
-            ).getOrNull()
+            val query =
+                NearbyItem.NearbyItemCoordinates(
+                    target = listOf(11346, 11346),
+                    searchType = NearbyType.TOWN,
+                    targetType = NearbyType.COORDINATE,
+                    radius = 500,
+                )
+            val nearby =
+                MapAPI
+                    .getNearby(
+                        query,
+                    ).getOrNull()
             assertNotNull(nearby)
             assertIs<List<Reference>>(nearby)
         }
@@ -66,16 +71,19 @@ class MapTests {
     @Test
     fun testNearbyApiNation() {
         runBlocking {
-            val query = NearbyItem.NearbyItemString(
-                target = "Giza",
-                searchType = NearbyType.NATION,
-                targetType = NearbyType.TOWN,
-                radius = 500
-            )
+            val query =
+                NearbyItem.NearbyItemString(
+                    target = "Giza",
+                    searchType = NearbyType.NATION,
+                    targetType = NearbyType.TOWN,
+                    radius = 500,
+                )
             println(query)
-            val nearby = MapAPI.getNearby(
-                query
-            ).getOrNull()
+            val nearby =
+                MapAPI
+                    .getNearby(
+                        query,
+                    ).getOrNull()
             assertNotNull(nearby)
             assertIs<List<Reference>>(nearby)
         }
@@ -85,9 +93,11 @@ class MapTests {
     fun testLocation() {
         val coords = Pair(11125.0, -3371.0)
         runBlocking {
-            val loc = MapAPI.getLocation(listOf(coords))
-                .getOrNull()
-                ?.first()
+            val loc =
+                MapAPI
+                    .getLocation(listOf(coords))
+                    .getOrNull()
+                    ?.first()
             assertNotNull(loc)
             Assertions.assertEquals("Giza", loc.town?.name)
             Assertions.assertEquals("Egypt", loc.nation?.name)

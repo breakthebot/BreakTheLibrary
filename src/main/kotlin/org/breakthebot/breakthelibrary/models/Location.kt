@@ -21,27 +21,25 @@ import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 
 @Serializable
-data class Location (
+data class Location(
     val name: String = "",
     val location: Coordinates? = null,
     val isWilderness: Boolean = false,
     val town: Reference? = null,
-    val nation: Reference? = null
+    val nation: Reference? = null,
 ) {
     @Serializable data class Coordinates(
         val x: Double = 0.0,
-        val z: Double = 0.0
+        val z: Double = 0.0,
     )
 
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
 
 @Serializable
 data class MapReturn(
     val max: Int,
-    val players: List<PlayerMapReturn>
+    val players: List<PlayerMapReturn>,
 )
 
 @Serializable
@@ -52,9 +50,7 @@ data class PlayerMapReturn(
     val y: Double,
     val z: Double,
     val uuid: String,
-    val yaw: Int
+    val yaw: Int,
 ) {
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }

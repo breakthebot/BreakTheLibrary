@@ -1,4 +1,4 @@
-//import proguard.gradle.ProGuardTask
+// import proguard.gradle.ProGuardTask
 // TODO: migrate from proguard to r8
 
 plugins {
@@ -8,14 +8,13 @@ plugins {
 }
 
 group = "org.breakthebot"
-version = "1.6.5"
+version = "1.6.6"
 
 repositories {
     mavenCentral()
 }
 
 val shouldPublish = project.hasProperty("publish")
-
 
 java {
     withSourcesJar()
@@ -47,9 +46,10 @@ val headerText = file("header.txt").readText()
 val addHeader by tasks.registering {
     group = "build"
 
-    val targetFiles = fileTree("src") {
-        include("**/*.kt")
-    }
+    val targetFiles =
+        fileTree("src") {
+            include("**/*.kt")
+        }
 
     doLast {
         targetFiles.forEach { file: File ->
@@ -64,7 +64,6 @@ val addHeader by tasks.registering {
 tasks.named("compileKotlin") {
     dependsOn(addHeader)
 }
-
 
 tasks.test {
     useJUnitPlatform()

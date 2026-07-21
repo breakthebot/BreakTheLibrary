@@ -16,56 +16,53 @@
  */
 package org.breakthebot.breakthelibrary.api.interfaces
 
-import org.breakthebot.breakthelibrary.models.*
 import org.breakthebot.breakthelibrary.api.APIClient.future
+import org.breakthebot.breakthelibrary.models.*
 import java.util.concurrent.CompletableFuture
 
 interface ITownyAPI {
-
     suspend fun getAllPlayers(): APIResult<List<Reference>>
+
     suspend fun getAllTowns(): APIResult<List<Reference>>
+
     suspend fun getAllNations(): APIResult<List<Reference>>
 
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
     suspend fun getPlayer(name: String): APIResult<Resident>
+
     suspend fun getPlayerDiscord(name: String): APIResult<String>
-    suspend fun getPlayers(names: List<String>): List<APIResult<List<Resident>>>
+
+    suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>>
+
     suspend fun getTown(name: String): APIResult<Town>
-    suspend fun getTowns(names: List<String>): List<APIResult<List<Town>>>
+
+    suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>>
+
     suspend fun getNation(name: String): APIResult<Nation>
-    suspend fun getNations(names: List<String>): List<APIResult<List<Nation>>>
+
+    suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>>
 
     // Java API
 
-    fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> =
-        future { getAllPlayers() }
+    fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllPlayers() }
 
-    fun getAllTownsJava(): CompletableFuture<APIResult<List<Reference>>> =
-        future { getAllTowns() }
+    fun getAllTownsJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllTowns() }
 
-    fun getAllNationsJava(): CompletableFuture<APIResult<List<Reference>>> =
-        future { getAllNations() }
+    fun getAllNationsJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllNations() }
 
-    fun getPlayerJava(name: String): CompletableFuture<APIResult<Resident>> =
-        future { getPlayer(name) }
+    fun getPlayerJava(name: String): CompletableFuture<APIResult<Resident>> = future { getPlayer(name) }
 
-    fun getPlayerDiscordJava(name: String): CompletableFuture<APIResult<String>> =
-        future { getPlayerDiscord(name) }
+    fun getPlayerDiscordJava(name: String): CompletableFuture<APIResult<String>> = future { getPlayerDiscord(name) }
 
-    fun getPlayersJava(names: List<String>): CompletableFuture<List<APIResult<List<Resident>>>> =
-        future { getPlayers(names) }
+    fun getPlayersJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Resident>>>> = future { getPlayers(names) }
 
-    fun getTownJava(name: String): CompletableFuture<APIResult<Town>> =
-        future { getTown(name) }
+    fun getTownJava(name: String): CompletableFuture<APIResult<Town>> = future { getTown(name) }
 
-    fun getTownsJava(names: List<String>): CompletableFuture<List<APIResult<List<Town>>>> =
-        future { getTowns(names) }
+    fun getTownsJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Town>>>> = future { getTowns(names) }
 
-    fun getNationJava(name: String): CompletableFuture<APIResult<Nation>> =
-        future { getNation(name) }
+    fun getNationJava(name: String): CompletableFuture<APIResult<Nation>> = future { getNation(name) }
 
-    fun getNationsJava(names: List<String>): CompletableFuture<List<APIResult<List<Nation>>>> =
-        future { getNations(names) }
+    fun getNationsJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Nation>>>> = future { getNations(names) }
 }

@@ -16,25 +16,35 @@
  */
 package org.breakthebot.breakthelibrary.api.interfaces
 
-import org.breakthebot.breakthelibrary.models.*
 import org.breakthebot.breakthelibrary.api.APIClient.future
+import org.breakthebot.breakthelibrary.models.APIResult
+import org.breakthebot.breakthelibrary.models.Location
+import org.breakthebot.breakthelibrary.models.NearbyItem
+import org.breakthebot.breakthelibrary.models.PlayerMapReturn
+import org.breakthebot.breakthelibrary.models.Reference
 import java.util.concurrent.CompletableFuture
 
 interface IMapAPI {
-
     suspend fun getVisiblePlayers(): List<PlayerMapReturn>?
-    suspend fun getLocation(query: List<Pair<Double, Double>>): APIResult<List<Location>>
+
+    suspend fun getLocation(query: Collection<Pair<Double, Double>>): APIResult<List<Location>>
+
     suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?>
 
     fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?>
 
-    fun getLocationJava(query: List<Pair<Double, Double>>): CompletableFuture<APIResult<List<Location>>> = future { getLocation(query) }
+    fun getLocationJava(query: Collection<Pair<Double, Double>>): CompletableFuture<APIResult<List<Location>>> =
+        future { getLocation(query) }
 
-    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<APIResult<Location>> = future { getLocation(
-        listOf(query)
-    ).mapSuccess { it[0] } }
+    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<APIResult<Location>> =
+        future {
+            getLocation(
+                listOf(query),
+            ).mapSuccess { it[0] }
+        }
 
-    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> = future {
-        getNearby(query)
-    }
+    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> =
+        future {
+            getNearby(query)
+        }
 }

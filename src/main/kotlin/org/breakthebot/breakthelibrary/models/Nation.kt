@@ -23,49 +23,41 @@ import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.utils.SerializableUUID
 
-
 @Serializable
 data class Nation(
     val name: String = "",
     val uuid: SerializableUUID,
-
     val board: String? = null,
     val dynmapColour: String? = null,
     val dynmapOutline: String? = null,
     val wiki: String? = null,
     val discord: String? = null,
-
     val king: Reference = Reference(),
     val capital: Reference = Reference(),
-
     val timestamps: Timestamps = Timestamps(),
     val status: Status = Status(),
     val stats: Stats = Stats(),
     val coordinates: Coordinates = Coordinates(),
-
     val residents: List<Reference> = emptyList(),
     val towns: List<Reference> = emptyList(),
     val allies: List<Reference> = emptyList(),
     val enemies: List<Reference> = emptyList(),
     val sanctioned: List<Reference> = emptyList(),
     val outlaws: List<Reference> = emptyList(),
-
     val ranks: Ranks = Ranks(),
-
     val embargoes: Embargoes = Embargoes(),
-
-    val pacts: Pacts = Pacts()
+    val pacts: Pacts = Pacts(),
 ) {
     @Serializable
     data class Timestamps(
-        val registered: Long = 0L
+        val registered: Long = 0L,
     )
 
     @Serializable
     data class Status(
         var isPublic: Boolean = false,
         var isOpen: Boolean = false,
-        var isNeutral: Boolean = false
+        var isNeutral: Boolean = false,
     )
 
     @Serializable
@@ -77,27 +69,24 @@ data class Nation(
         val numEnemies: Int = 0,
         val nationBonus: Int = 0,
         val numOutlaws: Int = 0,
-        val balance: Float = 0f
+        val balance: Float = 0f,
     )
 
     @Serializable
     data class Coordinates(
-        var spawn: Spawn = Spawn()
+        var spawn: Spawn = Spawn(),
     )
 
     @Serializable
     data class Ranks(
         @SerialName("Chancellor")
         val chancellor: List<Reference> = emptyList(),
-
         @SerialName("Colonist")
         val colonist: List<Reference> = emptyList(),
-
         @SerialName("diplomat")
         val diplomat: List<Reference> = emptyList(),
-
         @SerialName("Treasurer")
-        val treasurer: List<Reference> = emptyList()
+        val treasurer: List<Reference> = emptyList(),
     )
 
     @Serializable
@@ -105,22 +94,20 @@ data class Nation(
         val sender: String,
         val receiver: String,
         val status: String,
-        val stats: PactStats
+        val stats: PactStats,
     )
 
     @Serializable
     data class Pacts(
         val active: List<PactData> = listOf(),
-        val pending: List<PactData> = listOf()
+        val pending: List<PactData> = listOf(),
     )
 
     @Serializable
     data class Embargoes(
         val own: List<Reference> = listOf(),
-        val against: List<Reference> = listOf()
+        val against: List<Reference> = listOf(),
     )
 
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }

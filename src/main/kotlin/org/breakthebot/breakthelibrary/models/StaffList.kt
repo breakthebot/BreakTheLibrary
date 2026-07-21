@@ -34,15 +34,11 @@ data class StaffList(
     @Contextual
     val moderator: List<SerializableUUID>,
     @Contextual
-    val helper: List<SerializableUUID>
+    val helper: List<SerializableUUID>,
 ) {
-    fun allStaff(): List<SerializableUUID> {
-        return (owner + admin + moderator + helper + developer).distinct()
-    }
+    fun allStaff(): List<SerializableUUID> = (owner + admin + moderator + helper + developer).distinct()
 
-    fun toList(): List<UUID> {
-        return allStaff().map { it.toUUID() }
-    }
+    fun toList(): List<UUID> = allStaff().map { it.toUUID() }
 
     fun toMap(): Map<String, List<UUID>> {
         val map = mutableMapOf<String, List<UUID>>()

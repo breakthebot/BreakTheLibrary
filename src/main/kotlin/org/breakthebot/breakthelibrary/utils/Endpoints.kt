@@ -16,16 +16,39 @@
  */
 package org.breakthebot.breakthelibrary.utils
 
+/**
+ * Helper utility that carries all the api endpoints.
+ * */
 object Endpoints {
-    val APIURL = ConfigHandler.cfg.apiUrl
+    val api_url = ConfigHandler.cfg.apiUrl
 
-    val TOWNS = "$APIURL/towns"
-    val NATIONS = "$APIURL/nations"
-    val PLAYERS = "$APIURL/players"
-    val LOCATION = "$APIURL/location"
-    val NEARBY = "$APIURL/nearby"
-    val PURSUITS = "$APIURL/pursuits"
-    val MM = "${APIURL}/mm"
-    val STAFF = ConfigHandler.cfg.staffUrl
-    val MAP = ConfigHandler.cfg.mapUrl + "tiles/players.json"
+    val PLAYERS: String
+        get() = "$api_url/players"
+
+    val TOWNS: String
+        get() = "$api_url/towns"
+
+    val NATIONS: String
+        get() = "$api_url/nations"
+
+    val LOCATION: String
+        get() = "$api_url/location"
+
+    val NEARBY: String
+        get() = "$api_url/nearby"
+
+    val PURSUITS: String
+        get() = "$api_url/pursuits"
+
+    val MM: String
+        get() = "$api_url/mm"
+
+    val STAFF: String
+        get() = ConfigHandler.cfg.staffUrl
+
+    val MAP: String
+        get() = ConfigHandler.cfg.mapUrl
+
+    val MAP_API: String
+        get() = "$MAP/tiles/players.json"
 }

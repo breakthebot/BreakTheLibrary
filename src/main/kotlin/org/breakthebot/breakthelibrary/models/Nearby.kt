@@ -26,8 +26,11 @@ import org.breakthebot.breakthelibrary.BreakTheLibrary
  * */
 @Serializable
 sealed class NearbyItem {
-    @SerialName("search_type") abstract val searchType: NearbyType
-    @SerialName("target_type") abstract val targetType: NearbyType
+    @SerialName("search_type")
+    abstract val searchType: NearbyType
+
+    @SerialName("target_type")
+    abstract val targetType: NearbyType
     abstract val radius: Int
     abstract val strict: Boolean
 
@@ -37,7 +40,7 @@ sealed class NearbyItem {
         @SerialName("target_type") override val targetType: NearbyType,
         override val radius: Int,
         override val strict: Boolean = false,
-        val target: List<Int>
+        val target: List<Int>,
     ) : NearbyItem()
 
     @Serializable
@@ -46,14 +49,10 @@ sealed class NearbyItem {
         @SerialName("target_type") override val targetType: NearbyType,
         override val radius: Int,
         override val strict: Boolean = false,
-        val target: String
+        val target: String,
     ) : NearbyItem()
 
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
 
-
 enum class NearbyType { TOWN, COORDINATE, NATION }
-

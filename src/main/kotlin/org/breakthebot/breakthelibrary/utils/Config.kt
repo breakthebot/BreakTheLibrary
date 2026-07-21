@@ -23,14 +23,13 @@ data class Config(
     val apiUrl: String = "https://api.earthmc.net/v4",
     val mapUrl: String = "https://map.earthmc.net/",
     val staffUrl: String = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json",
-
-    val batchSize: Int = 100
+    val batchSize: Int = 100,
 )
 
 object ConfigHandler {
     var cfg = Config()
 
-    fun setup(
-        conf: Config
-    ) { this.cfg = conf }
+    fun setup(conf: Config) {
+        this.cfg = conf
+    }
 }

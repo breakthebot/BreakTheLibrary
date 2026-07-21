@@ -22,6 +22,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
 import org.breakthebot.breakthelibrary.BreakTheLibrary
+import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.api.interfaces.IMapAPI
 import org.breakthebot.breakthelibrary.models.APIResult
 import org.breakthebot.breakthelibrary.models.Location
@@ -29,39 +30,47 @@ import org.breakthebot.breakthelibrary.models.MapReturn
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.PlayerMapReturn
 import org.breakthebot.breakthelibrary.models.Reference
-import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
 object MapAPI : IMapAPI {
-
-    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = APIClient.getRequest<MapReturn>(Endpoints.MAP)
-        .getOrNull()
-        ?.players
+    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? =
+        APIClient
+            .getRequest<MapReturn>(Endpoints.MAP_API)
+            .getOrNull()
+            ?.players
 
     /**
      * Query the location api.
      * @param query The list of coordinates to query.
      * */
-    override suspend fun getLocation(query: List<Pair<Double, Double>>): APIResult<List<Location>> {
-        val body = buildJsonObject {
-            put("query", JsonArray(query.map { (x, y) ->
-                JsonArray(
-                    listOf(
-                        JsonPrimitive(x), JsonPrimitive(y)
-                    )
+    override suspend fun getLocation(query: Collection<Pair<Double, Double>>): APIResult<List<Location>> {
+        val body =
+            buildJsonObject {
+                put(
+                    "query",
+                    JsonArray(
+                        query.map { (x, y) ->
+                            JsonArray(
+                                listOf(
+                                    JsonPrimitive(x),
+                                    JsonPrimitive(y),
+                                ),
+                            )
+                        },
+                    ),
                 )
-            }))
-        }
+            }
         return APIClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
     override suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?> {
-        val body = buildJsonObject {
-            put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
-        }
+        val body =
+            buildJsonObject {
+                put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
+            }
         return APIClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
     }
 
-    override fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> =  future { getVisiblePlayers() }
+    override fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> = future { getVisiblePlayers() }
 }

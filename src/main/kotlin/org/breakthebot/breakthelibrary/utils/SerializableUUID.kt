@@ -31,34 +31,29 @@ import kotlin.uuid.toJavaUuid
 import kotlin.uuid.toKotlinUuid
 
 object SerializableUUIDSerializer : KSerializer<SerializableUUID> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("SerializableUUID", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("SerializableUUID", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: SerializableUUID) {
+    override fun serialize(
+        encoder: Encoder,
+        value: SerializableUUID,
+    ) {
         encoder.encodeString(value.value.toString())
     }
 
-    override fun deserialize(decoder: Decoder): SerializableUUID {
-        return SerializableUUID(UUID.fromString(decoder.decodeString()))
-    }
+    override fun deserialize(decoder: Decoder): SerializableUUID = SerializableUUID(UUID.fromString(decoder.decodeString()))
 }
 
 @Serializable(with = SerializableUUIDSerializer::class)
-data class SerializableUUID(val value: UUID) {
-
+data class SerializableUUID(
+    val value: UUID,
+) {
     @OptIn(ExperimentalUuidApi::class)
     constructor(value: Uuid) : this(value.toJavaUuid())
 
-    fun toUUID(): UUID {
-        return value
-    }
+    fun toUUID(): UUID = value
 
     @OptIn(ExperimentalUuidApi::class)
-    fun toKotlinUUID(): Uuid {
-        return value.toKotlinUuid()
-    }
+    fun toKotlinUUID(): Uuid = value.toKotlinUuid()
 
-    override fun toString(): String {
-        return value.toString()
-    }
+    override fun toString(): String = value.toString()
 }

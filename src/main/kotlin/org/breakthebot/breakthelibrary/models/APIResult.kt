@@ -55,79 +55,71 @@ sealed class APIResult<out T> {
     /**
      * Returns [Success.data] or null.
      * */
-    fun getOrNull(): T? {
-        return when (this) {
+    fun getOrNull(): T? =
+        when (this) {
             is Success<T> -> this.data
             else -> null
         }
-    }
 
     /**
      * Returns [Error] or null.
      */
-    fun getErrorOrNull(): Error? {
-        return when (this) {
+    fun getErrorOrNull(): Error? =
+        when (this) {
             is Error -> this
             is Success -> null
         }
-    }
 
     /**
      * Get the status code from both success & error.
      * */
-    fun getStatus(): Int {
-        return when(this) {
+    fun getStatus(): Int =
+        when (this) {
             is Success -> statusCode
             is Error -> statusCode
         }
-    }
 
     /**
      * Get the error message or empty.
      * */
-    fun getErrorMessage(): String {
-        return when (this) {
+    fun getErrorMessage(): String =
+        when (this) {
             is Success -> ""
             is Error -> message
         }
-    }
 
     /**
      * Map data if it is a successful request.
      * @param transform The function that should be executed with the data as input.
      * */
-    inline fun <R> mapSuccess(
-        transform: (T) -> R
-    ): APIResult<R> {
-        return when (this) {
-            is Success -> Success(
-                transform(data),
-                statusCode
-            )
+    inline fun <R> mapSuccess(transform: (T) -> R): APIResult<R> =
+        when (this) {
+            is Success -> {
+                Success(
+                    transform(data),
+                    statusCode,
+                )
+            }
 
-            is Error -> this
+            is Error -> {
+                this
+            }
         }
-    }
 
     /** Map an action in-case of an error.
      * @param transform The function that should be executed with the error as input.
      * */
-    inline fun mapError(
-        transform: (Error) -> Error
-    ): APIResult<T> {
-        return when (this) {
+    inline fun mapError(transform: (Error) -> Error): APIResult<T> =
+        when (this) {
             is Success -> this
             is Error -> transform(this)
         }
-    }
 
     /**
      * Map a function on success.
      * @param block The action to execute
      * */
-    inline fun onSuccess(
-        block: (T) -> Unit
-    ): APIResult<T> {
+    inline fun onSuccess(block: (T) -> Unit): APIResult<T> {
         if (this is Success) {
             block(data)
         }
@@ -138,9 +130,7 @@ sealed class APIResult<out T> {
      * Map a function on error.
      * @param block The action to execute.
      * */
-    inline fun onError(
-        block: (Error) -> Unit
-    ): APIResult<T> {
+    inline fun onError(block: (Error) -> Unit): APIResult<T> {
         if (this is Error) {
             block(this)
         }
@@ -150,23 +140,24 @@ sealed class APIResult<out T> {
     /** Get the result or else.
      * @param fallback The fallback to be executed.
      * */
-    inline fun getOrElse(
-        fallback: (Error) -> @UnsafeVariance T
-    ): T = when (this) {
-        is Success -> data
-        is Error -> fallback(this)
-    }
+    inline fun getOrElse(fallback: (Error) -> @UnsafeVariance T): T =
+        when (this) {
+            is Success -> data
+            is Error -> fallback(this)
+        }
 
     /**
      * Provide a human friendly error string.
      * */
     @ApiStatus.AvailableSince("1.6.2")
-    override fun toString(): String {
-        return when (this) {
+    override fun toString(): String =
+        when (this) {
             is Error -> {
                 "Received error $message with status code $statusCode from the api."
             }
-            is Success -> this.toString()
+
+            is Success -> {
+                this.toString()
+            }
         }
-    }
 }

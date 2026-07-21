@@ -26,9 +26,7 @@ import org.breakthebot.breakthelibrary.utils.SerializableUUID
 data class MysteryMaster(
     val name: String?,
     val uuid: SerializableUUID?,
-    val change: String?
+    val change: String?,
 ) {
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }

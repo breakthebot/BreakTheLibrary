@@ -43,14 +43,13 @@ data class Town(
     val outlaws: List<Reference> = emptyList(),
     val quarters: List<Reference> = emptyList(),
     val ranks: Ranks = Ranks(),
-    val warps: List<Warp> = listOf()
+    val warps: List<Warp> = listOf(),
 ) {
-
     @Serializable
     data class Timestamps(
         val registered: Long = 0L,
         val joinedNationAt: Long = 0L,
-        val ruinedAt: Long = 0L
+        val ruinedAt: Long = 0L,
     )
 
     @Serializable
@@ -67,7 +66,7 @@ data class Town(
         val canOutsidersSpawn: Boolean = false,
         val canPassiveMobSpawn: Boolean = false,
         val hasSnowAccumulation: Boolean = false,
-        val hasFriendlyFire: Boolean = false
+        val hasFriendlyFire: Boolean = false,
     )
 
     @Serializable
@@ -79,41 +78,34 @@ data class Town(
         val numOutlaws: Int = 0,
         val bonusBlocks: Int = 0,
         val balance: Float = 0f,
-        val forSalePrice: Float = 0f
+        val forSalePrice: Float = 0f,
     )
 
     @Serializable
     data class Coordinates(
         val spawn: Spawn = Spawn(),
         val homeBlock: List<Int> = emptyList(),
-        val townBlocks: List<List<Int>> = emptyList()
+        val townBlocks: List<List<Int>> = emptyList(),
     )
 
     @Serializable
     data class Ranks(
         @SerialName("Councilor")
         val councillor: List<Reference> = emptyList(),
-
         @SerialName("Builder")
         val builder: List<Reference> = emptyList(),
-
         @SerialName("Recruiter")
         val recruiter: List<Reference> = emptyList(),
-
         @SerialName("Police")
         val police: List<Reference> = emptyList(),
-
         @SerialName("Tax-Exempt")
         val taxExempt: List<Reference> = emptyList(),
-
         @SerialName("Treasurer")
         val treasurer: List<Reference> = emptyList(),
-
         @SerialName("Realtor")
         val realtor: List<Reference> = emptyList(),
-
         @SerialName("Settler")
-        val settler: List<Reference> = emptyList()
+        val settler: List<Reference> = emptyList(),
     )
 
     @Serializable
@@ -123,10 +115,8 @@ data class Town(
         val createdAt: Long,
         val createdBy: String,
         val access: WarpAccess,
-        val location: WarpLocation
+        val location: WarpLocation,
     )
 
-    override fun toString(): String {
-        return BreakTheLibrary.json.encodeToString(this)
-    }
+    override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
