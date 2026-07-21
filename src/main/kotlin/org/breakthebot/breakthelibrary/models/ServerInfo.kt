@@ -25,16 +25,16 @@ data class ServerInfo(
     val timestamps: Timestamps,
     val status: Status,
     val stats: Stats,
-    val voteParty: VoteParty
+    val voteParty: VoteParty,
 ) {
     @Serializable data class Timestamps(
         val newDayTime: Int,
-        val serverTimeOfDay: Int
+        val serverTimeOfDay: Int,
     )
 
     @Serializable data class Status(
         val hasStorm: Boolean,
-        val isThundering: Boolean
+        val isThundering: Boolean,
     )
 
     @Serializable data class Stats(
@@ -49,12 +49,11 @@ data class ServerInfo(
         val numTownBlocks: Int,
         val numNations: Int,
         val numQuarters: Int,
-        val numCuboids: Int
+        val numCuboids: Int,
     )
 
     @Serializable data class VoteParty(
         val target: Int,
-        val numRemaining: Int
+        val numRemaining: Int,
     )
 }
-

@@ -57,11 +57,10 @@ object ServerAPI : IServerAPI {
         return start.elapsedNow().inWholeMilliseconds
     }
 
-    override suspend fun getStaff(): Map<String, List<UUID>> =
-        APIClient
-            .getRequest<StaffList>(Endpoints.STAFF)
-            .mapSuccess { it.toMap() }
-            .getOrElse { emptyMap() }
+    override suspend fun getStaff(): Map<String, List<UUID>> = APIClient
+        .getRequest<StaffList>(Endpoints.STAFF)
+        .mapSuccess { it.toMap() }
+        .getOrElse { emptyMap() }
 
     override suspend fun getStaffList(): APIResult<StaffList> = APIClient.getRequest(Endpoints.STAFF)
 }

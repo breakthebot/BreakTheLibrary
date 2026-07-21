@@ -33,20 +33,6 @@ import kotlin.test.assertIs
 
 class TownyObjectTests {
     @ParameterizedTest
-    @ValueSource(strings = ["Paris", "Giza", "Cairo"])
-    fun testTowns(name: String) {
-        runBlocking {
-            val town =
-                TownyAPI
-                    .getTown(name)
-                    .getOrNull()
-            assertNotNull(town)
-            assertIs<Town>(town)
-            assertEquals(town.name, name)
-        }
-    }
-
-    @ParameterizedTest
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
         runBlocking {
@@ -61,13 +47,25 @@ class TownyObjectTests {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = ["Paris", "Giza", "Cairo"])
+    fun testTowns(name: String) {
+        runBlocking {
+            val town = TownyAPI
+                .getTown(name)
+                .getOrNull()
+            assertNotNull(town)
+            assertIs<Town>(town)
+            assertEquals(town.name, name)
+        }
+    }
+
+    @ParameterizedTest
     @ValueSource(strings = ["France", "Egypt", "Germany"])
     fun testNations(name: String) {
         runBlocking {
-            val nation =
-                TownyAPI
-                    .getNation(name)
-                    .getOrNull()
+            val nation = TownyAPI
+                .getNation(name)
+                .getOrNull()
             assertNotNull(nation)
             assertIs<Nation>(nation)
             assertEquals(nation.name, name)
@@ -78,10 +76,9 @@ class TownyObjectTests {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testD2D(name: String) {
         runBlocking {
-            val resp =
-                TownyAPI
-                    .getPlayerDiscord(name)
-                    .getOrNull()
+            val resp = TownyAPI
+                .getPlayerDiscord(name)
+                .getOrNull()
             assertNotNull(resp)
             assertIs<String>(resp)
         }
@@ -90,15 +87,14 @@ class TownyObjectTests {
     @Test
     fun testPursuits() {
         runBlocking {
-            val resp =
-                ServerAPI
-                    .getPursuits(
-                        System.getenv("api_key") ?: "",
-                        PursuitType.ALL,
-                    ).mapError {
-                        println(it.message)
-                        it
-                    }.getOrNull()
+            val resp = ServerAPI
+                .getPursuits(
+                    System.getenv("api_key") ?: "",
+                    PursuitType.ALL,
+                ).mapError {
+                    println(it.message)
+                    it
+                }.getOrNull()
             assertNotNull(resp)
         }
     }

@@ -33,18 +33,15 @@ interface IMapAPI {
 
     fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?>
 
-    fun getLocationJava(query: Collection<Pair<Double, Double>>): CompletableFuture<APIResult<List<Location>>> =
-        future { getLocation(query) }
+    fun getLocationJava(query: Collection<Pair<Double, Double>>): CompletableFuture<APIResult<List<Location>>> = future { getLocation(query) }
 
-    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<APIResult<Location>> =
-        future {
-            getLocation(
-                listOf(query),
-            ).mapSuccess { it[0] }
-        }
+    fun getLocationJava(query: Pair<Double, Double>): CompletableFuture<APIResult<Location>> = future {
+        getLocation(
+            listOf(query),
+        ).mapSuccess { it[0] }
+    }
 
-    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> =
-        future {
-            getNearby(query)
-        }
+    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> = future {
+        getNearby(query)
+    }
 }

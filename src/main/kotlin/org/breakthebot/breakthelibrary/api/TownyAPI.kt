@@ -37,11 +37,9 @@ object TownyAPI : ITownyAPI {
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    override suspend fun getPlayerDiscord(name: String): APIResult<String> =
-        APIClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
+    override suspend fun getPlayerDiscord(name: String): APIResult<String> = APIClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
 
-    override suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> =
-        APIClient.getChunked(names, Endpoints.PLAYERS)
+    override suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = APIClient.getChunked(names, Endpoints.PLAYERS)
 
     override suspend fun getTown(name: String): APIResult<Town> = APIClient.postRequestItem(Endpoints.TOWNS, name)
 
@@ -49,6 +47,5 @@ object TownyAPI : ITownyAPI {
 
     override suspend fun getNation(name: String): APIResult<Nation> = APIClient.postRequestItem(Endpoints.NATIONS, name)
 
-    override suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> =
-        APIClient.getChunked(names, Endpoints.NATIONS)
+    override suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = APIClient.getChunked(names, Endpoints.NATIONS)
 }

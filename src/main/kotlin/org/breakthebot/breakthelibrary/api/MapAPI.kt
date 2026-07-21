@@ -34,11 +34,10 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
 object MapAPI : IMapAPI {
-    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? =
-        APIClient
-            .getRequest<MapReturn>(Endpoints.MAP_API)
-            .getOrNull()
-            ?.players
+    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = APIClient
+        .getRequest<MapReturn>(Endpoints.MAP_API)
+        .getOrNull()
+        ?.players
 
     /**
      * Query the location api.
