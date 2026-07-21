@@ -20,7 +20,8 @@ package org.breakthebot.breakthelibrary.utils
  * Helper utility that carries all the api endpoints.
  * */
 object Endpoints {
-    val api_url = ConfigHandler.cfg.apiUrl
+    val api_url: String
+        get() = ConfigHandler.cfg.apiUrl
 
     val PLAYERS: String
         get() = "$api_url/players"

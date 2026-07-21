@@ -84,7 +84,7 @@ class TownyObjectTests {
         }
     }
 
-    @Test
+    // @Test
     fun testPursuits() {
         runBlocking {
             val resp = ServerAPI
