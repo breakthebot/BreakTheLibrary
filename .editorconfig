@@ -3,3 +3,4 @@ ktlint_code_style = intellij_idea
 ktlint_standard_discouraged-comment-location = disabled
 ktlint_standard_no-empty-class-body = enabled
 ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_no-unused-imports = enabled

@@ -18,13 +18,12 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import kotlin.uuid.Uuid
 
 @Serializable
 data class Reference(
-    val uuid: SerializableUUID? = null,
+    val uuid: Uuid? = null,
     val name: String = "",
 )
 

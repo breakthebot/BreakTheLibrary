@@ -18,14 +18,13 @@
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import kotlin.uuid.Uuid
 
 @Serializable
 data class Resident(
     val name: String,
-    val uuid: SerializableUUID,
+    val uuid: Uuid,
     var title: String? = null,
     var surname: String? = null,
     var formattedName: String? = null,

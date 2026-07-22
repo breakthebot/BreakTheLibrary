@@ -18,23 +18,23 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import kotlin.uuid.Uuid
 
 @Serializable
 data class PlayerPursuitTop(
-    val player: SerializableUUID? = null,
+    val player: Uuid? = null,
     val score: Float = 0F,
 )
 
 @Serializable
 data class TownPursuitTop(
-    val town: SerializableUUID? = null,
+    val town: Uuid? = null,
     val score: Float = 0F,
 )
 
 @Serializable
 data class NationPursuitTop(
-    val nation: SerializableUUID? = null,
+    val nation: Uuid? = null,
     val score: Float = 0F,
 )
 

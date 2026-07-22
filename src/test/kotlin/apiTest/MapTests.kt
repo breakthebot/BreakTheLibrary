@@ -98,6 +98,8 @@ class MapTests {
                     .getLocation(listOf(coords))
                     .getOrNull()
                     ?.first()
+
+            println(loc.toString())
             assertNotNull(loc)
             Assertions.assertEquals("Giza", loc.town?.name)
             Assertions.assertEquals("Egypt", loc.nation?.name)

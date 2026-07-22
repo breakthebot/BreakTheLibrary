@@ -21,12 +21,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import kotlin.uuid.Uuid
 
 @Serializable
 data class Town(
     val name: String = "",
-    val uuid: SerializableUUID,
+    val uuid: Uuid,
     val board: String? = null,
     val founder: String? = null,
     val wiki: String? = null,
@@ -111,7 +111,7 @@ data class Town(
     @Serializable
     data class Warp(
         val name: String,
-        val uuid: SerializableUUID,
+        val uuid: Uuid,
         val createdAt: Long,
         val createdBy: String,
         val access: WarpAccess,

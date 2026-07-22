@@ -19,14 +19,13 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import kotlin.uuid.Uuid
 
 @Serializable
 data class Nation(
     val name: String = "",
-    val uuid: SerializableUUID,
+    val uuid: Uuid,
     val board: String? = null,
     val dynmapColour: String? = null,
     val dynmapOutline: String? = null,

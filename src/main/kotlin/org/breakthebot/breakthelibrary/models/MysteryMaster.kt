@@ -17,15 +17,13 @@
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.breakthebot.breakthelibrary.BreakTheLibrary
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
+import kotlin.uuid.Uuid
 
 @Serializable
 data class MysteryMaster(
     val name: String?,
-    val uuid: SerializableUUID?,
+    val uuid: Uuid,
     val change: String?,
 ) {
     override fun toString(): String = BreakTheLibrary.json.encodeToString(this)

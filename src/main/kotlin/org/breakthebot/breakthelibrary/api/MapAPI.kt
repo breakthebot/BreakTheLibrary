@@ -44,22 +44,21 @@ object MapAPI : IMapAPI {
      * @param query The list of coordinates to query.
      * */
     override suspend fun getLocation(query: Collection<Pair<Double, Double>>): APIResult<List<Location>> {
-        val body =
-            buildJsonObject {
-                put(
-                    "query",
-                    JsonArray(
-                        query.map { (x, y) ->
-                            JsonArray(
-                                listOf(
-                                    JsonPrimitive(x),
-                                    JsonPrimitive(y),
-                                ),
-                            )
-                        },
-                    ),
-                )
-            }
+        val body = buildJsonObject {
+            put(
+                "query",
+                JsonArray(
+                    query.map { (x, y) ->
+                        JsonArray(
+                            listOf(
+                                JsonPrimitive(x),
+                                JsonPrimitive(y),
+                            ),
+                        )
+                    },
+                ),
+            )
+        }
         return APIClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 

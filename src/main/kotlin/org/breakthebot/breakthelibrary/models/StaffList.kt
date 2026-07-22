@@ -19,34 +19,34 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import org.breakthebot.breakthelibrary.utils.SerializableUUID
 import java.util.UUID
+import kotlin.uuid.Uuid
+import kotlin.uuid.toJavaUuid
 
 @Serializable
 data class StaffList(
     @Contextual
-    val owner: List<SerializableUUID>,
+    val owner: List<Uuid>,
     @Contextual
-    val admin: List<SerializableUUID>,
+    val admin: List<Uuid>,
     @Contextual
-    val developer: List<SerializableUUID>,
+    val developer: List<Uuid>,
     @Contextual
-    val moderator: List<SerializableUUID>,
+    val moderator: List<Uuid>,
     @Contextual
-    val helper: List<SerializableUUID>,
+    val helper: List<Uuid>,
 ) {
-    fun allStaff(): List<SerializableUUID> = (owner + admin + moderator + helper + developer).distinct()
+    fun allStaff(): List<Uuid> = (owner + admin + moderator + helper + developer).distinct()
 
-    fun toList(): List<UUID> = allStaff().map { it.toUUID() }
+    fun toList(): List<UUID> = allStaff().map { it.toJavaUuid() }
 
     fun toMap(): Map<String, List<UUID>> {
         val map = mutableMapOf<String, List<UUID>>()
-        map["owner"] = owner.map { it.toUUID() }
-        map["admin"] = admin.map { it.toUUID() }
-        map["developer"] = developer.map { it.toUUID() }
-        map["moderator"] = moderator.map { it.toUUID() }
-        map["helper"] = helper.map { it.toUUID() }
+        map["owner"] = owner.map { it.toJavaUuid() }
+        map["admin"] = admin.map { it.toJavaUuid() }
+        map["developer"] = developer.map { it.toJavaUuid() }
+        map["moderator"] = moderator.map { it.toJavaUuid() }
+        map["helper"] = helper.map { it.toJavaUuid() }
         return map
     }
 }
