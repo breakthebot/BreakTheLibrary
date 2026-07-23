@@ -30,6 +30,8 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
+
 package org.breakthebot.breakthelibrary.api.interfaces
 
 import org.breakthebot.breakthelibrary.api.APIClient.future

@@ -14,22 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-/*
- * This file is part of BreakTheLibrary.
- *
- * BreakTheLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * BreakTheLibrary is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
- */
+@file:Suppress("unused")
+
 package org.breakthebot.breakthelibrary.models
 
 import org.jetbrains.annotations.ApiStatus
@@ -37,10 +23,13 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * Represents a response from the API.
  * @param T The type of the data if the request is successful.
+ * @param statusCode The status code of the response.
  * @property isSuccess If the response is success.
  * @property isError If the response is error.
  *  */
-sealed class APIResult<out T> {
+sealed class APIResult<out T>(
+    val statusCode: Int,
+) {
     val isSuccess: Boolean
         get() = this is Success
 
@@ -55,8 +44,8 @@ sealed class APIResult<out T> {
      * */
     open class Success<T>(
         val data: T,
-        val statusCode: Int = 0,
-    ) : APIResult<T>()
+        statusCode: Int = 0,
+    ) : APIResult<T>(statusCode)
 
     /**
      * Represents an error sent from the API.
@@ -65,8 +54,8 @@ sealed class APIResult<out T> {
      * */
     open class Error(
         val message: String,
-        val statusCode: Int,
-    ) : APIResult<Nothing>()
+        statusCode: Int,
+    ) : APIResult<Nothing>(statusCode)
 
     /**
      * Returns [Success.data] or null.
@@ -82,14 +71,6 @@ sealed class APIResult<out T> {
     fun getErrorOrNull(): Error? = when (this) {
         is Error -> this
         is Success -> null
-    }
-
-    /**
-     * Get the status code from both success & error.
-     * */
-    fun getStatus(): Int = when (this) {
-        is Success -> statusCode
-        is Error -> statusCode
     }
 
     /**

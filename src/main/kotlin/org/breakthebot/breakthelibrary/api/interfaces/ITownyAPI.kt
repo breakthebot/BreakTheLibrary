@@ -30,10 +30,16 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
+
 package org.breakthebot.breakthelibrary.api.interfaces
 
 import org.breakthebot.breakthelibrary.api.APIClient.future
-import org.breakthebot.breakthelibrary.models.*
+import org.breakthebot.breakthelibrary.models.APIResult
+import org.breakthebot.breakthelibrary.models.Nation
+import org.breakthebot.breakthelibrary.models.Reference
+import org.breakthebot.breakthelibrary.models.Resident
+import org.breakthebot.breakthelibrary.models.Town
 import java.util.concurrent.CompletableFuture
 
 interface ITownyAPI {

@@ -55,11 +55,10 @@ object ServerAPI : IServerAPI {
         key: String,
         type: PursuitType,
     ): APIResult<PursuitResponse> {
-        val query =
-            buildJsonObject {
-                put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
-                put("key", key)
-            }
+        val query = buildJsonObject {
+            put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
+            put("key", key)
+        }
         return APIClient.postRequest(Endpoints.PURSUITS, query)
     }
 

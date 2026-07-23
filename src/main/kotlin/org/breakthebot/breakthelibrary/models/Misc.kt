@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
+
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.SerialName

@@ -23,12 +23,11 @@ object BreakTheLibrary {
 
     // val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
 
-    val json: Json =
-        Json {
-            ignoreUnknownKeys = true
-            prettyPrint = true
-            coerceInputValues = true
-        }
+    val json: Json = Json {
+        ignoreUnknownKeys = true
+        prettyPrint = true
+        coerceInputValues = true
+    }
 
     init {
         // logger.info("Init.")

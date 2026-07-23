@@ -42,7 +42,6 @@ import kotlinx.coroutines.future.await
 import kotlinx.coroutines.future.future
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -58,7 +57,6 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.util.concurrent.CompletableFuture
-import java.util.function.Supplier
 
 /**
  * Wrapper for interacting with the EarthMc API in a clean way.
@@ -73,7 +71,6 @@ object APIClient {
      * @param body The string to parse into the T type.
      * @return The body as T or string.
      * */
-    @OptIn(ExperimentalSerializationApi::class)
     @ApiStatus.Internal
     inline fun <reified T> parseString(body: String): T {
         val serializer = json.serializersModule.serializer<T>()
@@ -99,13 +96,12 @@ object APIClient {
      * @return Return [APIResult] with T as a type param.
      * */
     suspend inline fun <reified T> getRequest(url: String): APIResult<T> {
-        val request =
-            HttpRequest
-                .newBuilder()
-                .apply {
-                    uri(URI(url))
-                    header("Content-Type", "application/json")
-                }.build()
+        val request = HttpRequest
+            .newBuilder()
+            .apply {
+                uri(URI(url))
+                header("Content-Type", "application/json")
+            }.build()
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             if (response.statusCode() != 200) {
@@ -136,14 +132,13 @@ object APIClient {
         url: String,
         body: String,
     ): APIResult<T> {
-        val request =
-            HttpRequest
-                .newBuilder()
-                .apply {
-                    uri(URI(url))
-                    header("Content-Type", "application/json")
-                    POST(HttpRequest.BodyPublishers.ofString(body))
-                }.build()
+        val request = HttpRequest
+            .newBuilder()
+            .apply {
+                uri(URI(url))
+                header("Content-Type", "application/json")
+                POST(HttpRequest.BodyPublishers.ofString(body))
+            }.build()
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             val body = response.body()
@@ -201,17 +196,16 @@ object APIClient {
                 400,
             )
         }
-        val uuids =
-            body
-                .toString()
-                .removePrefix("[")
-                .removeSuffix("]")
-                .split(",")
-                .map { it.trim().removeSurrounding("\"") }
-        val jsonBody =
-            buildJsonObject {
-                put("query", JsonArray(uuids.map { JsonPrimitive(it) }))
-            }
+        val uuids = body
+            .toString()
+            .removePrefix("[")
+            .removeSuffix("]")
+            .split(",")
+            .map { it.trim().removeSurrounding("\"") }
+
+        val jsonBody = buildJsonObject {
+            put("query", JsonArray(uuids.map { JsonPrimitive(it) }))
+        }
         return postRequest(url, jsonBody.toString())
     }
 
@@ -226,10 +220,9 @@ object APIClient {
         url: String,
         name: String,
     ): APIResult<T> {
-        val jsonBody =
-            buildJsonObject {
-                put("query", JsonArray(listOf(JsonPrimitive(name))))
-            }
+        val jsonBody = buildJsonObject {
+            put("query", JsonArray(listOf(JsonPrimitive(name))))
+        }
         return postRequest(url, jsonBody.toString())
     }
 
@@ -247,21 +240,18 @@ object APIClient {
         val batches = names.chunked(ConfigHandler.cfg.batchSize)
         val semaphore = Semaphore(concurrencyLimit)
 
-        val items =
-            coroutineScope {
-                batches
-                    .map { batch ->
-                        async {
-                            semaphore.withPermit {
-                                postRequest<T>(url, batch)
-                            }
+        val items = coroutineScope {
+            batches
+                .map { batch ->
+                    async {
+                        semaphore.withPermit {
+                            postRequest<T>(url, batch)
                         }
-                    }.awaitAll()
-            }
+                    }
+                }.awaitAll()
+        }
         return items
     }
 
     fun <T> future(block: suspend () -> T): CompletableFuture<T> = CoroutineScope(Dispatchers.IO).future { block() }
-
-    fun <T> supplyAsync(supplier: Supplier<T>): CompletableFuture<T> = CompletableFuture.supplyAsync(supplier)
 }

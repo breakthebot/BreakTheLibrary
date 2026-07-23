@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-class TownyObjectTests {
+class TownyObjectKotlinTest {
     @ParameterizedTest
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
