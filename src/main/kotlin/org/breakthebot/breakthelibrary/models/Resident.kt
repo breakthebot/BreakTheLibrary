@@ -15,6 +15,7 @@
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.Serializable

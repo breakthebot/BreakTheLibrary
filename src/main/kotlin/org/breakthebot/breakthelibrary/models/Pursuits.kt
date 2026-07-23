@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+
 package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.SerialName

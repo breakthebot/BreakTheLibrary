@@ -23,7 +23,6 @@ java {
 
 val ktSerde = project.property("kt_serialisation_json")
 val ktCoroutines = project.property("kt_coroutines")
-val slf4j = project.property("slf4j_version")
 
 dependencies {
     // tests
@@ -36,9 +35,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
-
-    // deps
-    compileOnly("org.slf4j:slf4j-api:$slf4j")
 }
 
 val headerText = file("header.txt").readText()

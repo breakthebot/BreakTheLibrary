@@ -14,22 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+
 package org.breakthebot.breakthelibrary
 
 import kotlinx.serialization.json.Json
 
 object BreakTheLibrary {
-    const val LOGGING_NAME: String = "BreakTheLibrary"
-
-    // val logger: Logger = LoggerFactory.getLogger(LOGGING_NAME)
-
     val json: Json = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
         coerceInputValues = true
-    }
-
-    init {
-        // logger.info("Init.")
     }
 }
