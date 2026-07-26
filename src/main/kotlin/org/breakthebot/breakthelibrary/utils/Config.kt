@@ -25,6 +25,7 @@ data class Config(
     val mapUrl: String = "https://map.earthmc.net/",
     val staffUrl: String = "https://raw.githubusercontent.com/veyronity/staff/master/staff.json",
     val batchSize: Int = 100,
+    val requestTimeOut: Int = 10,
 )
 
 object ConfigHandler {

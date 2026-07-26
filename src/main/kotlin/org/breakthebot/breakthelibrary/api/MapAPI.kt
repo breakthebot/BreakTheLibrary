@@ -22,6 +22,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.api.interfaces.IMapAPI
@@ -34,9 +35,11 @@ import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
-object MapAPI : IMapAPI {
-    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = APIClient
-        .getRequest<MapReturn>(Endpoints.MAP_API)
+open class BaseMapAPI(
+    val apiClient: BaseAPIClient,
+) : IMapAPI {
+    override suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = apiClient
+        .getRequest(Endpoints.MAP_API, MapReturn.serializer())
         .getOrNull()
         ?.players
 
@@ -60,7 +63,7 @@ object MapAPI : IMapAPI {
                 ),
             )
         }
-        return APIClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
+        return apiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
     }
 
     override suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?> {
@@ -68,8 +71,15 @@ object MapAPI : IMapAPI {
             buildJsonObject {
                 put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
             }
-        return APIClient.postRequest<List<List<Reference>?>?>(Endpoints.NEARBY, body.toString()).mapSuccess { it?.first() }
+
+        return apiClient.postRequest(
+            Endpoints.NEARBY,
+            body.toString(),
+            serializer<List<List<Reference>?>?>()
+        ).mapSuccess { it?.firstOrNull() }
     }
 
     override fun getVisiblePlayersJava(): CompletableFuture<List<PlayerMapReturn>?> = future { getVisiblePlayers() }
 }
+
+object MapAPI : BaseMapAPI(APIClient)
