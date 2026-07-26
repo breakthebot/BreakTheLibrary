@@ -21,7 +21,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.serializer
-import org.breakthebot.breakthelibrary.api.interfaces.IServerAPI
+import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.models.APIResult
 import org.breakthebot.breakthelibrary.models.MysteryMaster
 import org.breakthebot.breakthelibrary.models.OnlineReturn
@@ -35,10 +35,10 @@ import kotlin.time.TimeSource
 
 open class BaseServerAPI(
     val apiClient: BaseAPIClient,
-) : IServerAPI {
-    override suspend fun getServerInfo(): APIResult<ServerInfo> = apiClient.getRequest(Endpoints.api_url, serializer<ServerInfo>())
+) {
+    open suspend fun getServerInfo(): APIResult<ServerInfo> = apiClient.getRequest(Endpoints.api_url, serializer<ServerInfo>())
 
-    override suspend fun getPursuits(
+    open suspend fun getPursuits(
         key: String,
         type: PursuitType,
     ): APIResult<PursuitResponse> {
@@ -49,22 +49,39 @@ open class BaseServerAPI(
         return apiClient.postRequest(Endpoints.PURSUITS, query)
     }
 
-    override suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = apiClient.getRequest(Endpoints.MM, serializer<List<MysteryMaster>>())
+    open suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = apiClient.getRequest(Endpoints.MM, serializer<List<MysteryMaster>>())
 
-    override suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = apiClient.getRequest(Endpoints.api_url + "/online", serializer<OnlineReturn>())
+    open suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = apiClient.getRequest(Endpoints.api_url + "/online", serializer<OnlineReturn>())
 
-    override suspend fun getAPILatency(): Long {
+    open suspend fun getAPILatency(): Long {
         val start = TimeSource.Monotonic.markNow()
         getServerInfo()
         return start.elapsedNow().inWholeMilliseconds
     }
 
-    override suspend fun getStaff(): Map<String, List<UUID>> = apiClient
+    open suspend fun getStaff(): Map<String, List<UUID>> = apiClient
         .getRequest(Endpoints.STAFF, serializer<StaffList>())
         .mapSuccess { it.toMap() }
         .getOrElse { emptyMap() }
 
-    override suspend fun getStaffList(): APIResult<StaffList> = apiClient.getRequest(Endpoints.STAFF, serializer<StaffList>())
+    open suspend fun getStaffList(): APIResult<StaffList> = apiClient.getRequest(Endpoints.STAFF, serializer<StaffList>())
+
+    fun getMysteryMasterJava() = future { getMysteryMaster() }
+
+    fun getOnlinePlayersJava() = future { getOnlinePlayers() }
+
+    fun getServerInfoJava() = future { getServerInfo() }
+
+    fun getPursuitsJava(
+        key: String,
+        type: PursuitType,
+    ) = future { getPursuits(key, type) }
+
+    fun getAPILatencyJava() = future { getAPILatency() }
+
+    fun getStaffListJava() = future { getStaffList() }
+
+    fun getStaffJava() = future { getStaff() }
 }
 
 object ServerAPI : BaseServerAPI(APIClient)

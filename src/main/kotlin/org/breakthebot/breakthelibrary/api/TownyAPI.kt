@@ -17,37 +17,58 @@
 package org.breakthebot.breakthelibrary.api
 
 import kotlinx.serialization.serializer
-import org.breakthebot.breakthelibrary.api.interfaces.ITownyAPI
+import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.models.APIResult
 import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.Town
 import org.breakthebot.breakthelibrary.utils.Endpoints
+import java.util.concurrent.CompletableFuture
 
-open class BaseTownyAPI(val apiClient: BaseAPIClient) : ITownyAPI {
-    override suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.PLAYERS, serializer<List<Reference>>())
+open class BaseTownyAPI(val apiClient: BaseAPIClient) {
+    open suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.PLAYERS, serializer<List<Reference>>())
 
-    override suspend fun getAllTowns(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.TOWNS, serializer<List<Reference>>())
+    open suspend fun getAllTowns(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.TOWNS, serializer<List<Reference>>())
 
-    override suspend fun getAllNations(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.NATIONS, serializer<List<Reference>>())
+    open suspend fun getAllNations(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.NATIONS, serializer<List<Reference>>())
 
-    override suspend fun getPlayer(name: String): APIResult<Resident> = apiClient.postRequestItem(Endpoints.PLAYERS, name)
+    open suspend fun getPlayer(name: String): APIResult<Resident> = apiClient.postRequestItem(Endpoints.PLAYERS, name)
 
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    override suspend fun getPlayerDiscord(name: String): APIResult<String> = apiClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
+    open suspend fun getPlayerDiscord(name: String): APIResult<String> = apiClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
 
-    override suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = apiClient.getChunked(names, Endpoints.PLAYERS, serializer<List<Resident>>())
+    open suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = apiClient.getChunked(names, Endpoints.PLAYERS, serializer<List<Resident>>())
 
-    override suspend fun getTown(name: String): APIResult<Town> = apiClient.postRequestItem(Endpoints.TOWNS, name)
+    open suspend fun getTown(name: String): APIResult<Town> = apiClient.postRequestItem(Endpoints.TOWNS, name)
 
-    override suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>> = apiClient.getChunked(names, Endpoints.TOWNS, serializer<List<Town>>())
+    open suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>> = apiClient.getChunked(names, Endpoints.TOWNS, serializer<List<Town>>())
 
-    override suspend fun getNation(name: String): APIResult<Nation> = apiClient.postRequestItem(Endpoints.NATIONS, name)
+    open suspend fun getNation(name: String): APIResult<Nation> = apiClient.postRequestItem(Endpoints.NATIONS, name)
 
-    override suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.NATIONS, serializer<List<Nation>>())
+    open suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.NATIONS, serializer<List<Nation>>())
+
+    fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllPlayers() }
+
+    fun getAllTownsJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllTowns() }
+
+    fun getAllNationsJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllNations() }
+
+    fun getPlayerJava(name: String): CompletableFuture<APIResult<Resident>> = future { getPlayer(name) }
+
+    fun getPlayerDiscordJava(name: String): CompletableFuture<APIResult<String>> = future { getPlayerDiscord(name) }
+
+    fun getPlayersJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Resident>>>> = future { getPlayers(names) }
+
+    fun getTownJava(name: String): CompletableFuture<APIResult<Town>> = future { getTown(name) }
+
+    fun getTownsJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Town>>>> = future { getTowns(names) }
+
+    fun getNationJava(name: String): CompletableFuture<APIResult<Nation>> = future { getNation(name) }
+
+    fun getNationsJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Nation>>>> = future { getNations(names) }
 }
 
 object TownyAPI : BaseTownyAPI(APIClient)
