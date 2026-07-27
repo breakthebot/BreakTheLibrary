@@ -218,15 +218,17 @@ open class BaseAPIClient(
      * @param T The type of the objects you want to fetch.
      * @param url The url to send the req to
      * @param name The name or stringified UUID to query.
+     * @param keyName The name of the json key.
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with List<T> as a type param.
      * */
     suspend inline fun <reified T> postRequestItem(
         url: String,
         name: String,
+        keyName: String = "query",
     ): APIResult<T> {
         val jsonBody = buildJsonObject {
-            put("query", JsonArray(listOf(JsonPrimitive(name))))
+            put(keyName, JsonArray(listOf(JsonPrimitive(name))))
         }
         return postRequest(url, jsonBody.toString(), serializer<T>())
     }

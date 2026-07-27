@@ -53,4 +53,7 @@ object Endpoints {
 
     val MAP_API: String
         get() = "$MAP/tiles/players.json"
+
+    val ALLIANCES_API: String
+        get() = "https://breakthebot.sparked.network/alliances"
 }

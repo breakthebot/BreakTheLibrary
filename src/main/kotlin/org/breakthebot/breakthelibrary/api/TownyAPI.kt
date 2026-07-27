@@ -19,12 +19,17 @@ package org.breakthebot.breakthelibrary.api
 import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.models.APIResult
+import org.breakthebot.breakthelibrary.models.AllianceFilter
+import org.breakthebot.breakthelibrary.models.AllianceModel
+import org.breakthebot.breakthelibrary.models.AllianceRanking
+import org.breakthebot.breakthelibrary.models.AllianceStats
 import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.Town
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
+import kotlin.uuid.Uuid
 
 open class BaseTownyAPI(val apiClient: BaseAPIClient) {
     open suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.PLAYERS, serializer<List<Reference>>())
@@ -32,6 +37,8 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
     open suspend fun getAllTowns(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.TOWNS, serializer<List<Reference>>())
 
     open suspend fun getAllNations(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.NATIONS, serializer<List<Reference>>())
+
+    open suspend fun getAllAlliances(): APIResult<Map<String, Uuid>> = apiClient.getRequest(Endpoints.ALLIANCES_API, serializer<Map<String, Uuid>>())
 
     open suspend fun getPlayer(name: String): APIResult<Resident> = apiClient.postRequestItem(Endpoints.PLAYERS, name)
 
@@ -50,11 +57,19 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
 
     open suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.NATIONS, serializer<List<Nation>>())
 
+    open suspend fun getAlliance(name: String): APIResult<AllianceModel> = apiClient.postRequestItem<AllianceModel>(Endpoints.ALLIANCES_API, name, "name")
+
+    open suspend fun getAllianceStats(name: String): APIResult<AllianceStats> = apiClient.postRequestItem<AllianceStats>(Endpoints.ALLIANCES_API, "name")
+
+    open suspend fun getTopAlliances(filter: AllianceFilter): APIResult<List<AllianceRanking>> = apiClient.postRequestItem<List<AllianceRanking>>(Endpoints.ALLIANCES_API, filter.toString(), "filter")
+
     fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllPlayers() }
 
     fun getAllTownsJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllTowns() }
 
     fun getAllNationsJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllNations() }
+
+    fun getAllAlliancesJava(): CompletableFuture<APIResult<Map<String, Uuid>>> = future { getAllAlliances() }
 
     fun getPlayerJava(name: String): CompletableFuture<APIResult<Resident>> = future { getPlayer(name) }
 
@@ -69,6 +84,12 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
     fun getNationJava(name: String): CompletableFuture<APIResult<Nation>> = future { getNation(name) }
 
     fun getNationsJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Nation>>>> = future { getNations(names) }
+
+    fun getAllianceJava(name: String): CompletableFuture<APIResult<AllianceModel>> = future { getAlliance(name) }
+
+    fun getAllianceStatsJava(name: String): CompletableFuture<APIResult<AllianceStats>> = future { getAllianceStats(name) }
+
+    fun getTopAlliancesJava(filter: AllianceFilter): CompletableFuture<APIResult<List<AllianceRanking>>> = future { getTopAlliances(filter) }
 }
 
 object TownyAPI : BaseTownyAPI(APIClient)
