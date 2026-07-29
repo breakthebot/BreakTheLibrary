@@ -24,6 +24,9 @@ object Endpoints {
     val api_url: String
         get() = ConfigHandler.cfg.apiUrl
 
+    val alliance_url: String
+        get() = ConfigHandler.cfg.allianceApiUrl
+
     val PLAYERS: String
         get() = "$api_url/players"
 
@@ -55,5 +58,11 @@ object Endpoints {
         get() = "$MAP/tiles/players.json"
 
     val ALLIANCES_API: String
-        get() = "https://breakthebot.sparked.network/alliances"
+        get() = "$alliance_url/alliances"
+
+    val ALLIANCES_STATS_API: String
+        get() = "$alliance_url/alliances/stats"
+
+    val ALLIANCES_TOP_API: String
+        get() = "$alliance_url/alliances/top"
 }
