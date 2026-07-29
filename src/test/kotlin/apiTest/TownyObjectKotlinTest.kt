@@ -20,6 +20,10 @@ package apiTest
 import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.ServerAPI
 import org.breakthebot.breakthelibrary.api.TownyAPI
+import org.breakthebot.breakthelibrary.models.AllianceFilter
+import org.breakthebot.breakthelibrary.models.AllianceModel
+import org.breakthebot.breakthelibrary.models.AllianceRanking
+import org.breakthebot.breakthelibrary.models.AllianceStats
 import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.Reference
@@ -31,6 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.uuid.Uuid
 
 class TownyObjectKotlinTest {
     @ParameterizedTest
@@ -85,6 +90,43 @@ class TownyObjectKotlinTest {
         }
     }
 
+    @Test
+    fun testAlliances() {
+        runBlocking {
+            val resp = TownyAPI
+                .getAlliance("African Union")
+                .onError { println(it) }
+                .getOrNull()
+            assertNotNull(resp)
+            assertIs<AllianceModel>(resp)
+        }
+    }
+
+    @Test
+    fun testAllianceStats() {
+        runBlocking {
+            val resp = TownyAPI
+                .getAllianceStats("African Union")
+                .onError { println(it) }
+                .getOrNull()
+            assertNotNull(resp)
+            assertIs<AllianceStats>(resp)
+        }
+    }
+
+    //  @Test
+    fun getTopAlliances() {
+        runBlocking {
+            val resp = TownyAPI
+                .getTopAlliances(AllianceFilter.SIZE)
+                .onError { println(it) }
+                .getOrNull()
+            println(resp)
+            assertNotNull(resp)
+            assertIs<List<AllianceRanking>>(resp)
+        }
+    }
+
     // @Test
     fun testPursuits() {
         runBlocking {
@@ -106,13 +148,16 @@ class TownyObjectKotlinTest {
             val players = TownyAPI.getAllPlayers().getOrNull()
             val towns = TownyAPI.getAllTowns().getOrNull()
             val nations = TownyAPI.getAllNations().getOrNull()
+            val alliances = TownyAPI.getAllAlliances().getOrNull()
             assertNotNull(players)
             assertNotNull(towns)
             assertNotNull(nations)
+            assertNotNull(alliances)
 
             assertIs<List<Reference>>(players)
             assertIs<List<Reference>>(towns)
             assertIs<List<Reference>>(nations)
+            assertIs<Map<String, Uuid>>(alliances)
         }
     }
 }

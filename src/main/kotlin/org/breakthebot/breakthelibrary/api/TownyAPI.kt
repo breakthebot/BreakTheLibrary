@@ -16,6 +16,8 @@
  */
 package org.breakthebot.breakthelibrary.api
 
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.models.APIResult
@@ -38,7 +40,13 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
 
     open suspend fun getAllNations(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.NATIONS, serializer<List<Reference>>())
 
-    open suspend fun getAllAlliances(): APIResult<Map<String, Uuid>> = apiClient.getRequest(Endpoints.ALLIANCES_API, serializer<Map<String, Uuid>>())
+    open suspend fun getAllAlliances(): APIResult<Map<String, Uuid>> = apiClient.getRequest(Endpoints.ALLIANCES_API, serializer<Map<String, String>>()).mapSuccess {
+        val map = mutableMapOf<String, Uuid>()
+        it.forEach { (k, v) ->
+            map[k] = Uuid.parse(v)
+        }
+        map
+    }
 
     open suspend fun getPlayer(name: String): APIResult<Resident> = apiClient.postRequestItem(Endpoints.PLAYERS, name)
 
@@ -57,11 +65,20 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
 
     open suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.NATIONS, serializer<List<Nation>>())
 
-    open suspend fun getAlliance(name: String): APIResult<AllianceModel> = apiClient.postRequestItem<AllianceModel>(Endpoints.ALLIANCES_API, name, "name")
+    open suspend fun getAlliance(name: String): APIResult<AllianceModel> {
+        val body = buildJsonObject { put("name", JsonPrimitive(name)) }
+        return apiClient.postRequest(Endpoints.ALLIANCES_API, body)
+    }
 
-    open suspend fun getAllianceStats(name: String): APIResult<AllianceStats> = apiClient.postRequestItem<AllianceStats>(Endpoints.ALLIANCES_API, "name")
+    open suspend fun getAllianceStats(name: String): APIResult<AllianceStats> {
+        val body = buildJsonObject { put("name", JsonPrimitive(name)) }
+        return apiClient.postRequest(Endpoints.ALLIANCES_STATS_API, body)
+    }
 
-    open suspend fun getTopAlliances(filter: AllianceFilter): APIResult<List<AllianceRanking>> = apiClient.postRequestItem<List<AllianceRanking>>(Endpoints.ALLIANCES_API, filter.toString(), "filter")
+    open suspend fun getTopAlliances(filter: AllianceFilter): APIResult<List<AllianceRanking>> {
+        val body = buildJsonObject { put("filter", JsonPrimitive(filter.toString())) }
+        return apiClient.postRequest(Endpoints.ALLIANCES_TOP_API, body)
+    }
 
     fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllPlayers() }
 
