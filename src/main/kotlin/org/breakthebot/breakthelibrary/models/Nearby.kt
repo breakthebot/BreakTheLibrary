@@ -23,6 +23,11 @@ import org.breakthebot.breakthelibrary.BreakTheLibrary
 
 /**
  * Represents a single query of the nearby endpoint.
+ * @property searchType The search type.
+ * @property targetType The target type.
+ * @property radius The radius to search in.
+ * @property strict To display towns in a range that is further away than the radius.
+ * @property target The search target.
  * */
 @Serializable
 sealed class NearbyItem {

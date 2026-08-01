@@ -110,3 +110,15 @@ data class Nation(
 
     override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
+
+@Serializable
+data class NationTemplate(
+    val timestamps: Boolean = true,
+    val status: Boolean = true,
+    val stats: Boolean = true,
+    val coordinates: Boolean = true,
+    val ranks: Boolean = true,
+    val pactData: Boolean = true,
+    val pacts: Boolean = true,
+    val embargoes: Boolean = true,
+) : Template()

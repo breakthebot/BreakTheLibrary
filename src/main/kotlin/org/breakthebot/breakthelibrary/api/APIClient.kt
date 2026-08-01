@@ -32,9 +32,11 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.models.APIResult
+import org.breakthebot.breakthelibrary.models.Template
 import org.breakthebot.breakthelibrary.utils.Config
 import org.breakthebot.breakthelibrary.utils.ConfigHandler
 import org.jetbrains.annotations.ApiStatus
@@ -50,31 +52,11 @@ import java.util.concurrent.CompletableFuture
  * Wrapper for interacting with the EarthMc API in a clean way.
  * @param json The JSON parser to use.
  * @property client The http client the ApiClient uses.
- * @property timeout The request timeout.
  * */
 open class BaseAPIClient(
     val json: Json,
 ) {
     val client: HttpClient = HttpClient.newHttpClient()
-    val timeout: Duration
-        get() = Duration.ofSeconds(ConfigHandler.cfg.requestTimeOut.toLong())
-
-    /** Parse an API response into a specified T type.
-     * @param T The type to attempt to parse the string into.
-     * @param body The string to parse into the T type.
-     * @return The body as T.
-     * */
-    @ApiStatus.Internal
-    fun <T> parseString(body: String, serializer: KSerializer<T>): T = when {
-        serializer.descriptor.kind is StructureKind.LIST -> {
-            json.decodeFromString(serializer, body)
-        }
-
-        else -> {
-            val cleaned = body.removePrefix("[").removeSuffix("]")
-            json.decodeFromString(serializer, cleaned)
-        }
-    }
 
     /** Sends a get request.
      * @param url The url to send the request to.
@@ -185,6 +167,45 @@ open class BaseAPIClient(
         body: JsonObject,
     ): APIResult<T> = postRequest(url, body.toString(), serializer<T>())
 
+    /**
+     * Sends a POST request to the specified url.
+     * @param url The url to send the request to.
+     * @param body The items to query.
+     * @param template A template for the items.
+     * @param R The type of the response.
+     * @param T The template type.
+     * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
+     * @return Return [APIResult] with List<T> as a type param.
+     * */
+    suspend fun <R, T : Template> postRequest(
+        url: String,
+        body: Collection<String>,
+        template: T,
+        templateSerializer: KSerializer<T>,
+    ): APIResult<List<R>> {
+        val body = buildJsonObject {
+            put("query", Json.encodeToJsonElement(body))
+            put("template", Json.encodeToJsonElement(templateSerializer, template))
+        }
+        return postRequest(url, body)
+    }
+
+    /**
+     * Sends a post request to the specified url.
+     * @param url The url to send the request to.
+     * @param body The items to query.
+     * @param template A template for the items.
+     * @param R The type of the response.
+     * @param T The template type.
+     * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
+     * @return Return [APIResult] with List<T> as a type param.
+     * */
+    suspend inline fun <reified R, reified T : Template> postRequest(
+        url: String,
+        body: Collection<String>,
+        template: T,
+    ): APIResult<List<R>> = postRequest(url, body, template, serializer<T>())
+
     /** Send a request with a JSON payload without parsing to str.
      * @param url The url to send the request to.
      * @param body The items to query.
@@ -218,17 +239,15 @@ open class BaseAPIClient(
      * @param T The type of the objects you want to fetch.
      * @param url The url to send the req to
      * @param name The name or stringified UUID to query.
-     * @param keyName The name of the json key.
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with List<T> as a type param.
      * */
     suspend inline fun <reified T> postRequestItem(
         url: String,
         name: String,
-        keyName: String = "query",
     ): APIResult<T> {
         val jsonBody = buildJsonObject {
-            put(keyName, JsonArray(listOf(JsonPrimitive(name))))
+            put("query", JsonArray(listOf(JsonPrimitive(name))))
         }
         return postRequest(url, jsonBody.toString(), serializer<T>())
     }
@@ -263,6 +282,65 @@ open class BaseAPIClient(
         return items
     }
 
+    /**
+     * [BaseAPIClient.getChunked] implementation with POST templates.
+     *
+     * @param url The url to send the requests to.
+     * @param items The list of items to query.
+     * @param template The template which must implement [Template].
+     * @param concurrencyLimit How many requests can execute concurrently.
+     * @param R The return type for the requests.
+     * */
+    suspend inline fun <reified R, reified T : Template> getChunked(
+        url: String,
+        items: Collection<String>,
+        template: T,
+        concurrencyLimit: Int = 3,
+    ): List<APIResult<List<R>>> {
+        val batches = items.chunked(ConfigHandler.cfg.batchSize)
+        val semaphore = Semaphore(concurrencyLimit)
+
+        val items = coroutineScope {
+            batches
+                .map { batch ->
+                    async {
+                        semaphore.withPermit {
+                            postRequest<R, T>(url, batch, template)
+                        }
+                    }
+                }.awaitAll()
+        }
+        return items
+    }
+
+    /** Parse an API response into a specified [T] type.
+     * @param T The type to attempt to parse the string into.
+     * @param body The string to parse into the [T] type.
+     * @return The body as T.
+     * */
+    @ApiStatus.Internal
+    fun <T> parseString(body: String, serializer: KSerializer<T>): T = when {
+        serializer.descriptor.kind is StructureKind.LIST -> {
+            json.decodeFromString(serializer, body)
+        }
+
+        else -> {
+            val cleaned = body.removePrefix("[").removeSuffix("]")
+            json.decodeFromString(serializer, cleaned)
+        }
+    }
+
+    /**
+     * @property timeout The request timeout.
+     * */
+    companion object {
+        val timeout: Duration
+            get() = Duration.ofSeconds(ConfigHandler.cfg.requestTimeOut.toLong())
+    }
+
+    /**
+     * Creates a completable future using Dispatchers.IO that yields [T] when completed.
+     * */
     fun <T> future(block: suspend () -> T): CompletableFuture<T> = CoroutineScope(Dispatchers.IO).future { block() }
 }
 

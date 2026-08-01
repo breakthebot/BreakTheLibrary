@@ -19,7 +19,6 @@ package org.breakthebot.breakthelibrary.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import org.breakthebot.breakthelibrary.BreakTheLibrary
 import kotlin.uuid.Uuid
 
@@ -120,3 +119,17 @@ data class Town(
 
     override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
+
+/**
+ * Template for town post requests.
+ *  */
+@Serializable
+data class TownTemplate(
+    val timestamps: Boolean = true,
+    val status: Boolean = true,
+    val stats: Boolean = true,
+    val residents: Boolean = true,
+    val coordinates: Boolean = true,
+    val ranks: Boolean = true,
+    val warps: Boolean = true,
+) : Template()

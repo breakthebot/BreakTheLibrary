@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
-
 @file:Suppress("unused")
 
 package org.breakthebot.breakthelibrary.models
@@ -96,3 +95,7 @@ data class OnlineReturn(
     val count: Int = 0,
     val players: List<Reference> = listOf(),
 )
+
+/* A base for POST templates.*/
+@Serializable
+abstract class Template

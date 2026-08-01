@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.breakthebot"
-version = "1.6.13"
+version = "1.6.14"
 
 repositories {
     mavenCentral()
@@ -32,9 +32,9 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    api("org.jetbrains.kotlin:kotlin-stdlib")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:$ktSerde")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutines")
 }
 
 val headerText = file("header.txt").readText()

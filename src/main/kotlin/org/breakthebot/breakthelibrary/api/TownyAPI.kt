@@ -28,6 +28,7 @@ import org.breakthebot.breakthelibrary.models.AllianceStats
 import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
+import org.breakthebot.breakthelibrary.models.Template
 import org.breakthebot.breakthelibrary.models.Town
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
@@ -57,13 +58,19 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
 
     open suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = apiClient.getChunked(names, Endpoints.PLAYERS, serializer<List<Resident>>())
 
+    open suspend fun getPlayers(names: Collection<String>, template: Template): List<APIResult<List<Resident>>> = apiClient.getChunked(Endpoints.PLAYERS, names, template)
+
     open suspend fun getTown(name: String): APIResult<Town> = apiClient.postRequestItem(Endpoints.TOWNS, name)
 
     open suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>> = apiClient.getChunked(names, Endpoints.TOWNS, serializer<List<Town>>())
 
+    open suspend fun getTowns(names: Collection<String>, template: Template): List<APIResult<List<Town>>> = apiClient.getChunked(Endpoints.TOWNS, names, template)
+
     open suspend fun getNation(name: String): APIResult<Nation> = apiClient.postRequestItem(Endpoints.NATIONS, name)
 
     open suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.NATIONS, serializer<List<Nation>>())
+
+    open suspend fun getNations(names: Collection<String>, template: Template): List<APIResult<List<Nation>>> = apiClient.getChunked(Endpoints.NATIONS, names, template)
 
     open suspend fun getAlliance(name: String): APIResult<AllianceModel> {
         val body = buildJsonObject { put("name", JsonPrimitive(name)) }

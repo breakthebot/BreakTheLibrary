@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
 
 package apiTest
 
@@ -42,10 +43,9 @@ class TownyObjectKotlinTest {
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     fun testResidents(name: String) {
         runBlocking {
-            val res =
-                TownyAPI
-                    .getPlayer(name)
-                    .getOrNull()
+            val res = TownyAPI
+                .getPlayer(name)
+                .getOrNull()
             assertNotNull(res)
             assertIs<Resident>(res)
             assertEquals(res.name, name)
@@ -58,6 +58,9 @@ class TownyObjectKotlinTest {
         runBlocking {
             val town = TownyAPI
                 .getTown(name)
+                .onError {
+                    println(it)
+                }
                 .getOrNull()
             assertNotNull(town)
             assertIs<Town>(town)
@@ -99,6 +102,7 @@ class TownyObjectKotlinTest {
                 .getOrNull()
             assertNotNull(resp)
             assertIs<AllianceModel>(resp)
+            println(resp)
         }
     }
 

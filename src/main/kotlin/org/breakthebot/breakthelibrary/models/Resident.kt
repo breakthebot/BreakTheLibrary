@@ -69,3 +69,13 @@ data class Resident(
 
     override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
+
+@Serializable
+data class ResidentTemplate(
+    val title: Boolean = true,
+    val formattedName: Boolean = true,
+    val timestamps: Boolean = true,
+    val status: Boolean = true,
+    val stats: Boolean = true,
+    val friends: Boolean = true,
+) : Template()
