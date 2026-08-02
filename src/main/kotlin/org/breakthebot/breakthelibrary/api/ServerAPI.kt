@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
+
 package org.breakthebot.breakthelibrary.api
 
 import kotlinx.serialization.json.JsonArray
@@ -33,6 +35,10 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.UUID
 import kotlin.time.TimeSource
 
+/**
+ * A base class for the server api functions.
+ * @param apiClient The [BaseAPIClient] to make the requests with.
+ * */
 open class BaseServerAPI(
     val apiClient: BaseAPIClient,
 ) {
@@ -84,4 +90,7 @@ open class BaseServerAPI(
     fun getStaffJava() = future { getStaff() }
 }
 
+/**
+ * The default implementation of the [BaseServerAPI] with [APIClient].
+ * */
 object ServerAPI : BaseServerAPI(APIClient)

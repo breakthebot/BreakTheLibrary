@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
+
 package org.breakthebot.breakthelibrary.api
 
 import kotlinx.serialization.json.JsonPrimitive
@@ -34,6 +36,10 @@ import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 import kotlin.uuid.Uuid
 
+/**
+ * A base class for the towny api functions.
+ * @param apiClient The [BaseAPIClient] to make the requests with.
+ * */
 open class BaseTownyAPI(val apiClient: BaseAPIClient) {
     open suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.PLAYERS, serializer<List<Reference>>())
 
@@ -79,12 +85,17 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
 
     open suspend fun getAllianceStats(name: String): APIResult<AllianceStats> {
         val body = buildJsonObject { put("name", JsonPrimitive(name)) }
-        return apiClient.postRequest(Endpoints.ALLIANCES_STATS_API, body)
+        return apiClient.postRequest(Endpoints.ALLIANCES_STATS, body)
     }
 
     open suspend fun getTopAlliances(filter: AllianceFilter): APIResult<List<AllianceRanking>> {
         val body = buildJsonObject { put("filter", JsonPrimitive(filter.toString())) }
-        return apiClient.postRequest(Endpoints.ALLIANCES_TOP_API, body)
+        return apiClient.postRequest(Endpoints.ALLIANCES_TOP, body)
+    }
+
+    open suspend fun getNationMembership(name: String): APIResult<List<Reference>> {
+        val body = buildJsonObject { put("name", JsonPrimitive(name)) }
+        return apiClient.postRequest(Endpoints.ALLIANCE_NATION_MEMBERSHIP, body)
     }
 
     fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllPlayers() }
@@ -114,6 +125,11 @@ open class BaseTownyAPI(val apiClient: BaseAPIClient) {
     fun getAllianceStatsJava(name: String): CompletableFuture<APIResult<AllianceStats>> = future { getAllianceStats(name) }
 
     fun getTopAlliancesJava(filter: AllianceFilter): CompletableFuture<APIResult<List<AllianceRanking>>> = future { getTopAlliances(filter) }
+
+    fun getNationMembershipJava(name: String): CompletableFuture<APIResult<List<Reference>>> = future { getNationMembership(name) }
 }
 
+/**
+ * The standard implementation of [BaseTownyAPI] with the default [APIClient].
+ * */
 object TownyAPI : BaseTownyAPI(APIClient)

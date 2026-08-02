@@ -96,6 +96,6 @@ data class OnlineReturn(
     val players: List<Reference> = listOf(),
 )
 
-/* A base for POST templates.*/
+/** A base for POST templates.*/
 @Serializable
 abstract class Template

@@ -58,11 +58,14 @@ object Endpoints {
         get() = "$MAP/tiles/players.json"
 
     val ALLIANCES_API: String
-        get() = "$alliance_url/alliances"
+        get() = alliance_url
 
-    val ALLIANCES_STATS_API: String
-        get() = "$alliance_url/alliances/stats"
+    val ALLIANCES_STATS: String
+        get() = "$alliance_url/stats"
 
-    val ALLIANCES_TOP_API: String
-        get() = "$alliance_url/alliances/top"
+    val ALLIANCES_TOP: String
+        get() = "$alliance_url/top"
+
+    val ALLIANCE_NATION_MEMBERSHIP: String
+        get() = "$alliance_url/nation-membership"
 }

@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with BreakTheLibrary. If not, see <https://www.gnu.org/licenses/>.
  */
+@file:Suppress("unused")
 
 package org.breakthebot.breakthelibrary.api
 
@@ -34,6 +35,10 @@ import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.utils.Endpoints
 import java.util.concurrent.CompletableFuture
 
+/**
+ * A base class for the map api functions.
+ * @param apiClient The [BaseAPIClient] to make the requests with.
+ * */
 open class BaseMapAPI(
     val apiClient: BaseAPIClient,
 ) {
@@ -93,4 +98,7 @@ open class BaseMapAPI(
     }
 }
 
+/**
+ * The default implementation of [BaseMapAPI] with [APIClient].
+ * */
 object MapAPI : BaseMapAPI(APIClient)

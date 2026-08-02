@@ -49,7 +49,7 @@ import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
 /**
- * Wrapper for interacting with the EarthMc API in a clean way.
+ * Wrapper for interacting with the web APIs in a clean way.
  * @param json The JSON parser to use.
  * @property client The http client the ApiClient uses.
  * */
