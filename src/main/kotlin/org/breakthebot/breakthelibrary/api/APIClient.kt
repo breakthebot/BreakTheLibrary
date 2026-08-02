@@ -172,6 +172,7 @@ open class BaseAPIClient(
      * @param url The url to send the request to.
      * @param body The items to query.
      * @param template A template for the items.
+     * @param serializer The list serializer of the return type.
      * @param R The type of the response.
      * @param T The template type.
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
@@ -182,19 +183,20 @@ open class BaseAPIClient(
         body: Collection<String>,
         template: T,
         templateSerializer: KSerializer<T>,
+        serializer: KSerializer<List<R>>,
     ): APIResult<List<R>> {
         val body = buildJsonObject {
             put("query", Json.encodeToJsonElement(body))
             put("template", Json.encodeToJsonElement(templateSerializer, template))
-        }
-        return postRequest(url, body)
+        }.toString()
+        return postRequest(url, body, serializer)
     }
 
     /**
      * Sends a post request to the specified url.
      * @param url The url to send the request to.
      * @param body The items to query.
-     * @param template A template for the items.
+     * @param template A template for the items that implements [Template].
      * @param R The type of the response.
      * @param T The template type.
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
@@ -204,7 +206,7 @@ open class BaseAPIClient(
         url: String,
         body: Collection<String>,
         template: T,
-    ): APIResult<List<R>> = postRequest(url, body, template, serializer<T>())
+    ): APIResult<List<R>> = postRequest(url, body, template, serializer<T>(), serializer<List<R>>())
 
     /** Send a request with a JSON payload without parsing to str.
      * @param url The url to send the request to.
@@ -339,7 +341,7 @@ open class BaseAPIClient(
     }
 
     /**
-     * Creates a completable future using Dispatchers.IO that yields [T] when completed.
+     * Creates a completable future using [Dispatchers.IO] that yields [T] when completed.
      * */
     fun <T> future(block: suspend () -> T): CompletableFuture<T> = CoroutineScope(Dispatchers.IO).future { block() }
 }

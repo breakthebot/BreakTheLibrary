@@ -26,6 +26,7 @@ import org.jetbrains.annotations.ApiStatus
  * @param statusCode The status code of the response.
  * @property isSuccess If the response is success.
  * @property isError If the response is error.
+ * @property isSevere If the error is severe aka not in [NOT_SEVERE].
  *  */
 sealed class APIResult<out T>(
     val statusCode: Int,
@@ -35,6 +36,9 @@ sealed class APIResult<out T>(
 
     val isError: Boolean
         get() = this is Error
+
+    val isSevere: Boolean
+        get() = isError && !NOT_SEVERE.contains(statusCode)
 
     /**
      * Represents a successful response from the API.
@@ -148,5 +152,9 @@ sealed class APIResult<out T>(
         is Success -> {
             this.toString()
         }
+    }
+
+    companion object {
+        val NOT_SEVERE = setOf(429, 408)
     }
 }
