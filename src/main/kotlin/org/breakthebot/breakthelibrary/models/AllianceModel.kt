@@ -67,6 +67,6 @@ data class AllianceStats(
 
 @Serializable
 data class AllianceRanking(
-    val identifier: AllianceIdentifier,
+    val alliance: AllianceIdentifier,
     val value: Int,
 )

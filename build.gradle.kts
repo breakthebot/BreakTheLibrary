@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.breakthebot"
-version = "1.6.15"
+version = "1.6.16"
 
 repositories {
     mavenCentral()

@@ -118,14 +118,15 @@ class TownyObjectKotlinTest {
         }
     }
 
-    //  @Test
+    @Test
     fun getTopAlliances() {
         runBlocking {
             val resp = TownyAPI
                 .getTopAlliances(AllianceFilter.SIZE)
                 .onError { println(it) }
+                .onSuccess { println(it) }
                 .getOrNull()
-            println(resp)
+
             assertNotNull(resp)
             assertIs<List<AllianceRanking>>(resp)
         }
