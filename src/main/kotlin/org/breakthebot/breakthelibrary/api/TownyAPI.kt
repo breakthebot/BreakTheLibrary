@@ -40,7 +40,9 @@ import kotlin.uuid.Uuid
  * A base class for the towny api functions.
  * @param apiClient The [BaseAPIClient] to make the requests with.
  * */
-open class BaseTownyAPI(val apiClient: BaseAPIClient) {
+open class BaseTownyAPI(
+    private val apiClient: BaseAPIClient,
+) {
     open suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.PLAYERS, serializer<List<Reference>>())
 
     open suspend fun getAllTowns(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.TOWNS, serializer<List<Reference>>())

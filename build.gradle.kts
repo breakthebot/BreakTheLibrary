@@ -1,6 +1,3 @@
-// import proguard.gradle.ProGuardTask
-// TODO: migrate from proguard to r8
-
 plugins {
     kotlin("jvm") version "2.4.10"
     kotlin("plugin.serialization") version "2.4.10"
@@ -27,6 +24,7 @@ val ktCoroutines = project.property("kt_coroutines")
 dependencies {
     // tests
     testImplementation(kotlin("test"))
+    testImplementation(kotlin("reflect"))
     testImplementation(platform("org.junit:junit-bom:6.0.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

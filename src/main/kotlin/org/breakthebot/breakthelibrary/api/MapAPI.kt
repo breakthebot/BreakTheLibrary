@@ -40,7 +40,7 @@ import java.util.concurrent.CompletableFuture
  * @param apiClient The [BaseAPIClient] to make the requests with.
  * */
 open class BaseMapAPI(
-    val apiClient: BaseAPIClient,
+    private val apiClient: BaseAPIClient,
 ) {
     open suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = apiClient
         .getRequest(Endpoints.MAP_API, MapReturn.serializer())
@@ -71,10 +71,9 @@ open class BaseMapAPI(
     }
 
     open suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?> {
-        val body =
-            buildJsonObject {
-                put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
-            }
+        val body = buildJsonObject {
+            put("query", JsonArray(listOf(BreakTheLibrary.json.encodeToJsonElement(query))).jsonArray)
+        }
 
         return apiClient.postRequest(
             Endpoints.NEARBY,
@@ -93,9 +92,7 @@ open class BaseMapAPI(
         ).mapSuccess { it[0] }
     }
 
-    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> = future {
-        getNearby(query)
-    }
+    fun getNearbyJava(query: NearbyItem): CompletableFuture<APIResult<List<Reference>?>> = future { getNearby(query) }
 }
 
 /**

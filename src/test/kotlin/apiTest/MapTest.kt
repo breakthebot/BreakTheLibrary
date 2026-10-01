@@ -17,7 +17,6 @@
 
 package apiTest
 
-import kotlinx.coroutines.runBlocking
 import org.breakthebot.breakthelibrary.api.MapAPI
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
@@ -30,81 +29,71 @@ import kotlin.test.assertIs
 
 class MapTest {
     @Test
-    fun testNearbyApiTown() {
-        runBlocking {
-            val query = NearbyItem.NearbyItemString(
-                target = "Cairo",
-                searchType = NearbyType.TOWN,
-                targetType = NearbyType.TOWN,
-                radius = 500,
-            )
-            val nearby = MapAPI
-                .getNearby(
-                    query,
-                ).getOrNull()
-            assertNotNull(nearby)
-            assertIs<List<Reference>>(nearby)
-        }
+    suspend fun testNearbyApiTown() {
+        val query = NearbyItem.NearbyItemString(
+            target = "Cairo",
+            searchType = NearbyType.TOWN,
+            targetType = NearbyType.TOWN,
+            radius = 500,
+        )
+        val nearby = MapAPI
+            .getNearby(
+                query,
+            ).getOrNull()
+        assertNotNull(nearby)
+        assertIs<List<Reference>>(nearby)
     }
 
     @Test
-    fun testNearbyApiCoords() {
-        runBlocking {
-            val query = NearbyItem.NearbyItemCoordinates(
-                target = listOf(11346, 11346),
-                searchType = NearbyType.TOWN,
-                targetType = NearbyType.COORDINATE,
-                radius = 500,
-            )
-            val nearby = MapAPI
-                .getNearby(
-                    query,
-                ).getOrNull()
-            assertNotNull(nearby)
-            assertIs<List<Reference>>(nearby)
-        }
+    suspend fun testNearbyApiCoords() {
+        val query = NearbyItem.NearbyItemCoordinates(
+            target = listOf(11346, 11346),
+            searchType = NearbyType.TOWN,
+            targetType = NearbyType.COORDINATE,
+            radius = 500,
+        )
+        val nearby = MapAPI
+            .getNearby(
+                query,
+            ).getOrNull()
+        assertNotNull(nearby)
+        assertIs<List<Reference>>(nearby)
     }
 
     @Test
-    fun testNearbyApiNation() {
-        runBlocking {
-            val query = NearbyItem.NearbyItemString(
-                target = "Giza",
-                searchType = NearbyType.NATION,
-                targetType = NearbyType.TOWN,
-                radius = 500,
-            )
-            val nearby = MapAPI
-                .getNearby(
-                    query,
-                ).getOrNull()
-            assertNotNull(nearby)
-            assertIs<List<Reference>>(nearby)
-        }
+    suspend fun testNearbyApiNation() {
+        val query = NearbyItem.NearbyItemString(
+            target = "Giza",
+            searchType = NearbyType.NATION,
+            targetType = NearbyType.TOWN,
+            radius = 500,
+        )
+        val nearby = MapAPI
+            .getNearby(
+                query,
+            ).getOrNull()
+        assertNotNull(nearby)
+        assertIs<List<Reference>>(nearby)
     }
 
     @Test
-    fun testLocation() {
+    suspend fun testLocation() {
         val coords = Pair(11125.0, -3371.0)
-        runBlocking {
-            val loc = MapAPI
-                .getLocation(listOf(coords))
-                .getOrNull()
-                ?.first()
+        val loc = MapAPI
+            .getLocation(listOf(coords))
+            .getOrNull()
+            ?.first()
 
-            println(loc.toString())
-            assertNotNull(loc)
-            Assertions.assertEquals("Giza", loc.town?.name)
-            Assertions.assertEquals("Egypt", loc.nation?.name)
-        }
+        println(loc.toString())
+        assertNotNull(loc)
+        Assertions.assertEquals("Giza", loc.town?.name)
+        Assertions.assertEquals("Egypt", loc.nation?.name)
     }
 
     @Test
-    fun testMapReturn() {
-        runBlocking {
-            val players = MapAPI.getVisiblePlayers()
-            assertNotNull(players)
-            assertIs<List<PlayerMapReturn>>(players)
-        }
+    suspend fun testMapReturn() {
+        val players = MapAPI.getVisiblePlayers()
+        assertNotNull(players)
+        assertIs<List<PlayerMapReturn>>(players)
     }
 }

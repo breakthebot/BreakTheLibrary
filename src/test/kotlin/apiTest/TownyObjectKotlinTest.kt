@@ -30,6 +30,7 @@ import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
 import org.breakthebot.breakthelibrary.models.Town
+import org.breakthebot.breakthelibrary.models.TownTemplate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
@@ -41,95 +42,104 @@ import kotlin.uuid.Uuid
 class TownyObjectKotlinTest {
     @ParameterizedTest
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
-    fun testResidents(name: String) {
-        runBlocking {
-            val res = TownyAPI
-                .getPlayer(name)
-                .getOrNull()
-            assertNotNull(res)
-            assertIs<Resident>(res)
-            assertEquals(res.name, name)
-        }
+    suspend fun testResidents(name: String) {
+        val res = TownyAPI
+            .getPlayer(name)
+            .getOrNull()
+        assertNotNull(res)
+        assertIs<Resident>(res)
+        assertEquals(res.name, name)
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["Paris", "Giza", "Cairo"])
-    fun testTowns(name: String) {
-        runBlocking {
-            val town = TownyAPI
-                .getTown(name)
-                .onError {
-                    println(it)
-                }
-                .getOrNull()
-            assertNotNull(town)
-            assertIs<Town>(town)
-            assertEquals(town.name, name)
-        }
+    suspend fun testTowns(name: String) {
+        val town = TownyAPI
+            .getTown(name)
+            .onError {
+                println(it)
+            }
+            .getOrNull()
+        assertNotNull(town)
+        assertIs<Town>(town)
+        assertEquals(town.name, name)
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["France", "Egypt", "Germany"])
-    fun testNations(name: String) {
-        runBlocking {
-            val nation = TownyAPI
-                .getNation(name)
-                .getOrNull()
-            assertNotNull(nation)
-            assertIs<Nation>(nation)
-            assertEquals(nation.name, name)
-        }
+    suspend fun testNations(name: String) {
+        val nation = TownyAPI
+            .getNation(name)
+            .getOrNull()
+        assertNotNull(nation)
+        assertIs<Nation>(nation)
+        assertEquals(nation.name, name)
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
-    fun testD2D(name: String) {
-        runBlocking {
-            val resp = TownyAPI
-                .getPlayerDiscord(name)
-                .getOrNull()
-            assertNotNull(resp)
-            assertIs<String>(resp)
-        }
+    suspend fun testD2D(name: String) {
+        val resp = TownyAPI
+            .getPlayerDiscord(name)
+            .getOrNull()
+        assertNotNull(resp)
+        assertIs<String>(resp)
     }
 
     @Test
-    fun testAlliances() {
-        runBlocking {
-            val resp = TownyAPI
-                .getAlliance("African Union")
-                .onError { println(it) }
-                .getOrNull()
-            assertNotNull(resp)
-            assertIs<AllianceModel>(resp)
-            println(resp)
-        }
+    suspend fun testAlliances() {
+        val resp = TownyAPI
+            .getAlliance("African Union")
+            .onError { println(it) }
+            .getOrNull()
+        assertNotNull(resp)
+        assertIs<AllianceModel>(resp)
+        println(resp)
     }
 
     @Test
-    fun testAllianceStats() {
-        runBlocking {
-            val resp = TownyAPI
-                .getAllianceStats("African Union")
-                .onError { println(it) }
-                .getOrNull()
-            assertNotNull(resp)
-            assertIs<AllianceStats>(resp)
-        }
+    suspend fun testAllianceStats() {
+        val resp = TownyAPI
+            .getAllianceStats("African Union")
+            .onError { println(it) }
+            .getOrNull()
+        assertNotNull(resp)
+        assertIs<AllianceStats>(resp)
     }
 
     @Test
-    fun getTopAlliances() {
-        runBlocking {
-            val resp = TownyAPI
-                .getTopAlliances(AllianceFilter.SIZE)
-                .onError { println(it) }
-                .onSuccess { println(it) }
-                .getOrNull()
+    suspend fun getTopAlliances() {
+        val resp = TownyAPI
+            .getTopAlliances(AllianceFilter.SIZE)
+            .onError { println(it) }
+            .getOrNull()
 
-            assertNotNull(resp)
-            assertIs<List<AllianceRanking>>(resp)
-        }
+        assertNotNull(resp)
+        assertIs<List<AllianceRanking>>(resp)
+    }
+
+    @Test
+    suspend fun getNationMembership() {
+        val resp = TownyAPI
+            .getNationMembership("Egypt")
+            .onError { println(it) }
+            .getOrNull()
+
+        assertNotNull(resp)
+        assertIs<List<Reference>>(resp)
+    }
+
+    // @Test
+    suspend fun testTemplates() {
+        val resp = TownyAPI
+            .getTowns(listOf("Mansoura"), TownTemplate())
+            .first()
+            .onError { println(it) }
+            .getOrNull()
+            ?.first()
+
+        println(resp)
+        assertNotNull(resp)
     }
 
     // @Test

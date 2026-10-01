@@ -98,4 +98,42 @@ data class OnlineReturn(
 
 /** A base for POST templates.*/
 @Serializable
-abstract class Template
+sealed class Template
+
+@Serializable
+data class ResidentTemplate(
+    val title: Boolean = true,
+    val formattedName: Boolean = true,
+    val timestamps: Boolean = true,
+    val status: Boolean = true,
+    val stats: Boolean = true,
+    val friends: Boolean = true,
+) : Template()
+
+/**
+ * Template for town post requests.
+ *  */
+@Serializable
+data class TownTemplate(
+    val uuid: Boolean = true,
+    val name: Boolean = true,
+    val timestamps: Boolean = true,
+    val status: Boolean = true,
+    val stats: Boolean = true,
+    val residents: Boolean = true,
+    val coordinates: Boolean = true,
+    val ranks: Boolean = true,
+    val warps: Boolean = true,
+) : Template()
+
+@Serializable
+data class NationTemplate(
+    val timestamps: Boolean = true,
+    val status: Boolean = true,
+    val stats: Boolean = true,
+    val coordinates: Boolean = true,
+    val ranks: Boolean = true,
+    val pactData: Boolean = true,
+    val pacts: Boolean = true,
+    val embargoes: Boolean = true,
+) : Template()

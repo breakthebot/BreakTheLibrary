@@ -42,13 +42,13 @@ data class Town(
     val outlaws: List<Reference> = emptyList(),
     val quarters: List<Reference> = emptyList(),
     val ranks: Ranks = Ranks(),
-    val warps: List<Warp> = listOf(),
+    val warps: List<Warp> = emptyList(),
 ) {
     @Serializable
     data class Timestamps(
         val registered: Long = 0L,
         val joinedNationAt: Long = 0L,
-        val ruinedAt: Long = 0L,
+        val ruinedAt: Long? = null,
     )
 
     @Serializable
@@ -61,9 +61,8 @@ data class Town(
         val isRuined: Boolean = false,
         val isForSale: Boolean = false,
         val hasNation: Boolean = false,
-        val hasOverclaimShield: Boolean = false,
         val canOutsidersSpawn: Boolean = false,
-        val canPassiveMobSpawn: Boolean = false,
+        val canPassiveMobsSpawn: Boolean = false,
         val hasSnowAccumulation: Boolean = false,
         val hasFriendlyFire: Boolean = false,
     )
@@ -72,12 +71,13 @@ data class Town(
     data class Stats(
         val numTownBlocks: Int = 0,
         val maxTownBlocks: Int = 0,
+        val bonusBlocks: Int = 0,
+        val nationBonus: Int = 0,
         val numResidents: Int = 0,
         val numTrusted: Int = 0,
         val numOutlaws: Int = 0,
-        val bonusBlocks: Int = 0,
         val balance: Float = 0f,
-        val forSalePrice: Float = 0f,
+        val forSalePrice: Float? = null,
     )
 
     @Serializable
@@ -85,11 +85,17 @@ data class Town(
         val spawn: Spawn = Spawn(),
         val homeBlock: List<Int> = emptyList(),
         val townBlocks: List<List<Int>> = emptyList(),
-    )
+        val worlds: Map<String, World> = emptyMap(),
+    ) {
+        @Serializable
+        data class World(
+            val townBlocks: List<List<Int>> = emptyList(),
+        )
+    }
 
     @Serializable
     data class Ranks(
-        @SerialName("Councilor")
+        @SerialName("Councillor")
         val councillor: List<Reference> = emptyList(),
         @SerialName("Builder")
         val builder: List<Reference> = emptyList(),
@@ -97,7 +103,7 @@ data class Town(
         val recruiter: List<Reference> = emptyList(),
         @SerialName("Police")
         val police: List<Reference> = emptyList(),
-        @SerialName("Tax-Exempt")
+        @SerialName("Tax-exempt")
         val taxExempt: List<Reference> = emptyList(),
         @SerialName("Treasurer")
         val treasurer: List<Reference> = emptyList(),
@@ -119,17 +125,3 @@ data class Town(
 
     override fun toString(): String = BreakTheLibrary.json.encodeToString(this)
 }
-
-/**
- * Template for town post requests.
- *  */
-@Serializable
-data class TownTemplate(
-    val timestamps: Boolean = true,
-    val status: Boolean = true,
-    val stats: Boolean = true,
-    val residents: Boolean = true,
-    val coordinates: Boolean = true,
-    val ranks: Boolean = true,
-    val warps: Boolean = true,
-) : Template()
