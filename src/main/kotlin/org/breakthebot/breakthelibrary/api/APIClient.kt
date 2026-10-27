@@ -178,7 +178,7 @@ open class BaseAPIClient(
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with List<T> as a type param.
      * */
-    suspend fun <R, T : Template> postRequest(
+    suspend fun <R, T : Template> postRequestTemplate(
         url: String,
         body: Collection<String>,
         template: T,
@@ -186,10 +186,10 @@ open class BaseAPIClient(
         serializer: KSerializer<List<R>>,
     ): APIResult<List<R>> {
         val body = buildJsonObject {
-            put("query", Json.encodeToJsonElement(body))
-            put("template", Json.encodeToJsonElement(templateSerializer, template))
-        }.toString()
-        return postRequest(url, body, serializer)
+            put("query", json.encodeToJsonElement(body))
+            put("template", json.encodeToJsonElement(templateSerializer, template))
+        }
+        return postRequest(url, body.toString(), serializer)
     }
 
     /**
@@ -202,11 +202,11 @@ open class BaseAPIClient(
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with List<T> as a type param.
      * */
-    suspend inline fun <reified R, reified T : Template> postRequest(
+    suspend inline fun <reified R, reified T : Template> postRequestTemplate(
         url: String,
         body: Collection<String>,
         template: T,
-    ): APIResult<List<R>> = postRequest(url, body, template, serializer<T>(), serializer<List<R>>())
+    ): APIResult<List<R>> = postRequestTemplate(url, body, template, serializer<T>(), serializer<List<R>>())
 
     /** Send a request with a JSON payload without parsing to str.
      * @param url The url to send the request to.
@@ -307,7 +307,7 @@ open class BaseAPIClient(
                 .map { batch ->
                     async {
                         semaphore.withPermit {
-                            postRequest<R, T>(url, batch, template)
+                            postRequestTemplate<R, T>(url, batch, template)
                         }
                     }
                 }.awaitAll()

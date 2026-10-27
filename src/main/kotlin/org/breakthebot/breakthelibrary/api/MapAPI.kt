@@ -43,7 +43,7 @@ open class BaseMapAPI(
     private val apiClient: BaseAPIClient,
 ) {
     open suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = apiClient
-        .getRequest(Endpoints.MAP_API, MapReturn.serializer())
+        .getRequest(Endpoints.map_api, MapReturn.serializer())
         .getOrNull()
         ?.players
 
@@ -67,7 +67,7 @@ open class BaseMapAPI(
                 ),
             )
         }
-        return apiClient.postRequest<List<Location>>(Endpoints.LOCATION, body)
+        return apiClient.postRequest<List<Location>>(Endpoints.location, body)
     }
 
     open suspend fun getNearby(query: NearbyItem): APIResult<List<Reference>?> {
@@ -76,7 +76,7 @@ open class BaseMapAPI(
         }
 
         return apiClient.postRequest(
-            Endpoints.NEARBY,
+            Endpoints.nearby,
             body.toString(),
             serializer<List<List<Reference>?>?>()
         ).mapSuccess { it?.firstOrNull() }

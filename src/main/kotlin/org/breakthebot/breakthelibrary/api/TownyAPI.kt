@@ -43,13 +43,13 @@ import kotlin.uuid.Uuid
 open class BaseTownyAPI(
     private val apiClient: BaseAPIClient,
 ) {
-    open suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.PLAYERS, serializer<List<Reference>>())
+    open suspend fun getAllPlayers(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.players, serializer<List<Reference>>())
 
-    open suspend fun getAllTowns(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.TOWNS, serializer<List<Reference>>())
+    open suspend fun getAllTowns(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.towns, serializer<List<Reference>>())
 
-    open suspend fun getAllNations(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.NATIONS, serializer<List<Reference>>())
+    open suspend fun getAllNations(): APIResult<List<Reference>> = apiClient.getRequest(Endpoints.nations, serializer<List<Reference>>())
 
-    open suspend fun getAllAlliances(): APIResult<Map<String, Uuid>> = apiClient.getRequest(Endpoints.ALLIANCES_API, serializer<Map<String, String>>()).mapSuccess {
+    open suspend fun getAllAlliances(): APIResult<Map<String, Uuid>> = apiClient.getRequest(Endpoints.alliances_api, serializer<Map<String, String>>()).mapSuccess {
         val map = mutableMapOf<String, Uuid>()
         it.forEach { (k, v) ->
             map[k] = Uuid.parse(v)
@@ -57,47 +57,47 @@ open class BaseTownyAPI(
         map
     }
 
-    open suspend fun getPlayer(name: String): APIResult<Resident> = apiClient.postRequestItem(Endpoints.PLAYERS, name)
+    open suspend fun getPlayer(name: String): APIResult<Resident> = apiClient.postRequestItem(Endpoints.players, name)
 
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    open suspend fun getPlayerDiscord(name: String): APIResult<String> = apiClient.postRequestItem<Resident>(Endpoints.PLAYERS, name).mapSuccess { it.discord!! }
+    open suspend fun getPlayerDiscord(name: String): APIResult<String> = apiClient.postRequestItem<Resident>(Endpoints.players, name).mapSuccess { it.discord!! }
 
-    open suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = apiClient.getChunked(names, Endpoints.PLAYERS, serializer<List<Resident>>())
+    open suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = apiClient.getChunked(names, Endpoints.players, serializer<List<Resident>>())
 
-    open suspend fun getPlayers(names: Collection<String>, template: Template): List<APIResult<List<Resident>>> = apiClient.getChunked(Endpoints.PLAYERS, names, template)
+    open suspend fun getPlayers(names: Collection<String>, template: Template): List<APIResult<List<Resident>>> = apiClient.getChunked(Endpoints.players, names, template)
 
-    open suspend fun getTown(name: String): APIResult<Town> = apiClient.postRequestItem(Endpoints.TOWNS, name)
+    open suspend fun getTown(name: String): APIResult<Town> = apiClient.postRequestItem(Endpoints.towns, name)
 
-    open suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>> = apiClient.getChunked(names, Endpoints.TOWNS, serializer<List<Town>>())
+    open suspend fun getTowns(names: Collection<String>): List<APIResult<List<Town>>> = apiClient.getChunked(names, Endpoints.towns, serializer<List<Town>>())
 
-    open suspend fun getTowns(names: Collection<String>, template: Template): List<APIResult<List<Town>>> = apiClient.getChunked(Endpoints.TOWNS, names, template)
+    open suspend fun getTowns(names: Collection<String>, template: Template): List<APIResult<List<Town>>> = apiClient.getChunked(Endpoints.towns, names, template)
 
-    open suspend fun getNation(name: String): APIResult<Nation> = apiClient.postRequestItem(Endpoints.NATIONS, name)
+    open suspend fun getNation(name: String): APIResult<Nation> = apiClient.postRequestItem(Endpoints.nations, name)
 
-    open suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.NATIONS, serializer<List<Nation>>())
+    open suspend fun getNations(names: Collection<String>): List<APIResult<List<Nation>>> = apiClient.getChunked(names, Endpoints.nations, serializer<List<Nation>>())
 
-    open suspend fun getNations(names: Collection<String>, template: Template): List<APIResult<List<Nation>>> = apiClient.getChunked(Endpoints.NATIONS, names, template)
+    open suspend fun getNations(names: Collection<String>, template: Template): List<APIResult<List<Nation>>> = apiClient.getChunked(Endpoints.nations, names, template)
 
     open suspend fun getAlliance(name: String): APIResult<AllianceModel> {
         val body = buildJsonObject { put("name", JsonPrimitive(name)) }
-        return apiClient.postRequest(Endpoints.ALLIANCES_API, body)
+        return apiClient.postRequest(Endpoints.alliances_api, body)
     }
 
     open suspend fun getAllianceStats(name: String): APIResult<AllianceStats> {
         val body = buildJsonObject { put("name", JsonPrimitive(name)) }
-        return apiClient.postRequest(Endpoints.ALLIANCES_STATS, body)
+        return apiClient.postRequest(Endpoints.alliance_stats, body)
     }
 
     open suspend fun getTopAlliances(filter: AllianceFilter): APIResult<List<AllianceRanking>> {
         val body = buildJsonObject { put("filter", JsonPrimitive(filter.toString())) }
-        return apiClient.postRequest(Endpoints.ALLIANCES_TOP, body)
+        return apiClient.postRequest(Endpoints.alliances_top, body)
     }
 
     open suspend fun getNationMembership(name: String): APIResult<List<Reference>> {
         val body = buildJsonObject { put("name", JsonPrimitive(name)) }
-        return apiClient.postRequest(Endpoints.ALLIANCE_NATION_MEMBERSHIP, body)
+        return apiClient.postRequest(Endpoints.alliance_nation_membership, body)
     }
 
     fun getAllPlayersJava(): CompletableFuture<APIResult<List<Reference>>> = future { getAllPlayers() }

@@ -29,8 +29,8 @@ import org.breakthebot.breakthelibrary.models.Nation
 import org.breakthebot.breakthelibrary.models.PursuitType
 import org.breakthebot.breakthelibrary.models.Reference
 import org.breakthebot.breakthelibrary.models.Resident
+import org.breakthebot.breakthelibrary.models.Template
 import org.breakthebot.breakthelibrary.models.Town
-import org.breakthebot.breakthelibrary.models.TownTemplate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
@@ -129,17 +129,34 @@ class TownyObjectKotlinTest {
         assertIs<List<Reference>>(resp)
     }
 
-    // @Test
+    @Test
     suspend fun testTemplates() {
-        val resp = TownyAPI
-            .getTowns(listOf("Mansoura"), TownTemplate())
+        val resResp = TownyAPI
+            .getPlayers(listOf("charis_k"), Template.ResidentTemplate())
             .first()
             .onError { println(it) }
             .getOrNull()
             ?.first()
 
-        println(resp)
-        assertNotNull(resp)
+        assertNotNull(resResp)
+
+        val townResp = TownyAPI
+            .getTowns(listOf("Mansoura"), Template.TownTemplate())
+            .first()
+            .onError { println(it) }
+            .getOrNull()
+            ?.first()
+
+        assertNotNull(townResp)
+
+        val nationResp = TownyAPI
+            .getTowns(listOf("Egypt"), Template.NationTemplate())
+            .first()
+            .onError { println(it) }
+            .getOrNull()
+            ?.first()
+
+        assertNotNull(nationResp)
     }
 
     // @Test

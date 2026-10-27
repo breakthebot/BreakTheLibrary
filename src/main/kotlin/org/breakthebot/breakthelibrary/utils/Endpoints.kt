@@ -27,45 +27,48 @@ object Endpoints {
     val alliance_url: String
         get() = ConfigHandler.cfg.allianceApiUrl
 
-    val PLAYERS: String
+    val players: String
         get() = "$api_url/players"
 
-    val TOWNS: String
+    val towns: String
         get() = "$api_url/towns"
 
-    val NATIONS: String
+    val nations: String
         get() = "$api_url/nations"
 
-    val LOCATION: String
+    val location: String
         get() = "$api_url/location"
 
-    val NEARBY: String
+    val nearby: String
         get() = "$api_url/nearby"
 
-    val PURSUITS: String
+    val pursuits: String
         get() = "$api_url/pursuits"
 
-    val MM: String
+    val mm: String
         get() = "$api_url/mm"
 
-    val STAFF: String
+    val staff: String
         get() = ConfigHandler.cfg.staffUrl
 
-    val MAP: String
+    val online_players: String
+        get() = "$api_url/online"
+
+    val map: String
         get() = ConfigHandler.cfg.mapUrl
 
-    val MAP_API: String
-        get() = "$MAP/tiles/players.json"
+    val map_api: String
+        get() = "$map/tiles/players.json"
 
-    val ALLIANCES_API: String
+    val alliances_api: String
         get() = alliance_url
 
-    val ALLIANCES_STATS: String
+    val alliance_stats: String
         get() = "$alliance_url/stats"
 
-    val ALLIANCES_TOP: String
+    val alliances_top: String
         get() = "$alliance_url/top"
 
-    val ALLIANCE_NATION_MEMBERSHIP: String
+    val alliance_nation_membership: String
         get() = "$alliance_url/nation-membership"
 }

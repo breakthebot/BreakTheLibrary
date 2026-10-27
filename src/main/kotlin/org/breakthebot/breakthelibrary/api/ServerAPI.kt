@@ -52,12 +52,12 @@ open class BaseServerAPI(
             put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
             put("key", key)
         }
-        return apiClient.postRequest(Endpoints.PURSUITS, query)
+        return apiClient.postRequest(Endpoints.pursuits, query)
     }
 
-    open suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = apiClient.getRequest(Endpoints.MM, serializer<List<MysteryMaster>>())
+    open suspend fun getMysteryMaster(): APIResult<List<MysteryMaster>> = apiClient.getRequest(Endpoints.mm, serializer<List<MysteryMaster>>())
 
-    open suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = apiClient.getRequest(Endpoints.api_url + "/online", serializer<OnlineReturn>())
+    open suspend fun getOnlinePlayers(): APIResult<OnlineReturn> = apiClient.getRequest(Endpoints.online_players, serializer<OnlineReturn>())
 
     open suspend fun getAPILatency(): Long {
         val start = TimeSource.Monotonic.markNow()
@@ -66,11 +66,11 @@ open class BaseServerAPI(
     }
 
     open suspend fun getStaff(): Map<String, List<UUID>> = apiClient
-        .getRequest(Endpoints.STAFF, serializer<StaffList>())
+        .getRequest(Endpoints.staff, serializer<StaffList>())
         .mapSuccess { it.toMap() }
         .getOrElse { emptyMap() }
 
-    open suspend fun getStaffList(): APIResult<StaffList> = apiClient.getRequest(Endpoints.STAFF, serializer<StaffList>())
+    open suspend fun getStaffList(): APIResult<StaffList> = apiClient.getRequest(Endpoints.staff, serializer<StaffList>())
 
     fun getMysteryMasterJava() = future { getMysteryMaster() }
 

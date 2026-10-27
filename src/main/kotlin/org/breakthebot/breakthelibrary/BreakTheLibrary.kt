@@ -17,12 +17,17 @@
 
 package org.breakthebot.breakthelibrary
 
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 
 object BreakTheLibrary {
+    @OptIn(ExperimentalSerializationApi::class)
     val json: Json = Json {
         ignoreUnknownKeys = true
+        encodeDefaults = true
         prettyPrint = true
         coerceInputValues = true
+        classDiscriminatorMode = ClassDiscriminatorMode.NONE
     }
 }
