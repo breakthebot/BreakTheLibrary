@@ -22,6 +22,9 @@ import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 
 object BreakTheLibrary {
+    lateinit var apiKey: String
+        private set
+
     @OptIn(ExperimentalSerializationApi::class)
     val json: Json = Json {
         ignoreUnknownKeys = true
@@ -29,5 +32,9 @@ object BreakTheLibrary {
         prettyPrint = true
         coerceInputValues = true
         classDiscriminatorMode = ClassDiscriminatorMode.NONE
+    }
+
+    fun setApiKey(apiKey: String) {
+        this.apiKey = apiKey
     }
 }

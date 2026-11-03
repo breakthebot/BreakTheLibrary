@@ -53,9 +53,7 @@ import java.util.concurrent.CompletableFuture
  * @param json The JSON parser to use.
  * @property client The http client the ApiClient uses.
  * */
-open class BaseAPIClient(
-    val json: Json,
-) {
+open class BaseAPIClient(private val json: Json) {
     val client: HttpClient = HttpClient.newHttpClient()
 
     /** Sends a get request.

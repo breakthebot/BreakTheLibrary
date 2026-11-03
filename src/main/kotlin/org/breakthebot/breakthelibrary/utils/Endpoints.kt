@@ -22,7 +22,7 @@ package org.breakthebot.breakthelibrary.utils
  * */
 object Endpoints {
     val api_url: String
-        get() = ConfigHandler.cfg.apiUrl
+        get() = ConfigHandler.cfg.apiUrl + "/v4"
 
     val alliance_url: String
         get() = ConfigHandler.cfg.allianceApiUrl
@@ -58,7 +58,7 @@ object Endpoints {
         get() = ConfigHandler.cfg.mapUrl
 
     val map_api: String
-        get() = "$map/tiles/players.json"
+        get() = "${ConfigHandler.cfg.apiUrl}/map/v1/players"
 
     val alliances_api: String
         get() = alliance_url

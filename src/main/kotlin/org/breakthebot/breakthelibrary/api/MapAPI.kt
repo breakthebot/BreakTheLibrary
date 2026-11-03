@@ -39,11 +39,10 @@ import java.util.concurrent.CompletableFuture
  * A base class for the map api functions.
  * @param apiClient The [BaseAPIClient] to make the requests with.
  * */
-open class BaseMapAPI(
-    private val apiClient: BaseAPIClient,
-) {
+open class BaseMapAPI(private val apiClient: BaseAPIClient) {
     open suspend fun getVisiblePlayers(): List<PlayerMapReturn>? = apiClient
         .getRequest(Endpoints.map_api, MapReturn.serializer())
+        .onError { println(it) }
         .getOrNull()
         ?.players
 

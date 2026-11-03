@@ -94,7 +94,6 @@ class TownyObjectKotlinTest {
             .getOrNull()
         assertNotNull(resp)
         assertIs<AllianceModel>(resp)
-        println(resp)
     }
 
     @Test

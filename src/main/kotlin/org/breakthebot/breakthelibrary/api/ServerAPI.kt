@@ -39,9 +39,7 @@ import kotlin.time.TimeSource
  * A base class for the server api functions.
  * @param apiClient The [BaseAPIClient] to make the requests with.
  * */
-open class BaseServerAPI(
-    private val apiClient: BaseAPIClient,
-) {
+open class BaseServerAPI(private val apiClient: BaseAPIClient) {
     open suspend fun getServerInfo(): APIResult<ServerInfo> = apiClient.getRequest(Endpoints.api_url, serializer<ServerInfo>())
 
     open suspend fun getPursuits(
