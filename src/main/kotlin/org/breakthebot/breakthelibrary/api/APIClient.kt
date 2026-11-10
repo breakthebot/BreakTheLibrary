@@ -16,11 +16,14 @@
  */
 package org.breakthebot.breakthelibrary.api
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.future.future
 import kotlinx.coroutines.sync.Semaphore
@@ -56,6 +59,9 @@ import java.util.concurrent.CompletableFuture
 open class BaseAPIClient(private val json: Json) {
     val client: HttpClient = HttpClient.newHttpClient()
 
+    val key: String
+        get() = BreakTheLibrary.apiKey
+
     /** Sends a get request.
      * @param url The url to send the request to.
      * @param T The type of the data that should be returned on success.
@@ -69,31 +75,21 @@ open class BaseAPIClient(private val json: Json) {
             .apply {
                 uri(URI(url))
                 header("Content-Type", "application/json")
+                header("Authorization", "Bearer $key")
                 timeout(timeout)
             }
             .build()
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             if (response.statusCode() != 200) {
-                return APIResult.Error(
-                    response.body(),
-                    response.statusCode(),
-                )
+                return APIResult.Error(response.body(), response.statusCode())
             }
-            return APIResult.Success(
-                parseString(response.body(), serializer),
-                200,
-            )
+            return APIResult.Success(parseString(response.body(), serializer), 200)
         } catch (_: HttpTimeoutException) {
-            return APIResult.Error(
-                "Request timed out.",
-                408,
-            )
+            return APIResult.Error("Request timed out.", 408)
         } catch (e: Exception) {
-            return APIResult.Error(
-                e.message ?: "Unknown error",
-                0,
-            )
+            if (e is CancellationException) currentCoroutineContext().ensureActive()
+            return APIResult.Error(e.message ?: "Unknown error", 0)
         }
     }
 
@@ -115,6 +111,7 @@ open class BaseAPIClient(private val json: Json) {
             .apply {
                 uri(URI(url))
                 header("Content-Type", "application/json")
+                header("Authorization", "Bearer $key")
                 POST(HttpRequest.BodyPublishers.ofString(body))
                 timeout(timeout)
             }
@@ -122,34 +119,20 @@ open class BaseAPIClient(private val json: Json) {
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             val body = response.body()
-            if (response.statusCode() != 200) {
-                return APIResult.Error(
-                    // In the context of towny APIs this will almost always be the error message.
-                    body,
-                    response.statusCode(),
-                )
+            if (response.statusCode() !in 200..299) {
+                // In the context of towny APIs this will almost always be the error message.
+                return APIResult.Error(body, response.statusCode())
             }
             // If body is [], then query is 404 but api does not return it.
             if (body == "[]") {
-                return APIResult.Error(
-                    "Not found",
-                    404,
-                )
+                return APIResult.Error("Not found", 404)
             }
-            return APIResult.Success(
-                parseString(body, serializer),
-                200,
-            )
+            return APIResult.Success(parseString(body, serializer), 200)
         } catch (_: HttpTimeoutException) {
-            return APIResult.Error(
-                "Request timed out.",
-                408,
-            )
+            return APIResult.Error("Request timed out.", 408)
         } catch (e: Exception) {
-            return APIResult.Error(
-                e.message ?: "Unknown error",
-                0,
-            )
+            if (e is CancellationException) currentCoroutineContext().ensureActive()
+            return APIResult.Error(e.message ?: "Unknown error", 0)
         }
     }
 
@@ -218,7 +201,7 @@ open class BaseAPIClient(private val json: Json) {
         if (body.size > ConfigHandler.cfg.batchSize) {
             return APIResult.Error(
                 "Unable to send request, query size is bigger than ${ConfigHandler.cfg.batchSize}",
-                400,
+                400
             )
         }
         val uuids = body

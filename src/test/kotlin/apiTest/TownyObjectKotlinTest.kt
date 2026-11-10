@@ -18,7 +18,9 @@
 
 package apiTest
 
+import io.github.cdimascio.dotenv.Dotenv
 import kotlinx.coroutines.runBlocking
+import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.api.ServerAPI
 import org.breakthebot.breakthelibrary.api.TownyAPI
 import org.breakthebot.breakthelibrary.models.AllianceFilter
@@ -40,6 +42,10 @@ import kotlin.test.assertIs
 import kotlin.uuid.Uuid
 
 class TownyObjectKotlinTest {
+    init {
+        BreakTheLibrary.setApiKey(Dotenv.load().get("API_KEY"))
+    }
+
     @ParameterizedTest
     @ValueSource(strings = ["charis_k", "Veyronity", "JR1258"])
     suspend fun testResidents(name: String) {

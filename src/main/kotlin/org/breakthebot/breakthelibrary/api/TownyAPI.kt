@@ -60,7 +60,7 @@ open class BaseTownyAPI(private val apiClient: BaseAPIClient) {
     /**
      * Retrieve the discord user of a player if they are linked.
      * */
-    open suspend fun getPlayerDiscord(name: String): APIResult<String> = apiClient.postRequestItem<Resident>(Endpoints.players, name).mapSuccess { it.discord!! }
+    open suspend fun getPlayerDiscord(name: String): APIResult<String?> = apiClient.postRequestItem<Resident>(Endpoints.players, name).mapSuccess { it.discord }
 
     open suspend fun getPlayers(names: Collection<String>): List<APIResult<List<Resident>>> = apiClient.getChunked(names, Endpoints.players, serializer<List<Resident>>())
 
@@ -108,7 +108,7 @@ open class BaseTownyAPI(private val apiClient: BaseAPIClient) {
 
     fun getPlayerJava(name: String): CompletableFuture<APIResult<Resident>> = future { getPlayer(name) }
 
-    fun getPlayerDiscordJava(name: String): CompletableFuture<APIResult<String>> = future { getPlayerDiscord(name) }
+    fun getPlayerDiscordJava(name: String): CompletableFuture<APIResult<String?>> = future { getPlayerDiscord(name) }
 
     fun getPlayersJava(names: Collection<String>): CompletableFuture<List<APIResult<List<Resident>>>> = future { getPlayers(names) }
 

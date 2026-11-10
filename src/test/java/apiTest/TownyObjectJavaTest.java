@@ -1,5 +1,7 @@
 package apiTest;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import org.breakthebot.breakthelibrary.BreakTheLibrary;
 import org.breakthebot.breakthelibrary.api.TownyAPI;
 import org.breakthebot.breakthelibrary.models.Nation;
 import org.breakthebot.breakthelibrary.models.Reference;
@@ -14,6 +16,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TownyObjectJavaTest {
+    public TownyObjectJavaTest() {
+        BreakTheLibrary.INSTANCE.setApiKey(Dotenv.load().get("API_KEY"));
+    }
 
     @ValueSource(strings = {"Paris", "Giza", "Cairo"})
     @ParameterizedTest

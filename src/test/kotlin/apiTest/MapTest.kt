@@ -17,6 +17,8 @@
 
 package apiTest
 
+import io.github.cdimascio.dotenv.Dotenv
+import org.breakthebot.breakthelibrary.BreakTheLibrary
 import org.breakthebot.breakthelibrary.api.MapAPI
 import org.breakthebot.breakthelibrary.models.NearbyItem
 import org.breakthebot.breakthelibrary.models.NearbyType
@@ -28,6 +30,10 @@ import org.junit.jupiter.api.assertNotNull
 import kotlin.test.assertIs
 
 class MapTest {
+    init {
+        BreakTheLibrary.setApiKey(Dotenv.load().get("API_KEY"))
+    }
+
     @Test
     suspend fun testNearbyApiTown() {
         val query = NearbyItem.NearbyItemString(
@@ -84,7 +90,6 @@ class MapTest {
             .getOrNull()
             ?.first()
 
-        println(loc.toString())
         assertNotNull(loc)
         Assertions.assertEquals("Giza", loc.town?.name)
         Assertions.assertEquals("Egypt", loc.nation?.name)

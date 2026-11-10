@@ -54,16 +54,7 @@ open class BaseMapAPI(private val apiClient: BaseAPIClient) {
         val body = buildJsonObject {
             put(
                 "query",
-                JsonArray(
-                    query.map { (x, y) ->
-                        JsonArray(
-                            listOf(
-                                JsonPrimitive(x),
-                                JsonPrimitive(y),
-                            ),
-                        )
-                    },
-                ),
+                JsonArray(query.map { (x, y) -> JsonArray(listOf(JsonPrimitive(x), JsonPrimitive(y))) })
             )
         }
         return apiClient.postRequest<List<Location>>(Endpoints.location, body)
