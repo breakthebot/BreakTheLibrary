@@ -105,6 +105,10 @@ sealed class Template {
     @Serializable
     data class ResidentTemplate(
         val title: Boolean = true,
+        val surname: Boolean = true,
+        val about: Boolean = true,
+        val discord: Boolean = true,
+        val nation: Boolean = true,
         val formattedName: Boolean = true,
         val timestamps: Boolean = true,
         val status: Boolean = true,
@@ -117,6 +121,12 @@ sealed class Template {
      *  */
     @Serializable
     data class TownTemplate(
+        val board: Boolean = true,
+        val founder: Boolean = true,
+        val discord: Boolean = true,
+        val wiki: Boolean = true,
+        val mayor: Boolean = true,
+        val nation: Boolean = true,
         val timestamps: Boolean = true,
         val status: Boolean = true,
         val stats: Boolean = true,
@@ -128,6 +138,12 @@ sealed class Template {
 
     @Serializable
     data class NationTemplate(
+        val board: Boolean = true,
+        val founder: Boolean = true,
+        val wiki: Boolean = true,
+        val discord: Boolean = true,
+        val nation: Boolean = true,
+        val mayor: Boolean = true,
         val timestamps: Boolean = true,
         val status: Boolean = true,
         val stats: Boolean = true,
