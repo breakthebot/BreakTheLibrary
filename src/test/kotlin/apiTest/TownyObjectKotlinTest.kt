@@ -169,7 +169,6 @@ class TownyObjectKotlinTest {
         runBlocking {
             val resp = ServerAPI
                 .getPursuits(
-                    System.getenv("api_key") ?: "",
                     PursuitType.ALL,
                 ).mapError {
                     println(it.message)

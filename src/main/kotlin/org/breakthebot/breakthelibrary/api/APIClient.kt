@@ -69,7 +69,7 @@ open class BaseAPIClient(private val json: Json) {
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with T as a type param.
      * */
-    suspend fun <T> getRequest(url: String, serializer: KSerializer<T>): APIResult<T> {
+    open suspend fun <T> getRequest(url: String, serializer: KSerializer<T>): APIResult<T> {
         val request = HttpRequest
             .newBuilder()
             .apply {
@@ -101,7 +101,7 @@ open class BaseAPIClient(private val json: Json) {
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with T as a type param.
      * */
-    suspend fun <T> postRequest(
+    open suspend fun <T> postRequest(
         url: String,
         body: String,
         serializer: KSerializer<T>,
@@ -119,7 +119,7 @@ open class BaseAPIClient(private val json: Json) {
         try {
             val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
             val body = response.body()
-            if (response.statusCode() !in 200..299) {
+            if (response.statusCode() != 200) {
                 // In the context of towny APIs this will almost always be the error message.
                 return APIResult.Error(body, response.statusCode())
             }

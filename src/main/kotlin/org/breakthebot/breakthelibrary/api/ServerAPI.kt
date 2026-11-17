@@ -21,7 +21,6 @@ package org.breakthebot.breakthelibrary.api
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import kotlinx.serialization.serializer
 import org.breakthebot.breakthelibrary.api.APIClient.future
 import org.breakthebot.breakthelibrary.models.APIResult
@@ -42,13 +41,9 @@ import kotlin.time.TimeSource
 open class BaseServerAPI(private val apiClient: BaseAPIClient) {
     open suspend fun getServerInfo(): APIResult<ServerInfo> = apiClient.getRequest(Endpoints.api_url, serializer<ServerInfo>())
 
-    open suspend fun getPursuits(
-        key: String,
-        type: PursuitType,
-    ): APIResult<PursuitResponse> {
+    open suspend fun getPursuits(type: PursuitType): APIResult<PursuitResponse> {
         val query = buildJsonObject {
             put("query", JsonArray(listOf(JsonPrimitive(type.toString()))))
-            put("key", key)
         }
         return apiClient.postRequest(Endpoints.pursuits, query)
     }
@@ -77,9 +72,8 @@ open class BaseServerAPI(private val apiClient: BaseAPIClient) {
     fun getServerInfoJava() = future { getServerInfo() }
 
     fun getPursuitsJava(
-        key: String,
         type: PursuitType,
-    ) = future { getPursuits(key, type) }
+    ) = future { getPursuits(type) }
 
     fun getAPILatencyJava() = future { getAPILatency() }
 
