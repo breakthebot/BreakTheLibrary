@@ -59,11 +59,11 @@ open class BaseServerAPI(private val apiClient: BaseAPIClient) {
     }
 
     open suspend fun getStaff(): Map<String, List<UUID>> = apiClient
-        .getRequest(Endpoints.staff, serializer<StaffList>())
+        .getRequest(Endpoints.staff, serializer<StaffList>(), false)
         .mapSuccess { it.toMap() }
         .getOrElse { emptyMap() }
 
-    open suspend fun getStaffList(): APIResult<StaffList> = apiClient.getRequest(Endpoints.staff, serializer<StaffList>())
+    open suspend fun getStaffList(): APIResult<StaffList> = apiClient.getRequest(Endpoints.staff, serializer<StaffList>(), false)
 
     fun getMysteryMasterJava() = future { getMysteryMaster() }
 

@@ -69,13 +69,13 @@ open class BaseAPIClient(private val json: Json) {
      * @throws HttpTimeoutException If the request surpasses the timeout defined in [Config.requestTimeOut].
      * @return Return [APIResult] with T as a type param.
      * */
-    open suspend fun <T> getRequest(url: String, serializer: KSerializer<T>): APIResult<T> {
+    open suspend fun <T> getRequest(url: String, serializer: KSerializer<T>, useKey: Boolean = true): APIResult<T> {
         val request = HttpRequest
             .newBuilder()
             .apply {
                 uri(URI(url))
                 header("Content-Type", "application/json")
-                header("Authorization", "Bearer $key")
+                if (useKey) header("Authorization", "Bearer $key")
                 timeout(timeout)
             }
             .build()

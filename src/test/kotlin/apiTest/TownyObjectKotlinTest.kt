@@ -179,6 +179,14 @@ class TownyObjectKotlinTest {
     }
 
     @Test
+    suspend fun testStaffList() {
+        val staff = ServerAPI.getStaffList()
+            .onError { println(it) }
+            .getOrNull()
+        assertNotNull(staff)
+    }
+
+    @Test
     fun testGenericApi() {
         runBlocking {
             val players = TownyAPI.getAllPlayers().getOrNull()

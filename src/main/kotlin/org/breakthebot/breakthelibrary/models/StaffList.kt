@@ -36,7 +36,13 @@ data class StaffList(
     @Contextual
     val helper: List<Uuid>,
 ) {
-    fun allStaff(): List<Uuid> = (owner + admin + moderator + helper + developer).distinct()
+    fun allStaff(): List<Uuid> = buildList {
+        addAll(this@StaffList.owner)
+        addAll(this@StaffList.admin)
+        addAll(this@StaffList.moderator)
+        addAll(this@StaffList.helper)
+        addAll(this@StaffList.developer)
+    }.distinct()
 
     fun toList(): List<UUID> = allStaff().map { it.toJavaUuid() }
 

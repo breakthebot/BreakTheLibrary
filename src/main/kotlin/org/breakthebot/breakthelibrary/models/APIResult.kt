@@ -145,13 +145,8 @@ sealed class APIResult<out T>(
      * */
     @ApiStatus.AvailableSince("1.6.2")
     override fun toString(): String = when (this) {
-        is Error -> {
-            "Received error $message with status code $statusCode from the api."
-        }
-
-        is Success -> {
-            this.toString()
-        }
+        is Error -> message
+        is Success -> this.toString()
     }
 
     companion object {
